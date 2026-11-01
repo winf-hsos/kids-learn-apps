@@ -3,6 +3,7 @@
 Object.assign(TYPE_ICON, {
   vmc: TYPE_ICON.mc, vmatch: TYPE_ICON.match, vswipe: TYPE_ICON.swipe,
   vacc: TYPE_ICON.write, vtest: TYPE_ICON.write, plform: TYPE_ICON.write, conj: TYPE_ICON.sort,
+  vnom: TYPE_ICON.write, numform: TYPE_ICON.write, debet: TYPE_ICON.mc,
 });
 
 const APP = {

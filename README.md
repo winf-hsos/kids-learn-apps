@@ -6,7 +6,7 @@ Gamified study apps for our kids, built for specific school tests and published 
 
 | App | School | Subject | Link |
 | --- | --- | --- | --- |
-| Latein-Arena | Gymnasium | Latin, grade 6 (vocabulary of lesson 2 with accusative and verb forms, conjugation classes) | [apps/latin-lesson-2](https://winf-hsos.github.io/kids-learn-apps/apps/latin-lesson-2/) |
+| Latein-Arena: Klasse 6 – Lektion 2 | Gymnasium | Latin, grade 6 (vocabulary of lesson 2 with accusative and verb forms, conjugation classes) | [apps/latin-lesson-2](https://winf-hsos.github.io/kids-learn-apps/apps/latin-lesson-2/) |
 | Chemie-Labor | Gymnasium | Chemistry, grade 6 (lab safety, lab equipment, Bunsen burner, hazardous substances) | [apps/chemistry-lab](https://winf-hsos.github.io/kids-learn-apps/apps/chemistry-lab/) |
 
 ## How the apps work

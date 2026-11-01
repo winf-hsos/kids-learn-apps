@@ -121,6 +121,45 @@ function plformItem(lv, id, ref) {
   return { kind: 'type', q: plain(v.inf), lead: 'Bilde die 3. Person Plural.', fields: [{ label: '3. Person Plural', accept: [v.pl], strict: true, sol: v.pl }], x: `${CONJ[v.conj].name}: ${CONJ[v.conj].rule}.`, ref };
 }
 
+// Acc -> nominative and meaning (workbook 1a shows accusative forms like frātrem).
+function nomItem(lv, id, ref) {
+  const n = NOUNS[id]; if (!n) return null;
+  return { kind: 'type', q: plain(n.acc), lead: 'Das ist ein Akkusativ. Wie heißt das Wort im Nominativ, und was bedeutet es?', ref, x: explain(id),
+    fields: [{ label: 'Nominativ', accept: [n.la], strict: true, sol: n.la }, meaningField(id)] };
+}
+
+// Sentence keys: "verbId.subjectIndex"; lv.dir is the number to form ('pl' or 'sg').
+function numformItem(lv, key, ref) {
+  const [id, si] = key.split('.'), v = VERBS[id], s = SUBJECTS[+si];
+  if (!v || !s) return null;
+  const to = lv.dir, from = to === 'pl' ? 'sg' : 'pl', de = v.de[0][FORM_INDEX[to]];
+  return {
+    kind: 'type', ref, lead: to === 'pl' ? 'Aus eins mach zwei: Setze das Verb in die 3. Person Plural.' : 'Aus zwei mach eins: Setze das Verb in die 3. Person Singular.',
+    q: `<span class="sent">${plain(s[from])} ${plain(v[from])}.</span><span class="sent gap">${plain(s[to])} …</span>`,
+    fields: [{ label: to === 'pl' ? '3. Person Plural' : '3. Person Singular', accept: [v[to]], strict: true, sol: v[to] }],
+    x: `${s[to]} ${v[to]}: ${s[to + 'De']} ${de}. <i>${CONJ[v.conj].name}: ${CONJ[v.conj].rule}.</i>`,
+  };
+}
+function numformKeys(lv) {
+  return shuffle(lv.words).slice(0, lv.n).map(id => `${id}.${Math.floor(Math.random() * SUBJECTS.length)}`);
+}
+
+// dēbet/dēbent keys: "dutyIndex.subjectIndex.number.negated".
+function debetKeys(lv) {
+  return shuffle(DUTIES).slice(0, lv.n).map(d => `${DUTIES.indexOf(d)}.${Math.floor(Math.random() * SUBJECTS.length)}.${pick(['sg', 'pl'])}.${Math.random() < .25 ? 1 : 0}`);
+}
+function debetItem(lv, key, ref) {
+  const [di, si, num, neg] = key.split('.'), d = DUTIES[+di], s = SUBJECTS[+si];
+  if (!d || !s) return null;
+  const pl = num === 'pl', not = neg === '1';
+  const modal = not ? (pl ? 'dürfen nicht' : 'darf nicht') : (pl ? 'müssen' : 'muss');
+  return {
+    kind: 'mc', ref, q: `<div class="type-lead">Ein Subjekt oder mehrere?</div>${plain(s[num])} ${plain(d.la)} ${not ? 'non ' : ''}___`,
+    o: [`${not ? 'nōn ' : ''}dēbet`, `${not ? 'nōn ' : ''}dēbent`], a: pl ? 1 : 0,
+    x: `<b>${s[num]} ${d.la} ${not ? 'nōn ' : ''}${pl ? 'dēbent' : 'dēbet'}.</b> ${s[num + 'De']} ${modal} ${d.de}.`,
+  };
+}
+
 const VOCAB_QUIZ_TYPES = {
   vmc: { keys: lv => sample(lv, wordKeys(lv)), item: mcItem },
   vacc: { keys: lv => sample(lv, lv.words), item: (lv, id, ref) => NOUNS[id] ? { kind: 'type', q: plain(NOUNS[id].la), lead: 'Wie lautet der Akkusativ?', fields: [accField(id)], x: explain(id), ref } : null },
@@ -128,6 +167,9 @@ const VOCAB_QUIZ_TYPES = {
   vswipe: { keys: swipeKeys, item: swipeItem },
   conj: { keys: lv => sample(lv, lv.words), item: conjItem },
   plform: { keys: lv => sample(lv, lv.words), item: plformItem },
+  vnom: { keys: lv => sample(lv, lv.words), item: nomItem },
+  numform: { keys: numformKeys, item: numformItem },
+  debet: { keys: debetKeys, item: debetItem },
 };
 
 // Match level with six random pairs from the level's words.

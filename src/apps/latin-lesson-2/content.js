@@ -91,6 +91,34 @@ const WORD_IDS = Object.keys(WORDS);
 const CONJ_VERBS = [...L2_VERBS, ...OLD_VERBS].filter(id => !VERBS[id].noConj);
 
 // ---------------------------------------------------------------------------
+// Sentences in the style of the workbook (pages 8-11): subjects in singular and
+// plural with their German translation, and infinitive phrases for dēbēre.
+// ---------------------------------------------------------------------------
+const SUBJECTS = [
+  { sg: 'Aulus', sgDe: 'Aulus', pl: 'Aulus et Cornēlia', plDe: 'Aulus und Cornelia' },
+  { sg: 'Dēlia', sgDe: 'Delia', pl: 'Dēlia et Crispīna', plDe: 'Delia und Crispina' },
+  { sg: 'Syrus', sgDe: 'Syrus', pl: 'Syrus et Modestus', plDe: 'Syrus und Modestus' },
+  { sg: 'Puer', sgDe: 'Der Junge', pl: 'Puer et puella', plDe: 'Der Junge und das Mädchen' },
+  { sg: 'Frāter', sgDe: 'Der Bruder', pl: 'Frāter et soror', plDe: 'Der Bruder und die Schwester' },
+  { sg: 'Māter', sgDe: 'Die Mutter', pl: 'Parentēs', plDe: 'Die Eltern' },
+  { sg: 'Puella', sgDe: 'Das Mädchen', pl: 'Līberī', plDe: 'Die Kinder' },
+];
+// Verbs that make a sentence without an object.
+const SENTENCE_VERBS = ['ludere', 'ridere', 'laborare', 'venire', 'currere', 'clamare', 'cantare', 'gaudere', 'respondere', 'incipere', 'fugere', 'audire', 'quaerere', 'dicere'];
+const DUTIES = [
+  { la: 'officium explēre', de: 'die Pflicht erfüllen' },
+  { la: 'labōrem pergere', de: 'die Arbeit fortsetzen' },
+  { la: 'culīnam intrāre', de: 'die Küche betreten' },
+  { la: 'ātrium intrāre', de: 'das Atrium betreten' },
+  { la: 'statim venīre', de: 'sofort kommen' },
+  { la: 'semper respondēre', de: 'immer antworten' },
+  { la: 'labōrāre', de: 'arbeiten' },
+  { la: 'frātrem exspectāre', de: 'den Bruder erwarten' },
+  { la: 'sorōrem quaerere', de: 'die Schwester suchen' },
+  { la: 'parentēs rogāre', de: 'die Eltern fragen' },
+];
+
+// ---------------------------------------------------------------------------
 // Worlds. Learn cards list words through `vocab` (rendered by vocabLearnExtras).
 // Never reorder worlds or levels: progress is stored per world id and position.
 // ---------------------------------------------------------------------------
@@ -108,6 +136,7 @@ const TOPICS = [
       { type: 'vmatch', title: 'Paare finden', words: NOUN_IDS, prompt: 'Verbinde jedes lateinische Wort mit seiner Bedeutung.' },
       { type: 'vacc', title: 'Akkusativ-Training', words: NOUN_IDS, n: 10 },
       { type: 'vtest', title: 'Wie im Test', words: NOUN_IDS, n: 10 },
+      { type: 'vnom', title: 'Akkusativ erkennen', words: NOUN_IDS.filter(id => NOUNS[id].acc !== NOUNS[id].la) },
     ],
   },
   {
@@ -166,6 +195,19 @@ const TOPICS = [
       { type: 'sort', title: 'Salve und L1 sortieren', prompt: 'Zu welcher Konjugation gehört das Verb?', buckets: CONJ_ORDER.map(k => CONJ[k].name), items: OLD_VERBS.filter(id => !VERBS[id].noConj).map(id => ({ t: plain(VERBS[id].inf), b: CONJ_ORDER.indexOf(VERBS[id].conj) })) },
       { type: 'conj', title: 'Welche Klasse?', words: CONJ_VERBS, n: 12 },
       { type: 'plform', title: '3. Person Plural bilden', words: CONJ_VERBS, n: 10 },
+    ],
+  },
+  {
+    id: 'sentences', title: 'Verben im Satz', sub: 'Aus dem Arbeitsheft: aus eins mach zwei, dēbet oder dēbent', art: 'verba', badge: 'Satzbauer',
+    learn: [
+      { h: 'Einer oder mehrere?', p: 'Das Prädikat richtet sich nach dem Subjekt. Steht ein Subjekt da, endet das Verb auf -t, sind es mehrere (auch mit et verbunden), endet es auf -nt.', bullets: ['Aulus lūdit. Aulus spielt.', 'Aulus et Cornēlia lūdunt. Aulus und Cornelia spielen.', 'Bei der gemischten und der i-Konjugation kommt im Plural ein -i- dazu: Dēlia incipit, Dēlia et Crispīna incipiunt.'] },
+      { h: 'dēbet oder dēbent', p: 'dēbēre steht mit einem Infinitiv. Der Infinitiv ist zwar ein Verb, aber kein Prädikat; das Prädikat ist dēbet oder dēbent.', bullets: ['Syrus labōrāre dēbet. Syrus muss arbeiten.', 'Servī labōrāre dēbent. Sklaven müssen arbeiten.', 'Puer clāmāre nōn dēbet. Der Junge darf nicht rufen.'] },
+    ],
+    levels: [
+      { type: 'learn', title: 'Lernkarten' },
+      { type: 'numform', title: 'Aus Eins mach Zwei', words: SENTENCE_VERBS, dir: 'pl', n: 10 },
+      { type: 'numform', title: 'Aus Zwei mach Eins', words: SENTENCE_VERBS, dir: 'sg', n: 10 },
+      { type: 'debet', title: 'dēbet oder dēbent?', n: 10 },
     ],
   },
 ];

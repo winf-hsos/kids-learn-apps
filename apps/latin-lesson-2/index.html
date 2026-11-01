@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Latein-Arena</title>
+<title>Latein-Arena: Klasse 6 – Lektion 2</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20aria-hidden%3D%22true%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%23B8322A%22/%3E%0A%20%20%3Cpath%20d%3D%22M19%2054%20A33%2033%200%200%201%2081%2054%22%20fill%3D%22none%22%20stroke%3D%22%23F2A65A%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Cpath%20d%3D%22M24%2066%20A26%2026%200%200%201%2076%2066%20Z%22%20fill%3D%22%23FFC21A%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22/%3E%0A%20%20%3Cpath%20d%3D%22M30%2066%20V82%20Q30%2088%2037%2086%20L42%2070%20Z%20M70%2066%20V82%20Q70%2088%2063%2086%20L58%2070%20Z%22%20fill%3D%22%23FFC21A%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22/%3E%0A%20%20%3Cpath%20d%3D%22M14%2066%20H86%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linecap%3D%22round%22/%3E%0A%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -444,6 +444,9 @@ button.tile:hover { border-color: var(--accent); }
 .conj-rule span { font-size: 15px; }
 .conj-rule .la { font-weight: 700; color: var(--pen); }
 
+.type-word .sent { display: block; font-size: clamp(22px, 6vw, 30px); }
+.type-word .sent.gap { color: var(--pen); margin-top: 6px; }
+
 .scard .swipe-la { display: block; font-family: var(--f-display); font-size: 30px; color: var(--pen); }
 .scard .swipe-de { display: block; margin-top: 10px; font-size: 20px; }
 .scard .swipe-de::before { content: "= "; color: var(--ink-soft); }
@@ -671,7 +674,7 @@ const FOOTBALL = [
 ];
 
 
-const MANIFEST = {"id": "latin-lesson-2", "title": "Latein-Arena", "school": "Gymnasium", "subject": "Latein", "grade": "Klasse 6", "about": "Vokabeln aus Lektion 2 mit Akkusativ und Verbformen, dazu die Verben aus Salve und Lektion 1 und die Konjugationsklassen", "storeKey": "kla:latin-lesson-2", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-03", "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"}, "packs": ["football"], "hubUrl": "../../"};
+const MANIFEST = {"id": "latin-lesson-2", "title": "Latein-Arena: Klasse 6 – Lektion 2", "school": "Gymnasium", "subject": "Latein", "grade": "Klasse 6", "about": "Vokabeln aus Lektion 2 mit Akkusativ und Verbformen, dazu die Verben aus Salve und Lektion 1 und die Konjugationsklassen", "storeKey": "kla:latin-lesson-2", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-03", "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"}, "packs": ["football"], "hubUrl": "../../"};
 
 // Vocabulary engine of the Latin app: accepted answers, quiz types, the match
 // level and the vocabulary tables on learn cards. Words are looked up by id in
@@ -796,6 +799,45 @@ function plformItem(lv, id, ref) {
   return { kind: 'type', q: plain(v.inf), lead: 'Bilde die 3. Person Plural.', fields: [{ label: '3. Person Plural', accept: [v.pl], strict: true, sol: v.pl }], x: `${CONJ[v.conj].name}: ${CONJ[v.conj].rule}.`, ref };
 }
 
+// Acc -> nominative and meaning (workbook 1a shows accusative forms like frātrem).
+function nomItem(lv, id, ref) {
+  const n = NOUNS[id]; if (!n) return null;
+  return { kind: 'type', q: plain(n.acc), lead: 'Das ist ein Akkusativ. Wie heißt das Wort im Nominativ, und was bedeutet es?', ref, x: explain(id),
+    fields: [{ label: 'Nominativ', accept: [n.la], strict: true, sol: n.la }, meaningField(id)] };
+}
+
+// Sentence keys: "verbId.subjectIndex"; lv.dir is the number to form ('pl' or 'sg').
+function numformItem(lv, key, ref) {
+  const [id, si] = key.split('.'), v = VERBS[id], s = SUBJECTS[+si];
+  if (!v || !s) return null;
+  const to = lv.dir, from = to === 'pl' ? 'sg' : 'pl', de = v.de[0][FORM_INDEX[to]];
+  return {
+    kind: 'type', ref, lead: to === 'pl' ? 'Aus eins mach zwei: Setze das Verb in die 3. Person Plural.' : 'Aus zwei mach eins: Setze das Verb in die 3. Person Singular.',
+    q: `<span class="sent">${plain(s[from])} ${plain(v[from])}.</span><span class="sent gap">${plain(s[to])} …</span>`,
+    fields: [{ label: to === 'pl' ? '3. Person Plural' : '3. Person Singular', accept: [v[to]], strict: true, sol: v[to] }],
+    x: `${s[to]} ${v[to]}: ${s[to + 'De']} ${de}. <i>${CONJ[v.conj].name}: ${CONJ[v.conj].rule}.</i>`,
+  };
+}
+function numformKeys(lv) {
+  return shuffle(lv.words).slice(0, lv.n).map(id => `${id}.${Math.floor(Math.random() * SUBJECTS.length)}`);
+}
+
+// dēbet/dēbent keys: "dutyIndex.subjectIndex.number.negated".
+function debetKeys(lv) {
+  return shuffle(DUTIES).slice(0, lv.n).map(d => `${DUTIES.indexOf(d)}.${Math.floor(Math.random() * SUBJECTS.length)}.${pick(['sg', 'pl'])}.${Math.random() < .25 ? 1 : 0}`);
+}
+function debetItem(lv, key, ref) {
+  const [di, si, num, neg] = key.split('.'), d = DUTIES[+di], s = SUBJECTS[+si];
+  if (!d || !s) return null;
+  const pl = num === 'pl', not = neg === '1';
+  const modal = not ? (pl ? 'dürfen nicht' : 'darf nicht') : (pl ? 'müssen' : 'muss');
+  return {
+    kind: 'mc', ref, q: `<div class="type-lead">Ein Subjekt oder mehrere?</div>${plain(s[num])} ${plain(d.la)} ${not ? 'non ' : ''}___`,
+    o: [`${not ? 'nōn ' : ''}dēbet`, `${not ? 'nōn ' : ''}dēbent`], a: pl ? 1 : 0,
+    x: `<b>${s[num]} ${d.la} ${not ? 'nōn ' : ''}${pl ? 'dēbent' : 'dēbet'}.</b> ${s[num + 'De']} ${modal} ${d.de}.`,
+  };
+}
+
 const VOCAB_QUIZ_TYPES = {
   vmc: { keys: lv => sample(lv, wordKeys(lv)), item: mcItem },
   vacc: { keys: lv => sample(lv, lv.words), item: (lv, id, ref) => NOUNS[id] ? { kind: 'type', q: plain(NOUNS[id].la), lead: 'Wie lautet der Akkusativ?', fields: [accField(id)], x: explain(id), ref } : null },
@@ -803,6 +845,9 @@ const VOCAB_QUIZ_TYPES = {
   vswipe: { keys: swipeKeys, item: swipeItem },
   conj: { keys: lv => sample(lv, lv.words), item: conjItem },
   plform: { keys: lv => sample(lv, lv.words), item: plformItem },
+  vnom: { keys: lv => sample(lv, lv.words), item: nomItem },
+  numform: { keys: numformKeys, item: numformItem },
+  debet: { keys: debetKeys, item: debetItem },
 };
 
 // Match level with six random pairs from the level's words.
@@ -927,6 +972,34 @@ const WORD_IDS = Object.keys(WORDS);
 const CONJ_VERBS = [...L2_VERBS, ...OLD_VERBS].filter(id => !VERBS[id].noConj);
 
 // ---------------------------------------------------------------------------
+// Sentences in the style of the workbook (pages 8-11): subjects in singular and
+// plural with their German translation, and infinitive phrases for dēbēre.
+// ---------------------------------------------------------------------------
+const SUBJECTS = [
+  { sg: 'Aulus', sgDe: 'Aulus', pl: 'Aulus et Cornēlia', plDe: 'Aulus und Cornelia' },
+  { sg: 'Dēlia', sgDe: 'Delia', pl: 'Dēlia et Crispīna', plDe: 'Delia und Crispina' },
+  { sg: 'Syrus', sgDe: 'Syrus', pl: 'Syrus et Modestus', plDe: 'Syrus und Modestus' },
+  { sg: 'Puer', sgDe: 'Der Junge', pl: 'Puer et puella', plDe: 'Der Junge und das Mädchen' },
+  { sg: 'Frāter', sgDe: 'Der Bruder', pl: 'Frāter et soror', plDe: 'Der Bruder und die Schwester' },
+  { sg: 'Māter', sgDe: 'Die Mutter', pl: 'Parentēs', plDe: 'Die Eltern' },
+  { sg: 'Puella', sgDe: 'Das Mädchen', pl: 'Līberī', plDe: 'Die Kinder' },
+];
+// Verbs that make a sentence without an object.
+const SENTENCE_VERBS = ['ludere', 'ridere', 'laborare', 'venire', 'currere', 'clamare', 'cantare', 'gaudere', 'respondere', 'incipere', 'fugere', 'audire', 'quaerere', 'dicere'];
+const DUTIES = [
+  { la: 'officium explēre', de: 'die Pflicht erfüllen' },
+  { la: 'labōrem pergere', de: 'die Arbeit fortsetzen' },
+  { la: 'culīnam intrāre', de: 'die Küche betreten' },
+  { la: 'ātrium intrāre', de: 'das Atrium betreten' },
+  { la: 'statim venīre', de: 'sofort kommen' },
+  { la: 'semper respondēre', de: 'immer antworten' },
+  { la: 'labōrāre', de: 'arbeiten' },
+  { la: 'frātrem exspectāre', de: 'den Bruder erwarten' },
+  { la: 'sorōrem quaerere', de: 'die Schwester suchen' },
+  { la: 'parentēs rogāre', de: 'die Eltern fragen' },
+];
+
+// ---------------------------------------------------------------------------
 // Worlds. Learn cards list words through `vocab` (rendered by vocabLearnExtras).
 // Never reorder worlds or levels: progress is stored per world id and position.
 // ---------------------------------------------------------------------------
@@ -944,6 +1017,7 @@ const TOPICS = [
       { type: 'vmatch', title: 'Paare finden', words: NOUN_IDS, prompt: 'Verbinde jedes lateinische Wort mit seiner Bedeutung.' },
       { type: 'vacc', title: 'Akkusativ-Training', words: NOUN_IDS, n: 10 },
       { type: 'vtest', title: 'Wie im Test', words: NOUN_IDS, n: 10 },
+      { type: 'vnom', title: 'Akkusativ erkennen', words: NOUN_IDS.filter(id => NOUNS[id].acc !== NOUNS[id].la) },
     ],
   },
   {
@@ -1004,6 +1078,19 @@ const TOPICS = [
       { type: 'plform', title: '3. Person Plural bilden', words: CONJ_VERBS, n: 10 },
     ],
   },
+  {
+    id: 'sentences', title: 'Verben im Satz', sub: 'Aus dem Arbeitsheft: aus eins mach zwei, dēbet oder dēbent', art: 'verba', badge: 'Satzbauer',
+    learn: [
+      { h: 'Einer oder mehrere?', p: 'Das Prädikat richtet sich nach dem Subjekt. Steht ein Subjekt da, endet das Verb auf -t, sind es mehrere (auch mit et verbunden), endet es auf -nt.', bullets: ['Aulus lūdit. Aulus spielt.', 'Aulus et Cornēlia lūdunt. Aulus und Cornelia spielen.', 'Bei der gemischten und der i-Konjugation kommt im Plural ein -i- dazu: Dēlia incipit, Dēlia et Crispīna incipiunt.'] },
+      { h: 'dēbet oder dēbent', p: 'dēbēre steht mit einem Infinitiv. Der Infinitiv ist zwar ein Verb, aber kein Prädikat; das Prädikat ist dēbet oder dēbent.', bullets: ['Syrus labōrāre dēbet. Syrus muss arbeiten.', 'Servī labōrāre dēbent. Sklaven müssen arbeiten.', 'Puer clāmāre nōn dēbet. Der Junge darf nicht rufen.'] },
+    ],
+    levels: [
+      { type: 'learn', title: 'Lernkarten' },
+      { type: 'numform', title: 'Aus Eins mach Zwei', words: SENTENCE_VERBS, dir: 'pl', n: 10 },
+      { type: 'numform', title: 'Aus Zwei mach Eins', words: SENTENCE_VERBS, dir: 'sg', n: 10 },
+      { type: 'debet', title: 'dēbet oder dēbent?', n: 10 },
+    ],
+  },
 ];
 
 
@@ -1048,6 +1135,7 @@ const ART = {
 Object.assign(TYPE_ICON, {
   vmc: TYPE_ICON.mc, vmatch: TYPE_ICON.match, vswipe: TYPE_ICON.swipe,
   vacc: TYPE_ICON.write, vtest: TYPE_ICON.write, plform: TYPE_ICON.write, conj: TYPE_ICON.sort,
+  vnom: TYPE_ICON.write, numform: TYPE_ICON.write, debet: TYPE_ICON.mc,
 });
 
 const APP = {

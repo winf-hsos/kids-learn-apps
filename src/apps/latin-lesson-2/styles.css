@@ -19,6 +19,9 @@
 .conj-rule span { font-size: 15px; }
 .conj-rule .la { font-weight: 700; color: var(--pen); }
 
+.type-word .sent { display: block; font-size: clamp(22px, 6vw, 30px); }
+.type-word .sent.gap { color: var(--pen); margin-top: 6px; }
+
 .scard .swipe-la { display: block; font-family: var(--f-display); font-size: 30px; color: var(--pen); }
 .scard .swipe-de { display: block; margin-top: 10px; font-size: 20px; }
 .scard .swipe-de::before { content: "= "; color: var(--ink-soft); }
