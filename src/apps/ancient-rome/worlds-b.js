@@ -1,5 +1,40 @@
 // Worlds 5 and 6: the Roman familia and the offices of the Republic.
 
+// The mind map from the worksheet of 17.09. (task 1b), filled in from text D1, its pictures and
+// textbook pages 110-111. Branch names follow the printed template. `s` is the short keyword
+// used in the sorting level.
+const FAMILIA_MINDMAP = {
+  root: 'Die römische Familie',
+  branches: [
+    { h: 'Familienmitglieder', leaves: [
+      { t: '<b>Vater (Pater familias)</b>: Oberhaupt und Richter über alle, sogar über Leben und Tod', s: 'Pater familias: Oberhaupt und Richter' },
+      { t: '<b>Mutter (Matrona)</b>: Haushalt, Erziehung der Kinder, Aufsicht über die Sklaven', s: 'Matrona: Haushalt und Erziehung' },
+      { t: '<b>Kinder</b>, auch die erwachsenen Söhne mit Ehefrauen und Kindern', s: 'erwachsene Söhne mit ihren Familien' },
+      { t: '<b>Sklavinnen und Sklaven</b>', s: null },
+      { t: '<b>Klienten</b>: Bürger, die frei, aber wirtschaftlich abhängig sind', s: 'Klienten: frei, aber abhängig' },
+    ] },
+    { h: 'Sklaven', leaves: [
+      { t: '<b>Eigentum</b> des Hausherrn, <b>keine eigenen Rechte</b>: Er darf sie verkaufen und bestrafen.', s: 'Eigentum des Hausherrn, keine Rechte' },
+      { t: '<b>harte Arbeit</b> in Bergwerken (am schwersten), in der Küche und in der Landwirtschaft', s: 'Arbeit im Bergwerk' },
+      { t: '<b>leichtere Arbeit</b> als Lehrer, Kinderbetreuer oder Ärzte', s: 'Arbeit als Lehrer oder Arzt' },
+      { t: 'oft <b>Kriegsgefangene</b>, in Ketten nach Rom gebracht (Abb. 3)', s: 'Kriegsgefangene in Ketten' },
+      { t: '<b>Diener</b> des Herrn (Abb. 2), manche auch <b>Gladiatoren</b> (Abb. 4)', s: 'bringen dem Herrn die Schreibtafel' },
+    ] },
+    { h: 'Kinder', leaves: [
+      { t: 'Der Vater nimmt <b>Neugeborene</b> in die familia auf und bestimmt, <b>wen sie heiraten</b>.', s: 'Aufnahme der Neugeborenen durch den Vater' },
+      { t: '<b>Mädchen</b> werden früh verheiratet, meist mit <b>12 bis 17 Jahren</b>.', s: 'Heirat mit 12 bis 17 Jahren' },
+      { t: '<b>Jungen</b> sind <b>ab 16 volljährig</b>: Feier mit dem Haarschnitt der Männer und der Toga.', s: 'ab 16 volljährig, Toga' },
+      { t: 'Die Mutter erzieht Kleinkinder und Mädchen, der Vater sorgt für die Erziehung der Jungen.', s: null },
+    ] },
+    { h: 'Bedeutung im alten Rom', leaves: [
+      { t: '<b>kleinster Baustein</b> der römischen Gesellschaft', s: 'kleinster Baustein der Gesellschaft' },
+      { t: '<b>Wirtschaftseinheit</b>: Alle leben und arbeiten in einem Haus oder Hof, oft mehr als 20 Personen.', s: 'Wirtschaftseinheit' },
+      { t: '<b>Patriarchat</b>: Der Vater hat das letzte Wort, die Frauen sind untergeordnet.', s: 'Patriarchat' },
+      { t: 'Die <b>Vorfahren</b> werden verehrt (Mores maiorum, Büsten auf dem Hausaltar).', s: 'Verehrung der Vorfahren' },
+    ] },
+  ],
+};
+
 const W_FAMILIA = {
   id: 'familia', img: 'img/familia.webp', title: 'Die römische familia', sub: 'Mitglieder, Aufgaben und Rechte, verglichen mit heute', art: 'temple', badge: 'Pater familias',
   learn: [
@@ -12,6 +47,7 @@ const W_FAMILIA = {
     { h: 'Sklavinnen und Sklaven', bullets: ['Nach römischem Recht waren sie Eigentum des Hausherrn, der sie behandeln, verkaufen und bestrafen konnte, wie er wollte. Sie hatten keine eigenen Rechte.', 'Sie mussten alle Arbeiten verrichten, etwa in der Küche, auf dem Feld (Feldsklaven) oder im Haus (Haussklaven).', 'Am schwersten hatten es die Sklaven in den Bergwerken, leichter die, die als Lehrer, zur Kinderbetreuung oder als Ärzte eingesetzt wurden.'] },
     { h: 'Patrizier, Plebejer, Patron und Klienten', bullets: ['<b>Patrizier</b>: die wenigen, besonders vornehmen Familien', '<b>Plebejer</b> („Menge“): die große Mehrheit, meist Kleinbauern, Handwerker und Händler', 'Geriet ein Plebejer in Not, bat er einen Patrizier um Schutz. Der Patrizier wurde sein <b>Patron</b> (Schutzherr).', 'Der verarmte Plebejer und seine Angehörigen gehörten dann als <b>Klienten</b> (Abhängige) zur familia des Patriziers.'] },
     { h: 'Sitten und Vorfahren', bullets: ['Die althergebrachten Sitten, die <b>Mores maiorum</b>, bestimmten, wie man leben sollte: arbeitsam, genügsam, zuverlässig, gerecht, ehrfürchtig gegenüber den Göttern und den Vorfahren, standhaft und tapfer für Rom.', 'Die Vorfahren wurden verehrt: Auf Hausaltären standen ihre Totenmasken oder Büsten, in täglichen Andachten ehrte man ihre Seelen.'] },
+    { h: 'Die Mindmap vom Arbeitsblatt', p: 'So sieht die Mindmap „Die römische Familie“ vom Arbeitsblatt (17.09.) ausgefüllt aus. Sie fasst alles auf einen Blick zusammen.', mindmap: FAMILIA_MINDMAP },
     { h: 'Damals und heute im Vergleich', table: { head: ['', 'Römische familia', 'Familie heute'], rows: [
       ['Familien­mitglieder', 'große Gemeinschaft, oft über 20 Personen: Eltern, Kinder, Söhne mit Familien, Sklaven, Klienten', 'meist Eltern und Kinder, oft auch Patchwork- oder Ein-Eltern-Familien, keine Sklaven'],
       ['Rechte und Aufgaben', 'Der Vater hat alle Macht (Patriarchat), die Mutter ist untergeordnet und führt den Haushalt, Sklaven haben keine Rechte.', 'Mann und Frau sind gleichberechtigt und entscheiden gemeinsam, Kinder haben eigene Rechte.'],
@@ -72,6 +108,9 @@ const W_FAMILIA = {
       { q: 'Erkläre und unterscheide die Begriffe Pater familias, Patrizier und Patron.', points: ['Pater familias: Hausvater und Oberhaupt der familia', 'Patrizier: Angehöriger der wenigen, vornehmen Familien Roms', 'Patron: Patrizier, der als Schutzherr verarmte Plebejer (Klienten) beschützt', 'Unterschied: Pater familias ist eine Rolle in der Familie, Patrizier ein Stand, Patron eine Schutzbeziehung'],
         m: 'Der Pater familias ist der Hausvater, der die familia nach römischem Recht führt und Macht über alle Mitglieder hat. Patrizier sind die Angehörigen der wenigen, besonders vornehmen Familien Roms, also eine Bevölkerungsgruppe. Ein Patron ist ein Patrizier, der einen verarmten Plebejer und dessen Angehörige beschützt. Sie gehören dann als Klienten zu seiner familia. Ein Patrizier kann also zugleich Pater familias seiner familia und Patron seiner Klienten sein.' },
     ] },
+    // Added on 1.11. after the filled mind map; appended so stored progress keeps its indices.
+    { type: 'sort', title: 'Die Mindmap ergänzen', prompt: 'An welchen Ast der Mindmap gehört das?', buckets: FAMILIA_MINDMAP.branches.map(b => b.h),
+      items: FAMILIA_MINDMAP.branches.flatMap((b, i) => b.leaves.filter(l => l.s).map(l => ({ t: l.s, b: i }))) },
   ],
 };
 

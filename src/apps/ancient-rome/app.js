@@ -10,12 +10,17 @@ function tableHtml(t) {
   return `<table class="ctab"><tr>${t.head.map(h => `<th>${h}</th>`).join('')}</tr>${t.rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
 }
 
+// Mind maps on learn cards: { root, branches: [{ h, leaves: [{ t }] }] }, drawn as a tree that fits a phone.
+function mindmapHtml(m) {
+  return `<div class="mmap"><div class="mmap-root">${m.root}</div>${m.branches.map((b, i) => `<div class="mmap-branch b${i}"><div class="mmap-h">${b.h}</div><ul>${b.leaves.map(l => `<li>${l.t}</li>`).join('')}</ul></div>`).join('')}</div>`;
+}
+
 const APP = {
   topics: TOPICS,
   art: key => ART[key] || '',
   heroArt: () => ART.temple,
   heroImg: 'img/hero.webp',
-  learnExtras: c => c.table ? { top: tableHtml(c.table) } : {},
+  learnExtras: c => c.table ? { top: tableHtml(c.table) } : c.mindmap ? { bottom: mindmapHtml(c.mindmap) } : {},
   // The mock test mixes questions from every topic of the checklist with two written tasks.
   exam: { mix: { gruendung: 4, wohnen: 2, freizeit: 3, arbeit: 2, familia: 3, republik: 4, quellen: 2, urteil: 1 }, writes: 2, art: 'tablet' },
   intro: { title: 'Zeitreise ins alte Rom', tip: 'Tipp: Arbeite die Welten der Reihe nach durch, sie folgen der Checkliste für die Klassenarbeit. Am Ende zeigt dir die Probe-Klassenarbeit, ob alles sitzt.' },
