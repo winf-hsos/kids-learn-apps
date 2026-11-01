@@ -1,0 +1,24 @@
+/* Latin arena: Roman red instead of the default blue, plus vocabulary tables,
+   conjugation overviews and the two-line swipe cards. The shared design lives in core/core.css. */
+:root { --accent: #B8322A; --accent-soft: #F9E0DC; --accent-2: #F2A65A; --pen: #8C2A1F; --accent-strong: #B8322A; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --accent: #FF7B6B; --accent-soft: #4A1D1A; --accent-2: #FFB27A; --pen: #FFA294; --accent-strong: #C9473A; }
+}
+:root[data-theme="dark"] { --accent: #FF7B6B; --accent-soft: #4A1D1A; --accent-2: #FFB27A; --pen: #FFA294; --accent-strong: #C9473A; }
+
+.vtab { width: 100%; border-collapse: collapse; margin: 10px 0 4px; font-size: 16px; }
+.vtab td { padding: 8px 6px; border-bottom: 2px solid var(--line); vertical-align: top; }
+.vtab tr:last-child td { border-bottom: 0; }
+.vtab .la, .vtab td:nth-child(2) { font-weight: 700; color: var(--pen); white-space: nowrap; }
+.vtab td:nth-child(2) { font-weight: 400; color: inherit; }
+.vtab i { color: var(--ink-soft); }
+.vtab small { display: block; font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+
+.conj-rules { display: grid; gap: 10px; margin-top: 10px; }
+.conj-rule { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; background: var(--accent-soft); }
+.conj-rule span { font-size: 15px; }
+.conj-rule .la { font-weight: 700; color: var(--pen); }
+
+.scard .swipe-la { display: block; font-family: var(--f-display); font-size: 30px; color: var(--pen); }
+.scard .swipe-de { display: block; margin-top: 10px; font-size: 20px; }
+.scard .swipe-de::before { content: "= "; color: var(--ink-soft); }

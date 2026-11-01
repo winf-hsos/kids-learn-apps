@@ -44,7 +44,7 @@ function ring(p) {
 function heroText() {
   if (!EXAM) return { headline: `Los geht's!`, sub: MANIFEST.about || '' };
   const dl = daysUntil(EXAM.date), k = EXAM.kind;
-  const headline = dl > 1 ? `Noch <em>${dl} Tage</em> bis zur ${k}` : dl === 1 ? `<em>Morgen</em> ist ${k}` : dl === 0 ? `<em>Heute</em> ist ${k}!` : `${k} geschrieben`;
+  const headline = dl > 1 ? `Noch <em>${dl} Tage</em> bis ${examArt.to} ${k}` : dl === 1 ? `<em>Morgen</em> ist ${k}` : dl === 0 ? `<em>Heute</em> ist ${k}!` : `${k} geschrieben`;
   const sub = dl >= 0 ? `${examDay}, ${shortDate(EXAM.date)} · ${MANIFEST.subject} · Thema: ${EXAM.topics}.` : 'Du kannst trotzdem weiter üben und spielen.';
   return { headline, sub };
 }

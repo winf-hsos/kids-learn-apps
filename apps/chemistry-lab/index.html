@@ -245,6 +245,16 @@ button.tile:hover { border-color: var(--accent); }
 
 /* write */
 .answer { width: 100%; min-height: 140px; border: 3px solid var(--line); border-radius: 16px; padding: 14px; font: inherit; font-size: 18px; background: var(--card); color: var(--ink); resize: vertical; font-family: var(--f-hand); }
+.type-lead { font-size: 17px; color: var(--ink-soft); margin-top: 4px; }
+.type-word { font-family: var(--f-display); font-size: clamp(30px, 8vw, 46px); line-height: 1.15; margin: 8px 0 18px; overflow-wrap: anywhere; }
+.type-word small { display: block; font-family: var(--f-body); font-size: 16px; font-weight: 400; color: var(--ink-soft); margin-top: 6px; }
+.type-form { display: grid; gap: 12px; }
+.tfield { display: grid; gap: 4px; font-size: 14px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+.tfield input { width: 100%; border: 3px solid var(--line); border-radius: 14px; padding: 12px 14px; font: inherit; font-family: var(--f-hand); font-size: 22px; letter-spacing: 0; text-transform: none; background: var(--card); color: var(--ink); }
+.tfield input:focus { outline: none; border-color: var(--accent); }
+.tfield input.right { border-color: var(--good); background: var(--good-soft); }
+.tfield input.wrong { border-color: var(--bad); background: var(--bad-soft); animation: shake .4s; }
+.type-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
 .model { margin-top: 16px; padding: 16px; border-radius: 16px; background: var(--card); border: 3px solid var(--good); }
 .model h4 { margin: 0 0 6px; font-size: 14px; letter-spacing: .08em; text-transform: uppercase; color: var(--good); }
 .kw { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
@@ -1648,6 +1658,8 @@ const RANKS = APP.ranks || [
 const GAMES = (APP.games || []).map(g => ({ ...GAME_DEFS[g.id], ...g }));
 const PRAISE = APP.praise || ['Richtig!', 'Volltreffer!', 'Stark!', 'Genau so!', 'Top!', 'Wie ein Profi!', 'Sauber!', 'Klasse!'];
 const examName = EXAM ? EXAM.kind : 'Prüfung';
+// German articles for the exam name, from manifest exam.gender (f: die Klassenarbeit, m: der Vokabeltest).
+const examArt = { f: { acc: 'die', dat: 'der', to: 'zur' }, m: { acc: 'den', dat: 'dem', to: 'zum' }, n: { acc: 'das', dat: 'dem', to: 'zum' } }[(EXAM && EXAM.gender) || 'f'];
 const examDay = EXAM ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
 
@@ -1816,7 +1828,7 @@ function allRefs() {
   const refs = [];
   WORLDS.forEach((t, ti) => t.levels.forEach((lv, l) => {
     const qt = QUIZ_TYPES[lv.type];
-    if (qt) qt.keys(lv).forEach(k => refs.push({ t: ti, ref: `${t.id}|${l}|${k}` }));
+    if (qt) qt.keys(lv).forEach(k => refs.push({ t: ti, type: lv.type, ref: `${t.id}|${l}|${k}` }));
   }));
   return refs;
 }
@@ -1871,7 +1883,7 @@ function ring(p) {
 function heroText() {
   if (!EXAM) return { headline: `Los geht's!`, sub: MANIFEST.about || '' };
   const dl = daysUntil(EXAM.date), k = EXAM.kind;
-  const headline = dl > 1 ? `Noch <em>${dl} Tage</em> bis zur ${k}` : dl === 1 ? `<em>Morgen</em> ist ${k}` : dl === 0 ? `<em>Heute</em> ist ${k}!` : `${k} geschrieben`;
+  const headline = dl > 1 ? `Noch <em>${dl} Tage</em> bis ${examArt.to} ${k}` : dl === 1 ? `<em>Morgen</em> ist ${k}` : dl === 0 ? `<em>Heute</em> ist ${k}!` : `${k} geschrieben`;
   const sub = dl >= 0 ? `${examDay}, ${shortDate(EXAM.date)} · ${MANIFEST.subject} · Thema: ${EXAM.topics}.` : 'Du kannst trotzdem weiter üben und spielen.';
   return { headline, sub };
 }
@@ -2024,7 +2036,7 @@ function startMistakes() {
 }
 
 // ---------------------------------------------------------------------------
-// Quiz engine (mc + swipe), also used for the mistake box and the exam
+// Quiz engine (mc, swipe and typed answers), also used for the mistake box and the exam
 // ---------------------------------------------------------------------------
 function quizStep() {
   if (run.i >= run.items.length) {
@@ -2035,6 +2047,7 @@ function quizStep() {
   const title = run.mode === 'level' ? run.lv.title : run.title;
   const top = stageTop(run.i / run.total, run.mode === 'exam' ? '' : comboHtml());
   if (it.kind === 'swipe') return swipeStep(it, title, top);
+  if (it.kind === 'type') return typeStep(it, title, top);
   openStage(`${top}
     ${run.timer && run.mode === 'level' ? '<div class="timer"><i id="tbar"></i></div>' : ''}
     <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
@@ -2116,6 +2129,79 @@ function swipeStep(it, title, top) {
     if (sx === null) return; const dx = e.clientX - sx; sx = null; card.style.transition = '';
     if (Math.abs(dx) > 90) decide(dx > 0); else { card.style.transform = ''; $$('.stamp', card).forEach(s => s.style.opacity = 0); }
   });
+}
+
+// Typed answers: it.fields is a list of inputs, each with a label, the solution
+// shown afterwards (sol) and either accepted answers (accept, traps, strict) or
+// its own judge(text) -> { ok, typo, hint }. Partly right items score pts < 1.
+function typeStep(it, title, top) {
+  const exam = run.mode === 'exam';
+  openStage(`${top}
+    <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    ${it.lead ? `<div class="type-lead">${it.lead}</div>` : ''}
+    <div class="type-word">${it.q}</div>
+    <form class="type-form" id="tform" autocomplete="off">
+      ${it.fields.map((f, i) => `<label class="tfield"><span>${f.label}</span><input id="tf${i}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="${i < it.fields.length - 1 ? 'next' : 'done'}"></label>`).join('')}
+      <div class="type-btns"><button class="btn primary" type="submit">${exam ? 'Weiter' : 'Prüfen'}</button><button class="btn" type="button" id="tskip">Weiß ich nicht</button></div>
+    </form>`);
+  bindQuit();
+  const inputs = it.fields.map((_, i) => $('#tf' + i));
+  inputs[0].focus({ preventScroll: true });
+  inputs.forEach((inp, i) => inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && i < inputs.length - 1) { e.preventDefault(); inputs[i + 1].focus(); }
+  }));
+  let done = false;
+  const check = skip => {
+    if (done) return; done = true;
+    const res = it.fields.map((f, i) => skip ? { ok: false } : f.judge ? f.judge(inputs[i].value) : judgeAnswer(inputs[i].value, f.accept, f.traps, f.strict));
+    const pts = res.filter(r => r.ok).length / res.length, ok = pts === 1;
+    inputs.forEach((inp, i) => { inp.readOnly = true; if (!exam) inp.classList.add(res[i].ok ? 'right' : 'wrong'); });
+    $$('#tform button').forEach(b => b.disabled = true);
+    if (exam) {
+      run.answers.push({ it, ok, pts, given: inputs.map(x => x.value.trim()).filter(Boolean).join(' · ') });
+      if (ok) run.correct++; else noteMistake(it.ref);
+      Sound.click(); return setTimeout(() => { run.i++; quizStep(); }, 350);
+    }
+    const xp = scoreAnswer(ok, it.ref);
+    const lines = it.fields.map((f, i) => res[i].ok && !res[i].typo ? '' :
+      `${it.fields.length > 1 ? f.label + ': ' : ''}${res[i].ok ? 'Achte auf die Schreibweise:' : 'Richtig ist'} <b>${f.sol}</b>.${res[i].hint ? ' ' + res[i].hint : ''}`);
+    showSheet(ok, ok ? pick(PRAISE) : pts > 0 ? 'Halb richtig.' : 'Nicht ganz.', [...lines, it.x].filter(Boolean).join('<br>'), xp, () => { run.i++; quizStep(); });
+  };
+  $('#tform').onsubmit = e => { e.preventDefault(); check(false); };
+  $('#tskip').onclick = () => check(true);
+}
+
+// Case, ä/ae spellings, Latin length marks and punctuation do not count.
+function normAnswer(s) {
+  return norm(String(s).normalize('NFD').replace(/[\u0304\u0306]/g, '').normalize('NFC'))
+    .replace(/[.,!?;:/„“"'()]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function editDistance(a, b) {
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+// Judges one typed answer. Several answers separated by commas count if one of
+// them is right. traps are known wrong answers ({ answers, hint }) that get a
+// specific hint; unless strict, one typo in a longer word is accepted.
+function judgeAnswer(text, accept, traps = [], strict = false) {
+  const parts = [text, ...String(text).split(/[,;]| oder /)].map(normAnswer).filter(Boolean);
+  const acc = accept.map(normAnswer);
+  if (parts.some(p => acc.includes(p))) return { ok: true };
+  for (const tr of traps) if (parts.some(p => tr.answers.map(normAnswer).includes(p))) return { ok: false, hint: tr.hint };
+  if (!strict && parts.some(p => acc.some(a => a.length >= 5 && editDistance(a, p) <= 1))) return { ok: true, typo: true };
+  return { ok: false };
+}
+
+// What the learner should have answered, for result lists.
+function itemSolution(it) {
+  if (it.kind === 'swipe') return swipeVerdict(it);
+  if (it.kind === 'type') return 'Richtig: ' + it.fields.map(f => f.sol).join(' · ') + '.';
+  return 'Richtig: ' + it.o[it.a] + '.';
 }
 
 // ---------------------------------------------------------------------------
@@ -2330,7 +2416,7 @@ function keywordScore(text, groups) {
 function writeTask(it, header, onDone) {
   openStage(`${header}
     <div class="question">${it.q}</div>
-    <textarea class="answer" id="ans" placeholder="Schreib deine Antwort hier rein, so wie in der ${examName} …"></textarea>
+    <textarea class="answer" id="ans" placeholder="Schreib deine Antwort hier rein, so wie in ${examArt.dat} ${examName} …"></textarea>
     <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"><button class="btn primary" id="check">Antwort prüfen</button><button class="btn" id="skip">Ich weiß es nicht</button></div>
     <div id="fb"></div>`);
   bindQuit();
@@ -2403,14 +2489,15 @@ function memoryLevel() {
 
 
 // Mock exam: quiz items mixed from several worlds plus write tasks, graded at the end.
-// APP.exam = { mix: { worldId: count, ... }, writes: n, art: artKey }
+// APP.exam = { mix: { worldId: count, ... }, writes: n, art: artKey, types: [levelType, ...] }
+// types optionally limits the quiz items to levels of these types.
 
 function startExam() {
   const cfg = APP.exam, refs0 = allRefs();
   const ids = Object.keys(cfg.mix);
   const refs = shuffle(ids.flatMap(id => {
     const ti = WORLDS.findIndex(t => t.id === id);
-    return shuffle(refs0.filter(r => r.t === ti)).slice(0, cfg.mix[id]).map(r => r.ref);
+    return shuffle(refs0.filter(r => r.t === ti && (!cfg.types || cfg.types.includes(r.type)))).slice(0, cfg.mix[id]).map(r => r.ref);
   }));
   const writes = shuffle(WORLDS.filter(t => ids.includes(t.id)).flatMap(t => t.levels.filter(lv => lv.type === 'write').flatMap(lv => lv.items))).slice(0, cfg.writes || 0);
   run = { mode: 'exam', items: refs.map(itemFromRef).filter(Boolean), writes, i: 0, correct: 0, combo: 0, xp: 0, answers: [], started: Date.now(), title: `Probe-${examName}` };
@@ -2418,7 +2505,7 @@ function startExam() {
   openStage(`<div class="result" style="padding-top:40px">
     <div style="width:120px;margin:0 auto;color:var(--ink)">${cfg.art ? artOf(cfg.art) : ICON.exam}</div>
     <h1>Probe-${examName}</h1>
-    <p class="lead" style="margin:12px auto">${run.items.length} Aufgaben zum Ankreuzen${writes.length ? ` und ${writes.length} Aufgaben zum Schreiben` : ''} aus allen Themen. Wie in der echten Arbeit gibt es erst am Ende die Auswertung, mit Note.</p>
+    <p class="lead" style="margin:12px auto">${run.items.length} Aufgaben${writes.length ? ` und ${writes.length} Schreibaufgaben` : ''} aus allen Themen. Wie in der echten Arbeit gibt es erst am Ende die Auswertung, mit Note.</p>
     <div class="actions"><button class="btn warn" id="go">Los geht's</button><button class="btn" id="back">Zurück</button></div></div>`);
   $('#go').onclick = () => quizStep();
   $('#back').onclick = () => { closeStage(); render(); };
@@ -2437,7 +2524,7 @@ function examWrite(k) {
 function gradeFor(pct) { return pct >= 92 ? '1' : pct >= 81 ? '2' : pct >= 67 ? '3' : pct >= 50 ? '4' : pct >= 30 ? '5' : '6'; }
 
 async function examResult() {
-  const mcPts = run.answers.filter(a => !a.write && a.ok).length;
+  const mcPts = run.answers.filter(a => !a.write).reduce((s, a) => s + (a.pts ?? (a.ok ? 1 : 0)), 0);
   const wPts = run.answers.filter(a => a.write).reduce((s, a) => s + a.score * 3, 0);
   const max = run.items.length + run.writes.length * 3;
   const pts = Math.round((mcPts + wPts) * 2) / 2, pct = Math.round(pts / max * 100), grade = gradeFor(pct);
@@ -2461,7 +2548,7 @@ async function examResult() {
     <div class="actions"><button class="btn primary" id="toMap">Zum Lernpfad</button><button class="btn" id="again">Neue Probe</button></div>
     ${wrong.length ? `<h2 class="section-title" style="text-align:left">Das solltest du dir nochmal anschauen</h2>
       <div class="options" style="text-align:left">${wrong.map(a => `<div class="opt" style="display:block;cursor:default"><b>${a.it.kind === 'swipe' ? a.it.t : a.it.q}</b><br>
-      <span class="muted">${a.it.kind === 'swipe' ? swipeVerdict(a.it) : 'Richtig: ' + a.it.o[a.it.a] + '.'} ${a.it.x || ''}</span></div>`).join('')}</div>
+      <span class="muted">${a.given ? `Deine Antwort: ${esc(a.given)}. ` : ''}${itemSolution(a.it)} ${a.it.x || ''}</span></div>`).join('')}</div>
       <p class="muted">Diese Fragen liegen jetzt in deiner Fehlerkiste.</p>` : ''}
   </div>`);
   $('#toMap').onclick = () => { closeStage(); render(); };
@@ -2968,7 +3055,7 @@ function boot() {
   if (!state.seenIntro) {
     state.seenIntro = true; save();
     const intro = APP.intro || {};
-    const when = EXAM && daysUntil(EXAM.date) >= 0 ? ` für die ${EXAM.kind} am ${examDay}` : '';
+    const when = EXAM && daysUntil(EXAM.date) >= 0 ? ` für ${examArt.acc} ${EXAM.kind} am ${examDay}` : '';
     const games = GAMES.length ? `, und jeder neue Stern bringt ein Ticket für die Arcade mit ${GAMES.slice(0, 2).map(g => g.name).join(', ')} und mehr` : '';
     modal(`${APP.heroArt ? `<div style="width:110px;margin:0 auto">${APP.heroArt()}</div>` : ''}<p class="hand">Willkommen!</p><h2>${intro.title || MANIFEST.title}</h2><p>Hier trainierst du alles${when}. Für jedes Level gibt es bis zu 3 Sterne${games}.</p>${intro.tip ? `<p>${intro.tip}</p>` : ''}`,
       [{ label: "Los geht's!", cls: 'go' }]).then(() => Sound.click());

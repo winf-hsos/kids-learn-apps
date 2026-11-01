@@ -6,6 +6,7 @@ Gamified study apps for our kids, built for specific school tests and published 
 
 | App | School | Subject | Link |
 | --- | --- | --- | --- |
+| Latein-Arena | Gymnasium | Latin, grade 6 (vocabulary of lesson 2 with accusative and verb forms, conjugation classes) | [apps/latin-lesson-2](https://winf-hsos.github.io/kids-learn-apps/apps/latin-lesson-2/) |
 | Chemie-Labor | Gymnasium | Chemistry, grade 6 (lab safety, lab equipment, Bunsen burner, hazardous substances) | [apps/chemistry-lab](https://winf-hsos.github.io/kids-learn-apps/apps/chemistry-lab/) |
 
 ## How the apps work
@@ -13,7 +14,7 @@ Gamified study apps for our kids, built for specific school tests and published 
 All apps share one engine and one look, so every new app gets the same gamification for free:
 
 - **Learning path** with worlds and levels, up to 3 stars per level, XP, ranks and a daily XP goal with a streak
-- **Level types:** learn cards, multiple choice (optionally timed), swipe cards, matching, sorting, ordering, memory, picture quiz and written answers with keyword feedback; apps can add their own types (the chemistry app adds a burner simulator, a labeling task and a GHS pictogram quiz)
+- **Level types:** learn cards, multiple choice (optionally timed), swipe cards, matching, sorting, ordering, memory, picture quiz, typed short answers (vocabulary, with hints for typical mix-ups) and written answers with keyword feedback; apps can add their own types (the chemistry app adds a burner simulator, a labeling task and a GHS pictogram quiz)
 - **Mistake box** that collects wrong answers for repetition, and a **mock exam** with a German school grade
 - **Arcade:** tickets earned for new stars, finished worlds, the daily goal and good mock exams unlock reward games (jump & run, penalty-shootout quiz, keepy-uppy, expert trivia quiz)
 - **Start page** listing all apps by school (Gymnasium, Grundschule, Kita), with exam countdown and the progress stored on the device

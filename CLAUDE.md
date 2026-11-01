@@ -21,7 +21,7 @@ Who the kids are, their grades and what they like is recorded in `STATUS.md` in 
 ## Architecture
 
 - `build.py` writes one single-file page per app (`apps/<id>/index.html`) and the start page (`index.html`). Script order per app: `core/util.js`, `core/icons.js`, `core/fx.js`, trivia packs, `MANIFEST` (from `manifest.json`), the app's `scripts`, then the rest of core (games registry, engine, UI, levels, exam, pages, games, boot).
-- `MANIFEST` holds the facts the start page also needs: `id`, `title`, `school`, `subject`, `grade`, `about`, `storeKey`, `exam` (`kind`, `date`, `topics`) and `packs`. The start page groups the apps by `school`.
+- `MANIFEST` holds the facts the start page also needs: `id`, `title`, `school`, `subject`, `grade`, `about`, `storeKey`, `exam` (`kind`, `gender` of the exam name for German articles, default `f`, `date`, `topics`) and `packs`. The start page groups the apps by `school`.
 - `APP` (in the app's `app.js`) configures the engine: `topics` (worlds with `id`, `title`, `sub`, `art`, `badge`, `learn` cards and `levels`), `art(key)`, `entity(key)` for picture quiz and memory, `ranks`, `games` with star thresholds, `trivia`, `praise`, `exam` (mix of quiz items per world and number of write tasks) and optional extensions: `levelTypes`, `quizTypes`, `learnExtras`, `heroArt`, `xpIcon`, `memoryBack`, `intro`.
 - Theme tokens live in `core/core.css` (`--accent`, `--gold`, `--good`, `--bad`, ...). An app can override them in its `styles.css` to get its own color.
 - The start page reads `kla:summary:<id>` from `localStorage`, which the engine writes on every save.

@@ -14,6 +14,8 @@ const RANKS = APP.ranks || [
 const GAMES = (APP.games || []).map(g => ({ ...GAME_DEFS[g.id], ...g }));
 const PRAISE = APP.praise || ['Richtig!', 'Volltreffer!', 'Stark!', 'Genau so!', 'Top!', 'Wie ein Profi!', 'Sauber!', 'Klasse!'];
 const examName = EXAM ? EXAM.kind : 'Prüfung';
+// German articles for the exam name, from manifest exam.gender (f: die Klassenarbeit, m: der Vokabeltest).
+const examArt = { f: { acc: 'die', dat: 'der', to: 'zur' }, m: { acc: 'den', dat: 'dem', to: 'zum' }, n: { acc: 'das', dat: 'dem', to: 'zum' } }[(EXAM && EXAM.gender) || 'f'];
 const examDay = EXAM ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
 
@@ -182,7 +184,7 @@ function allRefs() {
   const refs = [];
   WORLDS.forEach((t, ti) => t.levels.forEach((lv, l) => {
     const qt = QUIZ_TYPES[lv.type];
-    if (qt) qt.keys(lv).forEach(k => refs.push({ t: ti, ref: `${t.id}|${l}|${k}` }));
+    if (qt) qt.keys(lv).forEach(k => refs.push({ t: ti, type: lv.type, ref: `${t.id}|${l}|${k}` }));
   }));
   return refs;
 }

@@ -1,0 +1,17 @@
+{
+  "id": "latin-lesson-2",
+  "title": "Latein-Arena",
+  "school": "Gymnasium",
+  "subject": "Latein",
+  "grade": "Klasse 6",
+  "about": "Vokabeln aus Lektion 2 mit Akkusativ und Verbformen, dazu die Verben aus Salve und Lektion 1 und die Konjugationsklassen",
+  "storeKey": "kla:latin-lesson-2",
+  "exam": {
+    "kind": "Vokabeltest",
+    "gender": "m",
+    "date": "2026-11-03",
+    "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"
+  },
+  "packs": ["football"],
+  "scripts": ["vocab.js", "content.js", "art.js", "app.js"]
+}

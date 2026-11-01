@@ -24,7 +24,7 @@ function startMistakes() {
 }
 
 // ---------------------------------------------------------------------------
-// Quiz engine (mc + swipe), also used for the mistake box and the exam
+// Quiz engine (mc, swipe and typed answers), also used for the mistake box and the exam
 // ---------------------------------------------------------------------------
 function quizStep() {
   if (run.i >= run.items.length) {
@@ -35,6 +35,7 @@ function quizStep() {
   const title = run.mode === 'level' ? run.lv.title : run.title;
   const top = stageTop(run.i / run.total, run.mode === 'exam' ? '' : comboHtml());
   if (it.kind === 'swipe') return swipeStep(it, title, top);
+  if (it.kind === 'type') return typeStep(it, title, top);
   openStage(`${top}
     ${run.timer && run.mode === 'level' ? '<div class="timer"><i id="tbar"></i></div>' : ''}
     <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
@@ -116,6 +117,79 @@ function swipeStep(it, title, top) {
     if (sx === null) return; const dx = e.clientX - sx; sx = null; card.style.transition = '';
     if (Math.abs(dx) > 90) decide(dx > 0); else { card.style.transform = ''; $$('.stamp', card).forEach(s => s.style.opacity = 0); }
   });
+}
+
+// Typed answers: it.fields is a list of inputs, each with a label, the solution
+// shown afterwards (sol) and either accepted answers (accept, traps, strict) or
+// its own judge(text) -> { ok, typo, hint }. Partly right items score pts < 1.
+function typeStep(it, title, top) {
+  const exam = run.mode === 'exam';
+  openStage(`${top}
+    <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    ${it.lead ? `<div class="type-lead">${it.lead}</div>` : ''}
+    <div class="type-word">${it.q}</div>
+    <form class="type-form" id="tform" autocomplete="off">
+      ${it.fields.map((f, i) => `<label class="tfield"><span>${f.label}</span><input id="tf${i}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="${i < it.fields.length - 1 ? 'next' : 'done'}"></label>`).join('')}
+      <div class="type-btns"><button class="btn primary" type="submit">${exam ? 'Weiter' : 'Prüfen'}</button><button class="btn" type="button" id="tskip">Weiß ich nicht</button></div>
+    </form>`);
+  bindQuit();
+  const inputs = it.fields.map((_, i) => $('#tf' + i));
+  inputs[0].focus({ preventScroll: true });
+  inputs.forEach((inp, i) => inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && i < inputs.length - 1) { e.preventDefault(); inputs[i + 1].focus(); }
+  }));
+  let done = false;
+  const check = skip => {
+    if (done) return; done = true;
+    const res = it.fields.map((f, i) => skip ? { ok: false } : f.judge ? f.judge(inputs[i].value) : judgeAnswer(inputs[i].value, f.accept, f.traps, f.strict));
+    const pts = res.filter(r => r.ok).length / res.length, ok = pts === 1;
+    inputs.forEach((inp, i) => { inp.readOnly = true; if (!exam) inp.classList.add(res[i].ok ? 'right' : 'wrong'); });
+    $$('#tform button').forEach(b => b.disabled = true);
+    if (exam) {
+      run.answers.push({ it, ok, pts, given: inputs.map(x => x.value.trim()).filter(Boolean).join(' · ') });
+      if (ok) run.correct++; else noteMistake(it.ref);
+      Sound.click(); return setTimeout(() => { run.i++; quizStep(); }, 350);
+    }
+    const xp = scoreAnswer(ok, it.ref);
+    const lines = it.fields.map((f, i) => res[i].ok && !res[i].typo ? '' :
+      `${it.fields.length > 1 ? f.label + ': ' : ''}${res[i].ok ? 'Achte auf die Schreibweise:' : 'Richtig ist'} <b>${f.sol}</b>.${res[i].hint ? ' ' + res[i].hint : ''}`);
+    showSheet(ok, ok ? pick(PRAISE) : pts > 0 ? 'Halb richtig.' : 'Nicht ganz.', [...lines, it.x].filter(Boolean).join('<br>'), xp, () => { run.i++; quizStep(); });
+  };
+  $('#tform').onsubmit = e => { e.preventDefault(); check(false); };
+  $('#tskip').onclick = () => check(true);
+}
+
+// Case, ä/ae spellings, Latin length marks and punctuation do not count.
+function normAnswer(s) {
+  return norm(String(s).normalize('NFD').replace(/[\u0304\u0306]/g, '').normalize('NFC'))
+    .replace(/[.,!?;:/„“"'()]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+function editDistance(a, b) {
+  let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+// Judges one typed answer. Several answers separated by commas count if one of
+// them is right. traps are known wrong answers ({ answers, hint }) that get a
+// specific hint; unless strict, one typo in a longer word is accepted.
+function judgeAnswer(text, accept, traps = [], strict = false) {
+  const parts = [text, ...String(text).split(/[,;]| oder /)].map(normAnswer).filter(Boolean);
+  const acc = accept.map(normAnswer);
+  if (parts.some(p => acc.includes(p))) return { ok: true };
+  for (const tr of traps) if (parts.some(p => tr.answers.map(normAnswer).includes(p))) return { ok: false, hint: tr.hint };
+  if (!strict && parts.some(p => acc.some(a => a.length >= 5 && editDistance(a, p) <= 1))) return { ok: true, typo: true };
+  return { ok: false };
+}
+
+// What the learner should have answered, for result lists.
+function itemSolution(it) {
+  if (it.kind === 'swipe') return swipeVerdict(it);
+  if (it.kind === 'type') return 'Richtig: ' + it.fields.map(f => f.sol).join(' · ') + '.';
+  return 'Richtig: ' + it.o[it.a] + '.';
 }
 
 // ---------------------------------------------------------------------------
@@ -330,7 +404,7 @@ function keywordScore(text, groups) {
 function writeTask(it, header, onDone) {
   openStage(`${header}
     <div class="question">${it.q}</div>
-    <textarea class="answer" id="ans" placeholder="Schreib deine Antwort hier rein, so wie in der ${examName} …"></textarea>
+    <textarea class="answer" id="ans" placeholder="Schreib deine Antwort hier rein, so wie in ${examArt.dat} ${examName} …"></textarea>
     <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap"><button class="btn primary" id="check">Antwort prüfen</button><button class="btn" id="skip">Ich weiß es nicht</button></div>
     <div id="fb"></div>`);
   bindQuit();
