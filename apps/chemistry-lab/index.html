@@ -336,8 +336,10 @@ button.tile:hover { border-color: var(--accent); }
 .mem.gone .b { border-color: var(--good); background: var(--good-soft); }
 
 /* learn */
-.learn-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; min-height: 40px; }
-.learn-head .qtitle { margin-top: 0; }
+.learn-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; margin-top: 10px; min-height: 40px; }
+.learn-head .qtitle { margin-top: 0; flex: 1 1 220px; }
+.read-ctrl { flex: none; display: flex; gap: 6px; margin-left: auto; }
+.read-rate { min-width: 54px; padding-left: 8px; padding-right: 8px; font-variant-numeric: tabular-nums; }
 .read-aloud { flex: none; } .read-aloud svg { width: 20px; height: 20px; }
 .read-aloud.on { background: var(--accent-strong); color: #fff; }
 .learn-card { background: var(--card); border: 3px solid var(--ink); border-radius: 22px; padding: 22px; box-shadow: var(--shadow); }
@@ -2621,13 +2623,30 @@ function learnBlocks(c, mode) {
 // "<world id>/<card index>" to a recorded MP3 of that learn card.
 const Narrator = {
   el: null, btn: null,
+  // Playback speeds; the choice is remembered per browser for all apps.
+  rates: [1, 1.2, 1.5, 2],
+  get rate() { try { const r = +localStorage.getItem('kla:narrator-rate'); return this.rates.includes(r) ? r : 1; } catch { return 1; } },
+  set rate(r) { try { localStorage.setItem('kla:narrator-rate', r); } catch {} },
+  rateLabel(r) { return String(r).replace('.', ',') + '×'; },
   src(c) { for (const w of WORLDS) { const i = (w.learn || []).indexOf(c); if (i >= 0) return AUDIO[`${w.id}/${i}`] || null; } return null; },
-  button(c) { return this.src(c) ? `<button class="btn small read-aloud" id="readaloud">${ICON.soundOn}<span>Vorlesen</span></button>` : ''; },
-  bind(c) { const b = $('#readaloud'); if (b) b.onclick = () => this.toggle(this.src(c), b); },
+  button(c) {
+    return this.src(c) ? `<div class="read-ctrl"><button class="btn small read-rate" id="readrate" aria-label="Lesetempo">${this.rateLabel(this.rate)}</button>
+      <button class="btn small read-aloud" id="readaloud">${ICON.soundOn}<span>Vorlesen</span></button></div>` : '';
+  },
+  bind(c) {
+    const b = $('#readaloud'), r = $('#readrate'); if (!b) return;
+    b.onclick = () => this.toggle(this.src(c), b);
+    r.onclick = () => {
+      const next = this.rates[(this.rates.indexOf(this.rate) + 1) % this.rates.length];
+      this.rate = next; r.textContent = this.rateLabel(next);
+      if (this.el) this.el.playbackRate = next;
+    };
+  },
   // First tap starts the card, then each tap pauses or resumes where it stopped.
   toggle(src, b) {
     if (!this.el) {
       this.el = new Audio(src); this.btn = b;
+      this.el.playbackRate = this.el.defaultPlaybackRate = this.rate;
       this.el.onended = () => this.stop();
       this.el.onplay = this.el.onpause = () => this.mark();
     }
