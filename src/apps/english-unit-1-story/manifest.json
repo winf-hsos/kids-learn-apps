@@ -1,0 +1,17 @@
+{
+  "id": "english-unit-1-story",
+  "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story",
+  "school": "Gymnasium",
+  "subject": "Englisch",
+  "grade": "Klasse 6",
+  "about": "Die 39 Vokabeln aus Unit 1, Story: von to smile bis to roll, in beide Richtungen und mit richtiger Schreibweise",
+  "storeKey": "kla:english-unit-1-story",
+  "exam": {
+    "kind": "Vokabeltest",
+    "gender": "m",
+    "date": "2026-11-02",
+    "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"
+  },
+  "packs": ["football"],
+  "scripts": ["words.js", "vocab.js", "content.js", "art.js", "app.js"]
+}

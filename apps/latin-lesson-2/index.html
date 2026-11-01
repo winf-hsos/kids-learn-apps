@@ -2064,10 +2064,10 @@ function typeStep(it, title, top) {
   $('#tskip').onclick = () => check(true);
 }
 
-// Case, ä/ae spellings, Latin length marks and punctuation do not count.
+// Case, ä/ae spellings, Latin length marks, punctuation and curly apostrophes do not count.
 function normAnswer(s) {
   return norm(String(s).normalize('NFD').replace(/[\u0304\u0306]/g, '').normalize('NFC'))
-    .replace(/[.,!?;:/„“"'()]/g, ' ').replace(/\s+/g, ' ').trim();
+    .replace(/[.,!?;:/„“"'’‘()]/g, ' ').replace(/\s+/g, ' ').trim();
 }
 function editDistance(a, b) {
   let prev = Array.from({ length: b.length + 1 }, (_, j) => j);
