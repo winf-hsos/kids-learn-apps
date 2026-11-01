@@ -127,6 +127,7 @@ function closeStage() {
   if (keyHandler) { removeEventListener('keydown', keyHandler); keyHandler = null; }
   if (run && run.cleanup) run.cleanup();
   Sound.stopRoar();
+  Narrator.stop();
 }
 function onKey(fn) {
   if (keyHandler) removeEventListener('keydown', keyHandler);

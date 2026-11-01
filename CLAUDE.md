@@ -25,6 +25,7 @@ Who the kids are, their grades and what they like is recorded in `STATUS.md` in 
 - `APP` (in the app's `app.js`) configures the engine: `topics` (worlds with `id`, `title`, `sub`, `art`, `badge`, `learn` cards and `levels`), `art(key)`, `entity(key)` for picture quiz and memory, `ranks`, `games` with star thresholds, `trivia`, `praise`, `exam` (mix of quiz items per world and number of write tasks) and optional extensions: `levelTypes`, `quizTypes`, `learnExtras`, `heroArt`, `xpIcon`, `memoryBack`, `intro`.
 - Theme tokens live in `core/core.css` (`--accent`, `--gold`, `--good`, `--bad`, ...). An app can override them in its `styles.css` to get its own color.
 - The start page reads `kla:summary:<id>` from `localStorage`, which the engine writes on every save.
+- **Read-aloud:** `python tools/tts.py <app-id> --voice <voice-id>` records every learn card with ElevenLabs into `src/apps/<id>/audio/` and writes `audio.json`; `build.py` turns it into `AUDIO` and the learn level shows a "Vorlesen" button. The key comes from `ELEVENLABS_API_KEY` and must never appear in the repo or in browser code. Re-run the tool after changing learn cards: it records only changed cards (hash in the file name) and deletes unused files. `--dry-run` shows the spoken texts and the credit cost. The history app uses the narrator voice `87AwpS6yC86wa2WglbsK`.
 
 ## Testing a change
 

@@ -27,6 +27,7 @@ Progress lives in the browser's `localStorage`, one entry per app plus a small s
 index.html                 start page (built)
 apps/<id>/index.html       one built single-file app per folder
 build.py                   bundles everything; run after every change
+tools/tts.py               records the learn cards as MP3s for the read-aloud button
 src/
   core/                    shared engine, UI, level types, exam, games and styles
     games/                 reward games (arcade.js holds the registry)
@@ -37,6 +38,7 @@ src/
     app.js                 APP config: topics, ranks, games and extensions
     content.js, ...        learning content, artwork and app-specific level types
     styles.css, icon.svg   optional extra styles and the start page icon
+    audio/, audio.json     optional recorded learn cards (from tools/tts.py)
 ```
 
 ## Build
@@ -46,6 +48,18 @@ python build.py
 ```
 
 The pages are plain HTML, CSS and JavaScript without dependencies; only the fonts load from Google Fonts. To try them locally, serve the folder, for example with `python -m http.server`.
+
+## Read-aloud
+
+Learn cards can be read aloud by a narrator voice. The recordings are made once on the maintainer's machine with ElevenLabs, so no API key ever reaches the browser:
+
+```bash
+python tools/tts.py <app-id> --voice <voice-id> --dry-run   # spoken texts and credit cost
+python tools/tts.py <app-id> --voice <voice-id>             # needs ELEVENLABS_API_KEY
+python build.py
+```
+
+The tool records only cards whose text changed and removes files that no card uses any more.
 
 ## Adding an app
 

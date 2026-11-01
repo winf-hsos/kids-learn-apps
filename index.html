@@ -336,6 +336,10 @@ button.tile:hover { border-color: var(--accent); }
 .mem.gone .b { border-color: var(--good); background: var(--good-soft); }
 
 /* learn */
+.learn-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; min-height: 40px; }
+.learn-head .qtitle { margin-top: 0; }
+.read-aloud { flex: none; } .read-aloud svg { width: 20px; height: 20px; }
+.read-aloud.on { background: var(--accent-strong); color: #fff; }
 .learn-card { background: var(--card); border: 3px solid var(--ink); border-radius: 22px; padding: 22px; box-shadow: var(--shadow); }
 .learn-card h2 { font-size: clamp(22px, 4.8vw, 30px); margin-bottom: 10px; }
 .learn-card p { font-size: 18px; margin: 0; max-width: 62ch; }

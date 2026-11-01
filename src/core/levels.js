@@ -275,18 +275,37 @@ function learnBlocks(c, mode) {
   if (ex.bottom) b += ex.bottom;
   return b;
 }
+// Read-aloud: AUDIO (written by build.py from the app's audio.json, see tools/tts.py) maps
+// "<world id>/<card index>" to a recorded MP3 of that learn card.
+const Narrator = {
+  el: null, btn: null,
+  src(c) { for (const w of WORLDS) { const i = (w.learn || []).indexOf(c); if (i >= 0) return AUDIO[`${w.id}/${i}`] || null; } return null; },
+  button(c) { return this.src(c) ? `<button class="btn small read-aloud" id="readaloud">${ICON.soundOn}<span>Vorlesen</span></button>` : ''; },
+  bind(c) { const b = $('#readaloud'); if (b) b.onclick = () => this.el ? this.stop() : this.play(this.src(c), b); },
+  play(src, b) {
+    this.stop();
+    this.el = new Audio(src); this.btn = b;
+    this.el.onended = () => this.stop();
+    this.el.play().catch(() => this.stop());
+    this.mark(true);
+  },
+  stop() { if (this.el) { this.el.pause(); this.el = null; } this.mark(false); this.btn = null; },
+  mark(on) { const b = this.btn; if (b && b.isConnected) { b.classList.toggle('on', on); b.querySelector('span').textContent = on ? 'Stopp' : 'Vorlesen'; } },
+};
+
 function learnCardHtml(c) { return `<div class="learn-card"><h2>${c.h}</h2>${learnBlocks(c, 'card')}</div>`; }
 
 function learnLevel(cards, title) {
   cards = cards || WORLDS[run.t].learn;
   let i = 0;
   const show = () => {
+    Narrator.stop();
     openStage(`${stageTop((i + 1) / cards.length)}
-      <div class="qtitle">${title || run.lv.title} · Karte ${i + 1}/${cards.length}</div>
+      <div class="learn-head"><div class="qtitle">${title || run.lv.title} · Karte ${i + 1}/${cards.length}</div>${Narrator.button(cards[i])}</div>
       <div style="margin-top:10px">${learnCardHtml(cards[i])}</div>
       <div class="dots">${cards.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('')}</div>
       <div class="nav-row"><button class="btn" id="prev" ${i === 0 ? 'disabled' : ''}>Zurück</button><button class="btn ${i === cards.length - 1 ? 'go' : 'primary'}" id="fwd">${i === cards.length - 1 ? 'Verstanden!' : 'Weiter'}</button></div>`);
-    bindQuit();
+    bindQuit(); Narrator.bind(cards[i]);
     const fwd = () => { Sound.click(); if (i < cards.length - 1) { i++; show(); $('#stage').scrollTop = 0; } else { run.correct = 1; run.total = 1; run.xp = 10; finish(1); } };
     const back = () => { if (i > 0) { i--; show(); } };
     $('#fwd').onclick = fwd; $('#prev').onclick = back;

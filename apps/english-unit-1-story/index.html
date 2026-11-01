@@ -336,6 +336,10 @@ button.tile:hover { border-color: var(--accent); }
 .mem.gone .b { border-color: var(--good); background: var(--good-soft); }
 
 /* learn */
+.learn-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; min-height: 40px; }
+.learn-head .qtitle { margin-top: 0; }
+.read-aloud { flex: none; } .read-aloud svg { width: 20px; height: 20px; }
+.read-aloud.on { background: var(--accent-strong); color: #fff; }
 .learn-card { background: var(--card); border: 3px solid var(--ink); border-radius: 22px; padding: 22px; box-shadow: var(--shadow); }
 .learn-card h2 { font-size: clamp(22px, 4.8vw, 30px); margin-bottom: 10px; }
 .learn-card p { font-size: 18px; margin: 0; max-width: 62ch; }
@@ -940,6 +944,8 @@ const FOOTBALL = [
 
 
 const MANIFEST = {"id": "english-unit-1-story", "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story", "school": "Gymnasium", "subject": "Englisch", "grade": "Klasse 6", "about": "Die 39 Vokabeln aus Unit 1, Story: von to smile bis to roll, in beide Richtungen und mit richtiger Schreibweise", "storeKey": "kla:english-unit-1-story", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-02", "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"}, "packs": ["football"], "cover": "img/hero.webp", "hubUrl": "../../"};
+
+const AUDIO = {};
 
 // The 39 words of the test in textbook order (Unit 1, "Story", from "to smile" to "to roll").
 // en: English as in the book; de: German meanings as in the book (each one counts);
@@ -1745,6 +1751,7 @@ function closeStage() {
   if (keyHandler) { removeEventListener('keydown', keyHandler); keyHandler = null; }
   if (run && run.cleanup) run.cleanup();
   Sound.stopRoar();
+  Narrator.stop();
 }
 function onKey(fn) {
   if (keyHandler) removeEventListener('keydown', keyHandler);
@@ -2067,18 +2074,37 @@ function learnBlocks(c, mode) {
   if (ex.bottom) b += ex.bottom;
   return b;
 }
+// Read-aloud: AUDIO (written by build.py from the app's audio.json, see tools/tts.py) maps
+// "<world id>/<card index>" to a recorded MP3 of that learn card.
+const Narrator = {
+  el: null, btn: null,
+  src(c) { for (const w of WORLDS) { const i = (w.learn || []).indexOf(c); if (i >= 0) return AUDIO[`${w.id}/${i}`] || null; } return null; },
+  button(c) { return this.src(c) ? `<button class="btn small read-aloud" id="readaloud">${ICON.soundOn}<span>Vorlesen</span></button>` : ''; },
+  bind(c) { const b = $('#readaloud'); if (b) b.onclick = () => this.el ? this.stop() : this.play(this.src(c), b); },
+  play(src, b) {
+    this.stop();
+    this.el = new Audio(src); this.btn = b;
+    this.el.onended = () => this.stop();
+    this.el.play().catch(() => this.stop());
+    this.mark(true);
+  },
+  stop() { if (this.el) { this.el.pause(); this.el = null; } this.mark(false); this.btn = null; },
+  mark(on) { const b = this.btn; if (b && b.isConnected) { b.classList.toggle('on', on); b.querySelector('span').textContent = on ? 'Stopp' : 'Vorlesen'; } },
+};
+
 function learnCardHtml(c) { return `<div class="learn-card"><h2>${c.h}</h2>${learnBlocks(c, 'card')}</div>`; }
 
 function learnLevel(cards, title) {
   cards = cards || WORLDS[run.t].learn;
   let i = 0;
   const show = () => {
+    Narrator.stop();
     openStage(`${stageTop((i + 1) / cards.length)}
-      <div class="qtitle">${title || run.lv.title} · Karte ${i + 1}/${cards.length}</div>
+      <div class="learn-head"><div class="qtitle">${title || run.lv.title} · Karte ${i + 1}/${cards.length}</div>${Narrator.button(cards[i])}</div>
       <div style="margin-top:10px">${learnCardHtml(cards[i])}</div>
       <div class="dots">${cards.map((_, j) => `<i class="${j === i ? 'on' : ''}"></i>`).join('')}</div>
       <div class="nav-row"><button class="btn" id="prev" ${i === 0 ? 'disabled' : ''}>Zurück</button><button class="btn ${i === cards.length - 1 ? 'go' : 'primary'}" id="fwd">${i === cards.length - 1 ? 'Verstanden!' : 'Weiter'}</button></div>`);
-    bindQuit();
+    bindQuit(); Narrator.bind(cards[i]);
     const fwd = () => { Sound.click(); if (i < cards.length - 1) { i++; show(); $('#stage').scrollTop = 0; } else { run.correct = 1; run.total = 1; run.xp = 10; finish(1); } };
     const back = () => { if (i > 0) { i--; show(); } };
     $('#fwd').onclick = fwd; $('#prev').onclick = back;

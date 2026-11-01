@@ -6,6 +6,7 @@ Each app lives in src/apps/<id>/ with a manifest.json, its scripts and an
 optional styles.css, icon.svg and img/ folder. The build writes
   apps/<id>/index.html   the app: shared core + trivia packs + app files
   apps/<id>/img/         the app's images, copied as they are
+  apps/<id>/audio/       recorded learn cards from tools/tts.py, copied as they are
   index.html             the start page listing all apps
 A manifest may name extra Google Fonts ("fonts") and a cover image for the
 start page ("cover", a path inside the app folder such as "img/hero.webp").
@@ -82,6 +83,9 @@ def build_app(app: dict) -> None:
     parts = [read(CORE / f) for f in CORE_BEFORE]
     parts += [read(SRC / "packs" / f"{p}.js") for p in m.get("packs", [])]
     parts.append("const MANIFEST = " + json.dumps(injected, ensure_ascii=False) + ";")
+    # Recorded learn cards (tools/tts.py); an app without recordings gets an empty map.
+    audio = json.loads(read(folder / "audio.json")) if (folder / "audio.json").exists() else {}
+    parts.append("const AUDIO = " + json.dumps(audio) + ";")
     parts += [read(folder / f) for f in m["scripts"]]
     parts += [read(CORE / f) for f in CORE_AFTER]
     css = read(CORE / "core.css")
@@ -91,8 +95,11 @@ def build_app(app: dict) -> None:
     html = page(m["title"], app["icon"], css, body, "\n\n".join(parts), m.get("fonts", []))
     out = ROOT / "apps" / m["id"] / "index.html"
     out.parent.mkdir(parents=True, exist_ok=True)
-    if (folder / "img").is_dir():
-        shutil.copytree(folder / "img", out.parent / "img", dirs_exist_ok=True)
+    for media in ("img", "audio"):
+        # A fresh copy each time, so files removed from src/ disappear from the site too.
+        shutil.rmtree(out.parent / media, ignore_errors=True)
+        if (folder / media).is_dir():
+            shutil.copytree(folder / media, out.parent / media)
     out.write_text(html, encoding="utf-8", newline="\n")
     print(f"wrote {out.relative_to(ROOT)} ({len(html) // 1024} KB)")
 
