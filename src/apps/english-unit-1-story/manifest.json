@@ -13,5 +13,7 @@
     "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"
   },
   "packs": ["football"],
-  "scripts": ["words.js", "vocab.js", "content.js", "art.js", "app.js"]
+  "scripts": ["words.js", "vocab.js", "content.js", "art.js", "app.js"],
+  "fonts": ["Lilita One"],
+  "cover": "img/hero.webp"
 }

@@ -13,7 +13,7 @@ const vocabLevels = words => [
 
 const TOPICS = [
   {
-    id: 'part1', title: 'Teil 1: to smile bis to rush', sub: 'Die ersten 13 Wörter auf S. 218', art: 'smile', badge: 'Smiley',
+    id: 'part1', img: 'img/part1.webp', title: 'Teil 1: to smile bis to rush', sub: 'Die ersten 13 Wörter auf S. 218', art: 'smile', badge: 'Smiley',
     learn: [
       { h: 'So lernst du für Montag', p: 'Jede Welt hat 13 Wörter in der Reihenfolge aus dem Buch. Erst die Lernkarten, dann wird geübt, am Ende tippst du die Wörter auf Englisch. Mit dem Lautsprecher hörst du, wie man ein Wort ausspricht.', bullets: ['Bei Verben darfst du „to“ mitschreiben, musst aber nicht.', 'Auf Deutsch reicht eine der Bedeutungen.', 'Auf Englisch zählt jeder Buchstabe, wie im Test.'] },
       { h: 'Wörter 1 bis 7', words: PART[0].slice(0, 7) },
@@ -22,7 +22,7 @@ const TOPICS = [
     levels: vocabLevels(PART[0]),
   },
   {
-    id: 'part2', title: 'Teil 2: through bis to break', sub: 'Die nächsten 13 Wörter, S. 218 und 219', art: 'bubble', badge: 'Schweigebrecher',
+    id: 'part2', img: 'img/part2.webp', title: 'Teil 2: through bis to break', sub: 'Die nächsten 13 Wörter, S. 218 und 219', art: 'bubble', badge: 'Schweigebrecher',
     learn: [
       { h: 'Wörter 14 bis 20', words: PART[1].slice(0, 7) },
       { h: 'Wörter 21 bis 26', words: PART[1].slice(7) },
@@ -30,7 +30,7 @@ const TOPICS = [
     levels: vocabLevels(PART[1]),
   },
   {
-    id: 'part3', title: 'Teil 3: to rub bis to roll', sub: 'Die letzten 13 Wörter, S. 219 und 220', art: 'clapper', badge: 'Movie Star',
+    id: 'part3', img: 'img/part3.webp', title: 'Teil 3: to rub bis to roll', sub: 'Die letzten 13 Wörter, S. 219 und 220', art: 'clapper', badge: 'Movie Star',
     learn: [
       { h: 'Wörter 27 bis 33', words: PART[2].slice(0, 7) },
       { h: 'Wörter 34 bis 39', words: PART[2].slice(7) },
@@ -38,7 +38,7 @@ const TOPICS = [
     levels: vocabLevels(PART[2]),
   },
   {
-    id: 'mix', title: 'Alles für den Test', sub: 'Stolperfallen, Vergangenheit und alle 39 Wörter gemischt', art: 'trophy', badge: 'Vocab Champion',
+    id: 'mix', img: 'img/mix.webp', title: 'Alles für den Test', sub: 'Stolperfallen, Vergangenheit und alle 39 Wörter gemischt', art: 'trophy', badge: 'Vocab Champion',
     learn: [
       { h: 'Unregelmäßige Formen', p: 'Diese Verben bilden die Vergangenheit nicht mit -ed:', bullets: ['to break – <b>broke</b> (I broke my arm.)', 'to steal – <b>stole</b>', 'can – <b>could</b> (konnte)', 'to come up with – <b>came</b> up with', 'to set up – <b>set</b> up, to let sb down – <b>let</b> sb down: Hier ändert sich nichts.'] },
       { h: 'Achtung, Schreibweise', bullets: ['<b>definitely</b>: defin-ITE-ly, nicht „definately“', '<b>disappear</b> und <b>disappointed</b>: ein s, zwei p', '<b>through</b>: th am Anfang, gh am Ende', '<b>awkward</b>: aw-k-ward', '<b>rub</b> – ru<b>bb</b>ed: Nach kurzem Vokal wird verdoppelt.', '<b>realise</b> (britisch) oder <b>realize</b> (amerikanisch), beides ist richtig.'] },

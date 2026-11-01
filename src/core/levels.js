@@ -244,7 +244,7 @@ async function finish(ratio) {
   if (run.mode === 'level' && !wasDone && worldDone(run.t)) {
     const got = grantTickets(1); save(); renderStatus();
     Sound.fanfare(); Confetti.burst(220);
-    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${artOf(WORLDS[run.t].art)}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
+    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${worldArt(WORLDS[run.t])}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
       GAMES.length ? [{ label: 'Ab in die Arcade', cls: 'go' }, { label: 'Weiterlernen', cls: '' }] : [{ label: 'Weiterlernen', cls: 'go' }]);
     if (r === 0 && GAMES.length) { closeStage(); tab = 'arcade'; render(); }
   }

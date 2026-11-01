@@ -1,6 +1,6 @@
 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-  <rect width="100" height="100" rx="22" fill="#0F7B6C"/>
+  <rect width="100" height="100" rx="22" fill="#C8102E"/>
   <path d="M14 26 H70 Q76 26 76 32 V58 Q76 64 70 64 H38 L24 76 V64 H20 Q14 64 14 58 V32 Q14 26 20 26 Z" fill="#FFFFFF" stroke="#15213F" stroke-width="3.2" stroke-linejoin="round"/>
-  <text x="45" y="53" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="22" fill="#0F7B6C">Hi!</text>
+  <text x="45" y="53" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="22" fill="#C8102E">Hi!</text>
   <path d="M78 12 L81 20 L89 21 L83 26 L85 34 L78 30 L71 34 L73 26 L67 21 L75 20 Z" fill="#FFC21A" stroke="#15213F" stroke-width="2.4" stroke-linejoin="round"/>
 </svg>

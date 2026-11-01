@@ -65,7 +65,7 @@ const GHS = {
 // ---------------------------------------------------------------------------
 const TOPICS = [
   {
-    id: 'safety',
+    id: 'safety', img: 'img/safety.webp',
     badge: 'Sicherheits-Chef',
     title: 'Sicherheit im Fachraum',
     sub: 'Die 7 Sicherheitseinrichtungen und was im Notfall zu tun ist',
@@ -108,7 +108,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'rules',
+    id: 'rules', img: 'img/rules.webp',
     badge: 'Regel-Profi',
     title: 'Sicher experimentieren',
     sub: 'Regeln vor, während und nach dem Versuch',
@@ -175,7 +175,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'devices',
+    id: 'devices', img: 'img/devices.webp',
     badge: 'Geräte-Guru',
     title: 'Laborgeräte',
     sub: 'Erkennen, benennen und wissen, wofür man sie braucht',
@@ -210,7 +210,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'burner',
+    id: 'burner', img: 'img/burner.webp',
     badge: 'Brenner-Führerschein',
     title: 'Gasbrenner-Führerschein',
     sub: 'Aufbau, Flammen und die richtige Reihenfolge',
@@ -260,7 +260,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'hazards',
+    id: 'hazards', img: 'img/hazards.webp',
     badge: 'Gefahrstoff-Detektiv',
     title: 'Gefahrstoffe',
     sub: 'Piktogramme, Signalwörter, H- und P-Sätze',
@@ -313,7 +313,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'operators',
+    id: 'operators', img: 'img/operators.webp',
     badge: 'Aufgaben-Knacker',
     title: 'Aufgaben knacken',
     sub: 'Was will die Lehrerin bei „begründe“, „erkläre“, „beschreibe“?',

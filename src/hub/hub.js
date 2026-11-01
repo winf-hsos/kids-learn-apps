@@ -20,7 +20,8 @@ function appCard(a) {
     ? `<div class="hub-progress"><div class="xpbar"><i style="width:${pct}%"></i></div>
         <div class="hub-stats"><span>${ICON.star().replace('<svg', '<svg class="i"')}${s.stars}/${s.maxStars}</span><span>${s.xp} XP · ${s.rank}</span>${s.examBest ? `<span>Probe-Note ${s.examBest}</span>` : ''}</div></div>`
     : '<p class="hub-new">Noch nicht gestartet</p>';
-  return `<a class="hub-card" href="${a.url}">
+  return `<a class="hub-card${a.cover ? ' with-cover' : ''}" href="${a.url}">
+    ${a.cover ? `<img class="hub-cover" src="${a.cover}" alt="" loading="lazy">` : ''}
     <div class="hub-icon">${a.icon || ICON.book}</div>
     <div class="hub-body">
       <div class="hub-meta">${a.subject}${a.grade ? ' · ' + a.grade : ''}</div>

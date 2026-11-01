@@ -10,6 +10,7 @@ const APP = {
   topics: TOPICS,
   art: key => ART[key] || '',
   heroArt: () => ART.galea,
+  heroImg: 'img/hero.webp',
   learnExtras: vocabLearnExtras,
   quizTypes: VOCAB_QUIZ_TYPES,
   levelTypes: { vmatch: vocabMatchLevel },

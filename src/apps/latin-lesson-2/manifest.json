@@ -13,5 +13,7 @@
     "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"
   },
   "packs": ["football"],
-  "scripts": ["vocab.js", "content.js", "art.js", "app.js"]
+  "scripts": ["vocab.js", "content.js", "art.js", "app.js"],
+  "fonts": ["Cinzel:wght@700;900", "Alegreya:wght@700;800"],
+  "cover": "img/hero.webp"
 }

@@ -36,6 +36,10 @@
   --f-hand: 'Gochi Hand', 'Comic Sans MS', 'Segoe Print', cursive;
   /* calmer handwriting for what learners type, easier to read than --f-hand */
   --f-write: 'Patrick Hand', 'Segoe Print', 'Comic Sans MS', cursive;
+  /* page background and the decorative stripe on hero cards; apps swap these for their own look */
+  --paper-pattern: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  --paper-size: 24px 24px;
+  --stripe: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -60,10 +64,8 @@ html, body { min-height: 100%; }
 body {
   margin: 0;
   background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: var(--paper-pattern);
+  background-size: var(--paper-size);
   color: var(--ink);
   font-family: var(--f-body);
   font-size: 17px;
@@ -119,7 +121,10 @@ a.iconbtn { color: inherit; text-decoration: none; }
   position: relative; padding: 18px 20px 18px 22px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow);
   border: 3px solid var(--ink); overflow: hidden; min-width: 0;
 }
-.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px); }
+.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: var(--stripe); }
+.countdown.with-img { --hero-h: clamp(140px, 32vw, 230px); }
+.countdown.with-img::before { top: calc(var(--hero-h) + 3px); }
+.hero-img { display: block; width: calc(100% + 42px); max-width: none; height: var(--hero-h); margin: -18px -20px 14px -22px; object-fit: cover; object-position: var(--hero-pos, center); border-bottom: 3px solid var(--ink); }
 .countdown .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); }
 .countdown h1 { font-size: clamp(26px, 6vw, 40px); margin-top: 4px; }
 .countdown h1 em { font-style: normal; color: var(--accent); }
@@ -141,6 +146,8 @@ button.tile:hover { border-color: var(--accent); }
 .world { margin-top: 30px; }
 .world-head { display: flex; align-items: center; gap: 14px; }
 .world-art { width: 64px; height: 64px; flex: none; background: var(--card); border: 3px solid var(--ink); border-radius: 16px; padding: 6px; color: var(--ink); box-shadow: var(--shadow); }
+.world-art:has(.wimg) { width: 76px; height: 76px; padding: 0; overflow: hidden; }
+.wimg { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 13px; }
 .world-head h2 { font-size: clamp(20px, 4.4vw, 26px); }
 .world-head p { margin: 2px 0 0; color: var(--ink-soft); font-size: 15px; }
 .world-num { font-family: var(--f-hand); color: var(--pen); font-size: 20px; }
@@ -174,7 +181,7 @@ button.tile:hover { border-color: var(--accent); }
 .lead { color: var(--ink-soft); margin: 0 0 16px; max-width: 60ch; }
 
 /* ---------- level screen ---------- */
-.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: var(--paper-pattern); background-size: var(--paper-size); overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .stage-inner { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 180px; }
 .stage-top { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; padding: 10px 0; background: var(--paper); z-index: 2; }
 .progress { flex: 1; height: 16px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); overflow: hidden; }
@@ -417,6 +424,7 @@ button.tile:hover { border-color: var(--accent); }
   .world-prog small { display: none; }
   .world-head { flex-wrap: wrap; gap: 10px 12px; }
   .world-art { width: 52px; height: 52px; }
+  .world-art:has(.wimg) { width: 64px; height: 64px; }
   .world-head > div:nth-child(2) { flex: 1; }
   .world-prog { order: 3; width: 100%; text-align: left; margin-left: 0; }
   .node .lbl { font-size: 12px; }
@@ -428,7 +436,7 @@ button.tile:hover { border-color: var(--accent); }
 /* Start page. Builds on core/core.css (tokens, graph paper, typography). */
 .app.hub { padding-block: 0 60px; }
 .hub-head { margin-top: 28px; padding: 22px 22px 20px 26px; border-radius: 18px; background: var(--card); border: 3px solid var(--ink); box-shadow: var(--shadow); position: relative; overflow: hidden; }
-.hub-head::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px); }
+.hub-head::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: var(--stripe); }
 .hub-head .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); }
 .hub-head h1 { font-size: clamp(28px, 6.4vw, 44px); margin-top: 4px; }
 .hub-head h1 em { font-style: normal; color: var(--accent); }
@@ -441,6 +449,8 @@ button.tile:hover { border-color: var(--accent); }
 .hub-card { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 20px; background: var(--card); border: 3px solid var(--ink); box-shadow: 0 5px 0 var(--ink); color: inherit; text-decoration: none; transition: transform .12s; }
 .hub-card:hover { transform: translateY(-3px); }
 .hub-card:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+.hub-card.with-cover { flex-wrap: wrap; overflow: hidden; }
+.hub-cover { flex: 0 0 calc(100% + 32px); width: calc(100% + 32px); height: 150px; margin: -16px -16px 0; object-fit: cover; border-bottom: 3px solid var(--ink); }
 .hub-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 .hub-icon { width: 68px; height: 68px; flex: none; border-radius: 18px; overflow: hidden; color: var(--ink); }
 .hub-icon svg { width: 100%; height: 100%; }
@@ -532,7 +542,7 @@ const TYPE_ICON = {
 
 const SCHOOLS = ["Gymnasium", "Grundschule", "Kita"];
 
-const APPS = [{"id": "chemistry-lab", "title": "Chemie-Labor", "school": "Gymnasium", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "url": "apps/chemistry-lab/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <defs><linearGradient id=\"chemistry-lab-icon-flame\" x1=\"0\" y1=\"1\" x2=\"0\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2E6BFF\"/><stop offset=\".7\" stop-color=\"#7FB2FF\"/><stop offset=\"1\" stop-color=\"#C9E4FF\" stop-opacity=\".3\"/></linearGradient></defs>\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#0B1020\"/>\n  <path d=\"M50 12 C61 30 64 44 59 58 C57 65 43 65 41 58 C36 44 39 30 50 12 Z\" fill=\"url(#chemistry-lab-icon-flame)\"/>\n  <path d=\"M50 38 C54 46 55 52 53 58 C52 61 48 61 47 58 C45 52 46 46 50 38 Z\" fill=\"#A8ECFF\"/>\n  <rect x=\"45\" y=\"64\" width=\"10\" height=\"18\" fill=\"#9AA6BB\"/>\n  <path d=\"M41 82 L45 76 H55 L59 82 Z\" fill=\"#9AA6BB\"/>\n  <rect x=\"30\" y=\"82\" width=\"40\" height=\"7\" rx=\"3\" fill=\"#5E6A82\"/>\n</svg>"}, {"id": "english-unit-1-story", "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story", "school": "Gymnasium", "subject": "Englisch", "grade": "Klasse 6", "about": "Die 39 Vokabeln aus Unit 1, Story: von to smile bis to roll, in beide Richtungen und mit richtiger Schreibweise", "storeKey": "kla:english-unit-1-story", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-02", "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"}, "url": "apps/english-unit-1-story/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#0F7B6C\"/>\n  <path d=\"M14 26 H70 Q76 26 76 32 V58 Q76 64 70 64 H38 L24 76 V64 H20 Q14 64 14 58 V32 Q14 26 20 26 Z\" fill=\"#FFFFFF\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n  <text x=\"45\" y=\"53\" text-anchor=\"middle\" font-family=\"Arial Black, sans-serif\" font-weight=\"900\" font-size=\"22\" fill=\"#0F7B6C\">Hi!</text>\n  <path d=\"M78 12 L81 20 L89 21 L83 26 L85 34 L78 30 L71 34 L73 26 L67 21 L75 20 Z\" fill=\"#FFC21A\" stroke=\"#15213F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n</svg>"}, {"id": "latin-lesson-2", "title": "Latein-Arena: Klasse 6 – Lektion 2", "school": "Gymnasium", "subject": "Latein", "grade": "Klasse 6", "about": "Vokabeln aus Lektion 2 mit Akkusativ und Verbformen, dazu die Verben aus Salve und Lektion 1 und die Konjugationsklassen", "storeKey": "kla:latin-lesson-2", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-03", "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"}, "url": "apps/latin-lesson-2/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#B8322A\"/>\n  <path d=\"M19 54 A33 33 0 0 1 81 54\" fill=\"none\" stroke=\"#F2A65A\" stroke-width=\"12\" stroke-linecap=\"round\"/>\n  <path d=\"M24 66 A26 26 0 0 1 76 66 Z\" fill=\"#FFC21A\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n  <path d=\"M30 66 V82 Q30 88 37 86 L42 70 Z M70 66 V82 Q70 88 63 86 L58 70 Z\" fill=\"#FFC21A\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n  <path d=\"M14 66 H86\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linecap=\"round\"/>\n</svg>"}];
+const APPS = [{"id": "chemistry-lab", "title": "Chemie-Labor", "school": "Gymnasium", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "cover": "apps/chemistry-lab/img/hero.webp", "url": "apps/chemistry-lab/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <defs><linearGradient id=\"chemistry-lab-icon-flame\" x1=\"0\" y1=\"1\" x2=\"0\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2E6BFF\"/><stop offset=\".7\" stop-color=\"#7FB2FF\"/><stop offset=\"1\" stop-color=\"#C9E4FF\" stop-opacity=\".3\"/></linearGradient></defs>\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#0B1020\"/>\n  <path d=\"M50 12 C61 30 64 44 59 58 C57 65 43 65 41 58 C36 44 39 30 50 12 Z\" fill=\"url(#chemistry-lab-icon-flame)\"/>\n  <path d=\"M50 38 C54 46 55 52 53 58 C52 61 48 61 47 58 C45 52 46 46 50 38 Z\" fill=\"#A8ECFF\"/>\n  <rect x=\"45\" y=\"64\" width=\"10\" height=\"18\" fill=\"#9AA6BB\"/>\n  <path d=\"M41 82 L45 76 H55 L59 82 Z\" fill=\"#9AA6BB\"/>\n  <rect x=\"30\" y=\"82\" width=\"40\" height=\"7\" rx=\"3\" fill=\"#5E6A82\"/>\n</svg>"}, {"id": "english-unit-1-story", "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story", "school": "Gymnasium", "subject": "Englisch", "grade": "Klasse 6", "about": "Die 39 Vokabeln aus Unit 1, Story: von to smile bis to roll, in beide Richtungen und mit richtiger Schreibweise", "storeKey": "kla:english-unit-1-story", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-02", "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"}, "cover": "apps/english-unit-1-story/img/hero.webp", "url": "apps/english-unit-1-story/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#C8102E\"/>\n  <path d=\"M14 26 H70 Q76 26 76 32 V58 Q76 64 70 64 H38 L24 76 V64 H20 Q14 64 14 58 V32 Q14 26 20 26 Z\" fill=\"#FFFFFF\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n  <text x=\"45\" y=\"53\" text-anchor=\"middle\" font-family=\"Arial Black, sans-serif\" font-weight=\"900\" font-size=\"22\" fill=\"#C8102E\">Hi!</text>\n  <path d=\"M78 12 L81 20 L89 21 L83 26 L85 34 L78 30 L71 34 L73 26 L67 21 L75 20 Z\" fill=\"#FFC21A\" stroke=\"#15213F\" stroke-width=\"2.4\" stroke-linejoin=\"round\"/>\n</svg>"}, {"id": "latin-lesson-2", "title": "Latein-Arena: Klasse 6 – Lektion 2", "school": "Gymnasium", "subject": "Latein", "grade": "Klasse 6", "about": "Vokabeln aus Lektion 2 mit Akkusativ und Verbformen, dazu die Verben aus Salve und Lektion 1 und die Konjugationsklassen", "storeKey": "kla:latin-lesson-2", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-03", "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"}, "cover": "apps/latin-lesson-2/img/hero.webp", "url": "apps/latin-lesson-2/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#B8322A\"/>\n  <path d=\"M19 54 A33 33 0 0 1 81 54\" fill=\"none\" stroke=\"#F2A65A\" stroke-width=\"12\" stroke-linecap=\"round\"/>\n  <path d=\"M24 66 A26 26 0 0 1 76 66 Z\" fill=\"#FFC21A\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n  <path d=\"M30 66 V82 Q30 88 37 86 L42 70 Z M70 66 V82 Q70 88 63 86 L58 70 Z\" fill=\"#FFC21A\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linejoin=\"round\"/>\n  <path d=\"M14 66 H86\" stroke=\"#15213F\" stroke-width=\"3.2\" stroke-linecap=\"round\"/>\n</svg>"}];
 
 // Start page: lists every app (APPS is injected by build.py) grouped by school (no names: the site is public),
 // with exam countdown and the progress each app stored on this device.
@@ -556,7 +566,8 @@ function appCard(a) {
     ? `<div class="hub-progress"><div class="xpbar"><i style="width:${pct}%"></i></div>
         <div class="hub-stats"><span>${ICON.star().replace('<svg', '<svg class="i"')}${s.stars}/${s.maxStars}</span><span>${s.xp} XP · ${s.rank}</span>${s.examBest ? `<span>Probe-Note ${s.examBest}</span>` : ''}</div></div>`
     : '<p class="hub-new">Noch nicht gestartet</p>';
-  return `<a class="hub-card" href="${a.url}">
+  return `<a class="hub-card${a.cover ? ' with-cover' : ''}" href="${a.url}">
+    ${a.cover ? `<img class="hub-cover" src="${a.cover}" alt="" loading="lazy">` : ''}
     <div class="hub-icon">${a.icon || ICON.book}</div>
     <div class="hub-body">
       <div class="hub-meta">${a.subject}${a.grade ? ' · ' + a.grade : ''}</div>

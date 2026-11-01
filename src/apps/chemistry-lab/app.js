@@ -5,6 +5,7 @@ const APP = {
   art,
   entity: key => DEVICES[key] && { name: DEVICES[key].name, info: DEVICES[key].use },
   heroArt: heroFlameSvg,
+  heroImg: 'img/hero.webp',
   xpIcon: TYPE_ICON.sim,
   memoryBack: TYPE_ICON.sim,
   learnExtras: chemLearnExtras,

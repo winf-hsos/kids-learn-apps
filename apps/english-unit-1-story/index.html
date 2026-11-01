@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Englisch-Vokabeln: Klasse 6 – Unit 1 Story</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20aria-hidden%3D%22true%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%230F7B6C%22/%3E%0A%20%20%3Cpath%20d%3D%22M14%2026%20H70%20Q76%2026%2076%2032%20V58%20Q76%2064%2070%2064%20H38%20L24%2076%20V64%20H20%20Q14%2064%2014%2058%20V32%20Q14%2026%2020%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22/%3E%0A%20%20%3Ctext%20x%3D%2245%22%20y%3D%2253%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%20Black%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2222%22%20fill%3D%22%230F7B6C%22%3EHi%21%3C/text%3E%0A%20%20%3Cpath%20d%3D%22M78%2012%20L81%2020%20L89%2021%20L83%2026%20L85%2034%20L78%2030%20L71%2034%20L73%2026%20L67%2021%20L75%2020%20Z%22%20fill%3D%22%23FFC21A%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22/%3E%0A%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20aria-hidden%3D%22true%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%23C8102E%22/%3E%0A%20%20%3Cpath%20d%3D%22M14%2026%20H70%20Q76%2026%2076%2032%20V58%20Q76%2064%2070%2064%20H38%20L24%2076%20V64%20H20%20Q14%2064%2014%2058%20V32%20Q14%2026%2020%2026%20Z%22%20fill%3D%22%23FFFFFF%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22/%3E%0A%20%20%3Ctext%20x%3D%2245%22%20y%3D%2253%22%20text-anchor%3D%22middle%22%20font-family%3D%22Arial%20Black%2C%20sans-serif%22%20font-weight%3D%22900%22%20font-size%3D%2222%22%20fill%3D%22%23C8102E%22%3EHi%21%3C/text%3E%0A%20%20%3Cpath%20d%3D%22M78%2012%20L81%2020%20L89%2021%20L83%2026%20L85%2034%20L78%2030%20L71%2034%20L73%2026%20L67%2021%20L75%2020%20Z%22%20fill%3D%22%23FFC21A%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%222.4%22%20stroke-linejoin%3D%22round%22/%3E%0A%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Dela+Gothic+One&family=Gochi+Hand&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Dela+Gothic+One&family=Gochi+Hand&family=Patrick+Hand&family=Lilita+One&display=swap">
 <style>
 /* Shared design for all learning apps: one centered column on graph paper like a school notebook,
    sticky status bar and fixed tab bar. Apps override the color tokens in their own styles.css. */
@@ -36,6 +36,10 @@
   --f-hand: 'Gochi Hand', 'Comic Sans MS', 'Segoe Print', cursive;
   /* calmer handwriting for what learners type, easier to read than --f-hand */
   --f-write: 'Patrick Hand', 'Segoe Print', 'Comic Sans MS', cursive;
+  /* page background and the decorative stripe on hero cards; apps swap these for their own look */
+  --paper-pattern: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  --paper-size: 24px 24px;
+  --stripe: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -60,10 +64,8 @@ html, body { min-height: 100%; }
 body {
   margin: 0;
   background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: var(--paper-pattern);
+  background-size: var(--paper-size);
   color: var(--ink);
   font-family: var(--f-body);
   font-size: 17px;
@@ -119,7 +121,10 @@ a.iconbtn { color: inherit; text-decoration: none; }
   position: relative; padding: 18px 20px 18px 22px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow);
   border: 3px solid var(--ink); overflow: hidden; min-width: 0;
 }
-.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px); }
+.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: var(--stripe); }
+.countdown.with-img { --hero-h: clamp(140px, 32vw, 230px); }
+.countdown.with-img::before { top: calc(var(--hero-h) + 3px); }
+.hero-img { display: block; width: calc(100% + 42px); max-width: none; height: var(--hero-h); margin: -18px -20px 14px -22px; object-fit: cover; object-position: var(--hero-pos, center); border-bottom: 3px solid var(--ink); }
 .countdown .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); }
 .countdown h1 { font-size: clamp(26px, 6vw, 40px); margin-top: 4px; }
 .countdown h1 em { font-style: normal; color: var(--accent); }
@@ -141,6 +146,8 @@ button.tile:hover { border-color: var(--accent); }
 .world { margin-top: 30px; }
 .world-head { display: flex; align-items: center; gap: 14px; }
 .world-art { width: 64px; height: 64px; flex: none; background: var(--card); border: 3px solid var(--ink); border-radius: 16px; padding: 6px; color: var(--ink); box-shadow: var(--shadow); }
+.world-art:has(.wimg) { width: 76px; height: 76px; padding: 0; overflow: hidden; }
+.wimg { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 13px; }
 .world-head h2 { font-size: clamp(20px, 4.4vw, 26px); }
 .world-head p { margin: 2px 0 0; color: var(--ink-soft); font-size: 15px; }
 .world-num { font-family: var(--f-hand); color: var(--pen); font-size: 20px; }
@@ -174,7 +181,7 @@ button.tile:hover { border-color: var(--accent); }
 .lead { color: var(--ink-soft); margin: 0 0 16px; max-width: 60ch; }
 
 /* ---------- level screen ---------- */
-.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: var(--paper-pattern); background-size: var(--paper-size); overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .stage-inner { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 180px; }
 .stage-top { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; padding: 10px 0; background: var(--paper); z-index: 2; }
 .progress { flex: 1; height: 16px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); overflow: hidden; }
@@ -417,6 +424,7 @@ button.tile:hover { border-color: var(--accent); }
   .world-prog small { display: none; }
   .world-head { flex-wrap: wrap; gap: 10px 12px; }
   .world-art { width: 52px; height: 52px; }
+  .world-art:has(.wimg) { width: 64px; height: 64px; }
   .world-head > div:nth-child(2) { flex: 1; }
   .world-prog { order: 3; width: 100%; text-align: left; margin-left: 0; }
   .node .lbl { font-size: 12px; }
@@ -425,13 +433,22 @@ button.tile:hover { border-color: var(--accent); }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
-/* English app: teal instead of the default blue, plus vocabulary tables, listen
-   buttons, gap sentences and spelling cards. The shared design lives in core/core.css. */
-:root { --accent: #0F7B6C; --accent-soft: #D9F2EC; --accent-2: #F2B33D; --pen: #0B5E52; --accent-strong: #0F7B6C; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --accent: #4FD6C0; --accent-soft: #12332E; --accent-2: #F7C766; --pen: #7FE3D2; --accent-strong: #129C88; }
+/* English app: a British school notebook with ruled lines, London red and navy, Lilita One for headings,
+   plus vocabulary tables, listen buttons, gap sentences and spelling cards. The shared design lives in core/core.css. */
+:root {
+  --paper: #FBF7EE; --grid: #D9E3F1; --card: #FFFFFF; --ink: #14213D; --ink-soft: #56637F; --line: #DDD6C6;
+  --accent: #C8102E; --accent-soft: #FBE1E5; --accent-2: #2F6FDB; --pen: #1D3C8F; --accent-strong: #C8102E;
+  --f-display: 'Lilita One', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --paper-pattern: linear-gradient(transparent 31px, var(--grid) 31px);
+  --paper-size: 100% 32px;
+  --stripe: repeating-linear-gradient(-45deg, #C8102E 0 8px, #FFFFFF 8px 11px, #14213D 11px 19px, #FFFFFF 19px 22px);
+  --hero-pos: 60% 30%;
 }
-:root[data-theme="dark"] { --accent: #4FD6C0; --accent-soft: #12332E; --accent-2: #F7C766; --pen: #7FE3D2; --accent-strong: #129C88; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0F1424; --grid: #1E2742; --card: #18203A; --ink: #F3F0E8; --ink-soft: #A9B3CF; --line: #2C365A; --accent: #FF6B7D; --accent-soft: #46202A; --accent-2: #7FB2FF; --pen: #9DB5FF; --accent-strong: #D22B44; --shadow: 0 2px 0 #080B16, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+}
+:root[data-theme="dark"] { --paper: #0F1424; --grid: #1E2742; --card: #18203A; --ink: #F3F0E8; --ink-soft: #A9B3CF; --line: #2C365A; --accent: #FF6B7D; --accent-soft: #46202A; --accent-2: #7FB2FF; --pen: #9DB5FF; --accent-strong: #D22B44; --shadow: 0 2px 0 #080B16, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+h1, h2, h3 { letter-spacing: .015em; }
 
 .vtab { width: 100%; border-collapse: collapse; margin: 10px 0 4px; font-size: 16px; }
 .vtab td { padding: 8px 6px; border-bottom: 2px solid var(--line); vertical-align: top; }
@@ -870,7 +887,7 @@ const FOOTBALL = [
 ];
 
 
-const MANIFEST = {"id": "english-unit-1-story", "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story", "school": "Gymnasium", "subject": "Englisch", "grade": "Klasse 6", "about": "Die 39 Vokabeln aus Unit 1, Story: von to smile bis to roll, in beide Richtungen und mit richtiger Schreibweise", "storeKey": "kla:english-unit-1-story", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-02", "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"}, "packs": ["football"], "hubUrl": "../../"};
+const MANIFEST = {"id": "english-unit-1-story", "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story", "school": "Gymnasium", "subject": "Englisch", "grade": "Klasse 6", "about": "Die 39 Vokabeln aus Unit 1, Story: von to smile bis to roll, in beide Richtungen und mit richtiger Schreibweise", "storeKey": "kla:english-unit-1-story", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-02", "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"}, "packs": ["football"], "cover": "img/hero.webp", "hubUrl": "../../"};
 
 // The 39 words of the test in textbook order (Unit 1, "Story", from "to smile" to "to roll").
 // en: English as in the book; de: German meanings as in the book (each one counts);
@@ -1060,7 +1077,7 @@ const vocabLevels = words => [
 
 const TOPICS = [
   {
-    id: 'part1', title: 'Teil 1: to smile bis to rush', sub: 'Die ersten 13 Wörter auf S. 218', art: 'smile', badge: 'Smiley',
+    id: 'part1', img: 'img/part1.webp', title: 'Teil 1: to smile bis to rush', sub: 'Die ersten 13 Wörter auf S. 218', art: 'smile', badge: 'Smiley',
     learn: [
       { h: 'So lernst du für Montag', p: 'Jede Welt hat 13 Wörter in der Reihenfolge aus dem Buch. Erst die Lernkarten, dann wird geübt, am Ende tippst du die Wörter auf Englisch. Mit dem Lautsprecher hörst du, wie man ein Wort ausspricht.', bullets: ['Bei Verben darfst du „to“ mitschreiben, musst aber nicht.', 'Auf Deutsch reicht eine der Bedeutungen.', 'Auf Englisch zählt jeder Buchstabe, wie im Test.'] },
       { h: 'Wörter 1 bis 7', words: PART[0].slice(0, 7) },
@@ -1069,7 +1086,7 @@ const TOPICS = [
     levels: vocabLevels(PART[0]),
   },
   {
-    id: 'part2', title: 'Teil 2: through bis to break', sub: 'Die nächsten 13 Wörter, S. 218 und 219', art: 'bubble', badge: 'Schweigebrecher',
+    id: 'part2', img: 'img/part2.webp', title: 'Teil 2: through bis to break', sub: 'Die nächsten 13 Wörter, S. 218 und 219', art: 'bubble', badge: 'Schweigebrecher',
     learn: [
       { h: 'Wörter 14 bis 20', words: PART[1].slice(0, 7) },
       { h: 'Wörter 21 bis 26', words: PART[1].slice(7) },
@@ -1077,7 +1094,7 @@ const TOPICS = [
     levels: vocabLevels(PART[1]),
   },
   {
-    id: 'part3', title: 'Teil 3: to rub bis to roll', sub: 'Die letzten 13 Wörter, S. 219 und 220', art: 'clapper', badge: 'Movie Star',
+    id: 'part3', img: 'img/part3.webp', title: 'Teil 3: to rub bis to roll', sub: 'Die letzten 13 Wörter, S. 219 und 220', art: 'clapper', badge: 'Movie Star',
     learn: [
       { h: 'Wörter 27 bis 33', words: PART[2].slice(0, 7) },
       { h: 'Wörter 34 bis 39', words: PART[2].slice(7) },
@@ -1085,7 +1102,7 @@ const TOPICS = [
     levels: vocabLevels(PART[2]),
   },
   {
-    id: 'mix', title: 'Alles für den Test', sub: 'Stolperfallen, Vergangenheit und alle 39 Wörter gemischt', art: 'trophy', badge: 'Vocab Champion',
+    id: 'mix', img: 'img/mix.webp', title: 'Alles für den Test', sub: 'Stolperfallen, Vergangenheit und alle 39 Wörter gemischt', art: 'trophy', badge: 'Vocab Champion',
     learn: [
       { h: 'Unregelmäßige Formen', p: 'Diese Verben bilden die Vergangenheit nicht mit -ed:', bullets: ['to break – <b>broke</b> (I broke my arm.)', 'to steal – <b>stole</b>', 'can – <b>could</b> (konnte)', 'to come up with – <b>came</b> up with', 'to set up – <b>set</b> up, to let sb down – <b>let</b> sb down: Hier ändert sich nichts.'] },
       { h: 'Achtung, Schreibweise', bullets: ['<b>definitely</b>: defin-ITE-ly, nicht „definately“', '<b>disappear</b> und <b>disappointed</b>: ein s, zwei p', '<b>through</b>: th am Anfang, gh am Ende', '<b>awkward</b>: aw-k-ward', '<b>rub</b> – ru<b>bb</b>ed: Nach kurzem Vokal wird verdoppelt.', '<b>realise</b> (britisch) oder <b>realize</b> (amerikanisch), beides ist richtig.'] },
@@ -1144,6 +1161,7 @@ const APP = {
   topics: TOPICS,
   art: key => ART[key] || '',
   heroArt: () => ART.book,
+  heroImg: 'img/hero.webp',
   learnExtras: vocabLearnExtras,
   quizTypes: VOCAB_QUIZ_TYPES,
   levelTypes: { ematch: vocabMatchLevel },
@@ -1346,6 +1364,8 @@ const examName = EXAM ? EXAM.kind : 'Prüfung';
 const examArt = { f: { acc: 'die', dat: 'der', to: 'zur', good: 'eine gute' }, m: { acc: 'den', dat: 'dem', to: 'zum', good: 'einen guten' }, n: { acc: 'das', dat: 'dem', to: 'zum', good: 'ein gutes' } }[(EXAM && EXAM.gender) || 'f'];
 const examDay = EXAM ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
+// A world shows its picture (t.img, a file in the app's img/ folder) or else its drawing.
+const worldArt = t => t.img ? `<img class="wimg" src="${t.img}" alt="" loading="lazy">` : artOf(t.art);
 
 // Badges: generic ones, one per world and one per reward game the app uses.
 const BADGES = [
@@ -1593,12 +1613,13 @@ function homeHtml() {
   const all = WORLDS.reduce((s, t) => s + t.levels.length, 0);
   return `
   <section class="hero">
-    <div class="countdown">
+    <div class="countdown${APP.heroImg ? ' with-img' : ''}">
+      ${APP.heroImg ? `<img class="hero-img" src="${APP.heroImg}" alt="">` : ''}
       <div class="eyebrow">${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
       <h1>${headline}</h1>
       <p>${sub} <span class="hand">Du hast schon ${done} von ${all} Leveln geschafft.</span></p>
     </div>
-    ${APP.heroArt ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
+    ${APP.heroArt && !APP.heroImg ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
   </section>
   <div class="goalrow">
     <div class="tile">${ring(state.daily.xp / DAILY_GOAL)}<div><b>Tagesziel</b><span>${Math.min(state.daily.xp, DAILY_GOAL)} / ${DAILY_GOAL} XP heute</span></div></div>
@@ -1623,7 +1644,7 @@ function worldHtml(t, ti) {
       <span class="lbl">${lv.title}</span></button>`;
   }).join('');
   return `<section class="world">
-    <div class="world-head"><div class="world-art">${artOf(t.art)}</div>
+    <div class="world-head"><div class="world-art">${worldArt(t)}</div>
       <div style="min-width:0"><span class="world-num">Welt ${ti + 1}</span><h2>${t.title}</h2><p>${t.sub}</p></div>
       <div class="world-prog">${got}/${max} ${ICON.star().replace('<svg', '<svg style="width:16px;height:16px;display:inline;vertical-align:-2px"')}<small>${worldDone(ti) ? 'komplett' : ''}</small></div></div>
     <div class="path" style="--cols:${cols};--cols-sm:${colsSm}">${nodes}</div></section>`;
@@ -1953,7 +1974,7 @@ async function finish(ratio) {
   if (run.mode === 'level' && !wasDone && worldDone(run.t)) {
     const got = grantTickets(1); save(); renderStatus();
     Sound.fanfare(); Confetti.burst(220);
-    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${artOf(WORLDS[run.t].art)}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
+    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${worldArt(WORLDS[run.t])}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
       GAMES.length ? [{ label: 'Ab in die Arcade', cls: 'go' }, { label: 'Weiterlernen', cls: '' }] : [{ label: 'Weiterlernen', cls: 'go' }]);
     if (r === 0 && GAMES.length) { closeStage(); tab = 'arcade'; render(); }
   }
@@ -2261,7 +2282,7 @@ async function examResult() {
 function cheatHtml() {
   const when = examDay && EXAM && daysUntil(EXAM.date) >= 0 ? `für ${examDay}` : 'aus allen Welten';
   return `<h2 class="section-title">Spickzettel</h2><p class="lead">Alles Wichtige ${when} auf einen Blick. Am Abend vorher einmal durchlesen, am Morgen nochmal.</p>
-  <div class="cheat">${WORLDS.map((t, ti) => `<details ${ti === 0 ? 'open' : ''}><summary><span class="sa">${artOf(t.art)}</span>${t.title}</summary>
+  <div class="cheat">${WORLDS.map((t, ti) => `<details ${ti === 0 ? 'open' : ''}><summary><span class="sa">${worldArt(t)}</span>${t.title}</summary>
     <div class="cbody">${t.learn.map(c => `<div><h4>${c.h}</h4>${learnBlocks(c, 'cheat')}</div>`).join('')}<div><button class="btn small primary" data-learnall="${ti}">Als Lernkarten ansehen</button></div></div></details>`).join('')}</div>`;
 }
 

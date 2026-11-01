@@ -12,5 +12,6 @@
     "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"
   },
   "packs": ["football"],
-  "scripts": ["art.js", "content.js", "levels.js", "app.js"]
+  "scripts": ["art.js", "content.js", "levels.js", "app.js"],
+  "cover": "img/hero.webp"
 }

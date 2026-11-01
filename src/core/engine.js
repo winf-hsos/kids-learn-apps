@@ -18,6 +18,8 @@ const examName = EXAM ? EXAM.kind : 'Prüfung';
 const examArt = { f: { acc: 'die', dat: 'der', to: 'zur', good: 'eine gute' }, m: { acc: 'den', dat: 'dem', to: 'zum', good: 'einen guten' }, n: { acc: 'das', dat: 'dem', to: 'zum', good: 'ein gutes' } }[(EXAM && EXAM.gender) || 'f'];
 const examDay = EXAM ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
+// A world shows its picture (t.img, a file in the app's img/ folder) or else its drawing.
+const worldArt = t => t.img ? `<img class="wimg" src="${t.img}" alt="" loading="lazy">` : artOf(t.art);
 
 // Badges: generic ones, one per world and one per reward game the app uses.
 const BADGES = [

@@ -124,7 +124,7 @@ const DUTIES = [
 // ---------------------------------------------------------------------------
 const TOPICS = [
   {
-    id: 'nouns', title: 'Familie und Haus', sub: 'Die Nomen aus Lektion 2, immer mit Akkusativ', art: 'domus', badge: 'Hausherr',
+    id: 'nouns', img: 'img/nouns.webp', title: 'Familie und Haus', sub: 'Die Nomen aus Lektion 2, immer mit Akkusativ', art: 'domus', badge: 'Hausherr',
     learn: [
       { h: 'So lernst du Nomen', p: 'Im Test steht das lateinische Nomen. Du schreibst die Bedeutung <b>und</b> den Akkusativ Singular dazu, also die mittlere Spalte aus dem Buch.', bullets: ['soror → sorōrem, Schwester', 'Bei Neutra (n.) sieht der Akkusativ aus wie der Nominativ: ātrium → ātrium.', 'līberī und parentēs gibt es nur im Plural.'] },
       { h: 'Familie', vocab: ['soror', 'frater', 'puer', 'puella', 'vir', 'liberi', 'parentes'] },
@@ -140,7 +140,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'verbs2', title: 'Verben aus Lektion 2', sub: 'Infinitiv, er/sie/es und sie: jede Form genau übersetzen', art: 'verba', badge: 'Verben-Profi',
+    id: 'verbs2', img: 'img/verbs2.webp', title: 'Verben aus Lektion 2', sub: 'Infinitiv, er/sie/es und sie: jede Form genau übersetzen', art: 'verba', badge: 'Verben-Profi',
     learn: [
       { h: 'So übersetzt du Verbformen', p: 'Im Test steht der Infinitiv, die 3. Person Singular oder die 3. Person Plural. Genau diese Form übersetzt du:', bullets: ['<b>amāre</b>: lieben (Infinitiv auf -re)', '<b>amat</b>: er/sie/es liebt (Endung -t), nicht „lieben“', '<b>amant</b>: sie lieben (Endung -nt)'] },
       { h: 'Mögen, wollen, müssen', vocab: ['amare', 'cupere', 'placere', 'debere', 'nondebere'] },
@@ -157,7 +157,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'words', title: 'Kleine Wörter', sub: 'Adverbien, cūr?, Salvēte! und sunt', art: 'tabula', badge: 'Wortjäger',
+    id: 'words', img: 'img/words.webp', title: 'Kleine Wörter', sub: 'Adverbien, cūr?, Salvēte! und sunt', art: 'tabula', badge: 'Wortjäger',
     learn: [
       { h: 'Kleine Wörter', p: 'Diese Wörter ändern ihre Form nie. Im Test reicht die Bedeutung.', vocab: WORD_IDS },
     ],
@@ -169,7 +169,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'verbs1', title: 'Verben aus Salve und Lektion 1', sub: 'Die Wiederholung: jetzt mit Infinitiv', art: 'laurus', badge: 'Wiederholer',
+    id: 'verbs1', img: 'img/verbs1.webp', title: 'Verben aus Salve und Lektion 1', sub: 'Die Wiederholung: jetzt mit Infinitiv', art: 'laurus', badge: 'Wiederholer',
     learn: [
       { h: 'Infinitive aus „Salve“', p: 'Diese Verben kennst du schon. Neu ist der Infinitiv in der ersten Spalte.', vocab: ['esse', 'clamare', 'venire', 'laborare', 'ludere', 'cantare', 'gaudere', 'currere'] },
       { h: 'Infinitive aus Lektion 1', vocab: ['exspectare', 'audire', 'rogare', 'quaerere', 'videre', 'intrare', 'ridere', 'tenere'] },
@@ -183,7 +183,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'conj', title: 'Konjugationsklassen', sub: 'Jedes Verb seiner Klasse zuordnen', art: 'columnae', badge: 'Baumeister',
+    id: 'conj', img: 'img/conj.webp', title: 'Konjugationsklassen', sub: 'Jedes Verb seiner Klasse zuordnen', art: 'columnae', badge: 'Baumeister',
     learn: [
       { h: 'Fünf Klassen', p: 'Woran du die Klasse erkennst:', conj: CONJ_ORDER },
       { h: '-ēre oder -ere?', p: 'Im Test stehen keine Hinweise wie „Pl.: capiunt“ und vielleicht auch keine Längenstriche. Diese Gruppen musst du deshalb auswendig wissen:', conjList: ['e', 'cons', 'mixed'] },
@@ -198,7 +198,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'sentences', title: 'Verben im Satz', sub: 'Aus dem Arbeitsheft: aus eins mach zwei, dēbet oder dēbent', art: 'verba', badge: 'Satzbauer',
+    id: 'sentences', img: 'img/sentences.webp', title: 'Verben im Satz', sub: 'Aus dem Arbeitsheft: aus eins mach zwei, dēbet oder dēbent', art: 'verba', badge: 'Satzbauer',
     learn: [
       { h: 'Einer oder mehrere?', p: 'Das Prädikat richtet sich nach dem Subjekt. Steht ein Subjekt da, endet das Verb auf -t, sind es mehrere (auch mit et verbunden), endet es auf -nt.', bullets: ['Aulus lūdit. Aulus spielt.', 'Aulus et Cornēlia lūdunt. Aulus und Cornelia spielen.', 'Bei der gemischten und der i-Konjugation kommt im Plural ein -i- dazu: Dēlia incipit, Dēlia et Crispīna incipiunt.'] },
       { h: 'dēbet oder dēbent', p: 'dēbēre steht mit einem Infinitiv. Der Infinitiv ist zwar ein Verb, aber kein Prädikat; das Prädikat ist dēbet oder dēbent.', bullets: ['Syrus labōrāre dēbet. Syrus muss arbeiten.', 'Servī labōrāre dēbent. Sklaven müssen arbeiten.', 'Puer clāmāre nōn dēbet. Der Junge darf nicht rufen.'] },

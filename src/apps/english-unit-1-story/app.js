@@ -9,6 +9,7 @@ const APP = {
   topics: TOPICS,
   art: key => ART[key] || '',
   heroArt: () => ART.book,
+  heroImg: 'img/hero.webp',
   learnExtras: vocabLearnExtras,
   quizTypes: VOCAB_QUIZ_TYPES,
   levelTypes: { ematch: vocabMatchLevel },

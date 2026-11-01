@@ -57,12 +57,13 @@ function homeHtml() {
   const all = WORLDS.reduce((s, t) => s + t.levels.length, 0);
   return `
   <section class="hero">
-    <div class="countdown">
+    <div class="countdown${APP.heroImg ? ' with-img' : ''}">
+      ${APP.heroImg ? `<img class="hero-img" src="${APP.heroImg}" alt="">` : ''}
       <div class="eyebrow">${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
       <h1>${headline}</h1>
       <p>${sub} <span class="hand">Du hast schon ${done} von ${all} Leveln geschafft.</span></p>
     </div>
-    ${APP.heroArt ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
+    ${APP.heroArt && !APP.heroImg ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
   </section>
   <div class="goalrow">
     <div class="tile">${ring(state.daily.xp / DAILY_GOAL)}<div><b>Tagesziel</b><span>${Math.min(state.daily.xp, DAILY_GOAL)} / ${DAILY_GOAL} XP heute</span></div></div>
@@ -87,7 +88,7 @@ function worldHtml(t, ti) {
       <span class="lbl">${lv.title}</span></button>`;
   }).join('');
   return `<section class="world">
-    <div class="world-head"><div class="world-art">${artOf(t.art)}</div>
+    <div class="world-head"><div class="world-art">${worldArt(t)}</div>
       <div style="min-width:0"><span class="world-num">Welt ${ti + 1}</span><h2>${t.title}</h2><p>${t.sub}</p></div>
       <div class="world-prog">${got}/${max} ${ICON.star().replace('<svg', '<svg style="width:16px;height:16px;display:inline;vertical-align:-2px"')}<small>${worldDone(ti) ? 'komplett' : ''}</small></div></div>
     <div class="path" style="--cols:${cols};--cols-sm:${colsSm}">${nodes}</div></section>`;

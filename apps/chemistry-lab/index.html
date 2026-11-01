@@ -36,6 +36,10 @@
   --f-hand: 'Gochi Hand', 'Comic Sans MS', 'Segoe Print', cursive;
   /* calmer handwriting for what learners type, easier to read than --f-hand */
   --f-write: 'Patrick Hand', 'Segoe Print', 'Comic Sans MS', cursive;
+  /* page background and the decorative stripe on hero cards; apps swap these for their own look */
+  --paper-pattern: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  --paper-size: 24px 24px;
+  --stripe: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -60,10 +64,8 @@ html, body { min-height: 100%; }
 body {
   margin: 0;
   background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: var(--paper-pattern);
+  background-size: var(--paper-size);
   color: var(--ink);
   font-family: var(--f-body);
   font-size: 17px;
@@ -119,7 +121,10 @@ a.iconbtn { color: inherit; text-decoration: none; }
   position: relative; padding: 18px 20px 18px 22px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow);
   border: 3px solid var(--ink); overflow: hidden; min-width: 0;
 }
-.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px); }
+.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: var(--stripe); }
+.countdown.with-img { --hero-h: clamp(140px, 32vw, 230px); }
+.countdown.with-img::before { top: calc(var(--hero-h) + 3px); }
+.hero-img { display: block; width: calc(100% + 42px); max-width: none; height: var(--hero-h); margin: -18px -20px 14px -22px; object-fit: cover; object-position: var(--hero-pos, center); border-bottom: 3px solid var(--ink); }
 .countdown .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); }
 .countdown h1 { font-size: clamp(26px, 6vw, 40px); margin-top: 4px; }
 .countdown h1 em { font-style: normal; color: var(--accent); }
@@ -141,6 +146,8 @@ button.tile:hover { border-color: var(--accent); }
 .world { margin-top: 30px; }
 .world-head { display: flex; align-items: center; gap: 14px; }
 .world-art { width: 64px; height: 64px; flex: none; background: var(--card); border: 3px solid var(--ink); border-radius: 16px; padding: 6px; color: var(--ink); box-shadow: var(--shadow); }
+.world-art:has(.wimg) { width: 76px; height: 76px; padding: 0; overflow: hidden; }
+.wimg { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 13px; }
 .world-head h2 { font-size: clamp(20px, 4.4vw, 26px); }
 .world-head p { margin: 2px 0 0; color: var(--ink-soft); font-size: 15px; }
 .world-num { font-family: var(--f-hand); color: var(--pen); font-size: 20px; }
@@ -174,7 +181,7 @@ button.tile:hover { border-color: var(--accent); }
 .lead { color: var(--ink-soft); margin: 0 0 16px; max-width: 60ch; }
 
 /* ---------- level screen ---------- */
-.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: var(--paper-pattern); background-size: var(--paper-size); overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .stage-inner { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 180px; }
 .stage-top { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; padding: 10px 0; background: var(--paper); z-index: 2; }
 .progress { flex: 1; height: 16px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); overflow: hidden; }
@@ -417,6 +424,7 @@ button.tile:hover { border-color: var(--accent); }
   .world-prog small { display: none; }
   .world-head { flex-wrap: wrap; gap: 10px 12px; }
   .world-art { width: 52px; height: 52px; }
+  .world-art:has(.wimg) { width: 64px; height: 64px; }
   .world-head > div:nth-child(2) { flex: 1; }
   .world-prog { order: 3; width: 100%; text-align: left; margin-left: 0; }
   .node .lbl { font-size: 12px; }
@@ -899,7 +907,7 @@ const FOOTBALL = [
 ];
 
 
-const MANIFEST = {"id": "chemistry-lab", "title": "Chemie-Labor", "school": "Gymnasium", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "packs": ["football"], "hubUrl": "../../"};
+const MANIFEST = {"id": "chemistry-lab", "title": "Chemie-Labor", "school": "Gymnasium", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "packs": ["football"], "cover": "img/hero.webp", "hubUrl": "../../"};
 
 // Inline SVG artwork. Line art uses currentColor so it follows the theme;
 // liquids use var(--liquid). GHS pictograms keep their real white/red/black look.
@@ -1153,7 +1161,7 @@ const GHS = {
 // ---------------------------------------------------------------------------
 const TOPICS = [
   {
-    id: 'safety',
+    id: 'safety', img: 'img/safety.webp',
     badge: 'Sicherheits-Chef',
     title: 'Sicherheit im Fachraum',
     sub: 'Die 7 Sicherheitseinrichtungen und was im Notfall zu tun ist',
@@ -1196,7 +1204,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'rules',
+    id: 'rules', img: 'img/rules.webp',
     badge: 'Regel-Profi',
     title: 'Sicher experimentieren',
     sub: 'Regeln vor, während und nach dem Versuch',
@@ -1263,7 +1271,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'devices',
+    id: 'devices', img: 'img/devices.webp',
     badge: 'Geräte-Guru',
     title: 'Laborgeräte',
     sub: 'Erkennen, benennen und wissen, wofür man sie braucht',
@@ -1298,7 +1306,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'burner',
+    id: 'burner', img: 'img/burner.webp',
     badge: 'Brenner-Führerschein',
     title: 'Gasbrenner-Führerschein',
     sub: 'Aufbau, Flammen und die richtige Reihenfolge',
@@ -1348,7 +1356,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'hazards',
+    id: 'hazards', img: 'img/hazards.webp',
     badge: 'Gefahrstoff-Detektiv',
     title: 'Gefahrstoffe',
     sub: 'Piktogramme, Signalwörter, H- und P-Sätze',
@@ -1401,7 +1409,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'operators',
+    id: 'operators', img: 'img/operators.webp',
     badge: 'Aufgaben-Knacker',
     title: 'Aufgaben knacken',
     sub: 'Was will die Lehrerin bei „begründe“, „erkläre“, „beschreibe“?',
@@ -1693,6 +1701,7 @@ const APP = {
   art,
   entity: key => DEVICES[key] && { name: DEVICES[key].name, info: DEVICES[key].use },
   heroArt: heroFlameSvg,
+  heroImg: 'img/hero.webp',
   xpIcon: TYPE_ICON.sim,
   memoryBack: TYPE_ICON.sim,
   learnExtras: chemLearnExtras,
@@ -1896,6 +1905,8 @@ const examName = EXAM ? EXAM.kind : 'Prüfung';
 const examArt = { f: { acc: 'die', dat: 'der', to: 'zur', good: 'eine gute' }, m: { acc: 'den', dat: 'dem', to: 'zum', good: 'einen guten' }, n: { acc: 'das', dat: 'dem', to: 'zum', good: 'ein gutes' } }[(EXAM && EXAM.gender) || 'f'];
 const examDay = EXAM ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
+// A world shows its picture (t.img, a file in the app's img/ folder) or else its drawing.
+const worldArt = t => t.img ? `<img class="wimg" src="${t.img}" alt="" loading="lazy">` : artOf(t.art);
 
 // Badges: generic ones, one per world and one per reward game the app uses.
 const BADGES = [
@@ -2143,12 +2154,13 @@ function homeHtml() {
   const all = WORLDS.reduce((s, t) => s + t.levels.length, 0);
   return `
   <section class="hero">
-    <div class="countdown">
+    <div class="countdown${APP.heroImg ? ' with-img' : ''}">
+      ${APP.heroImg ? `<img class="hero-img" src="${APP.heroImg}" alt="">` : ''}
       <div class="eyebrow">${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
       <h1>${headline}</h1>
       <p>${sub} <span class="hand">Du hast schon ${done} von ${all} Leveln geschafft.</span></p>
     </div>
-    ${APP.heroArt ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
+    ${APP.heroArt && !APP.heroImg ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
   </section>
   <div class="goalrow">
     <div class="tile">${ring(state.daily.xp / DAILY_GOAL)}<div><b>Tagesziel</b><span>${Math.min(state.daily.xp, DAILY_GOAL)} / ${DAILY_GOAL} XP heute</span></div></div>
@@ -2173,7 +2185,7 @@ function worldHtml(t, ti) {
       <span class="lbl">${lv.title}</span></button>`;
   }).join('');
   return `<section class="world">
-    <div class="world-head"><div class="world-art">${artOf(t.art)}</div>
+    <div class="world-head"><div class="world-art">${worldArt(t)}</div>
       <div style="min-width:0"><span class="world-num">Welt ${ti + 1}</span><h2>${t.title}</h2><p>${t.sub}</p></div>
       <div class="world-prog">${got}/${max} ${ICON.star().replace('<svg', '<svg style="width:16px;height:16px;display:inline;vertical-align:-2px"')}<small>${worldDone(ti) ? 'komplett' : ''}</small></div></div>
     <div class="path" style="--cols:${cols};--cols-sm:${colsSm}">${nodes}</div></section>`;
@@ -2503,7 +2515,7 @@ async function finish(ratio) {
   if (run.mode === 'level' && !wasDone && worldDone(run.t)) {
     const got = grantTickets(1); save(); renderStatus();
     Sound.fanfare(); Confetti.burst(220);
-    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${artOf(WORLDS[run.t].art)}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
+    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${worldArt(WORLDS[run.t])}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
       GAMES.length ? [{ label: 'Ab in die Arcade', cls: 'go' }, { label: 'Weiterlernen', cls: '' }] : [{ label: 'Weiterlernen', cls: 'go' }]);
     if (r === 0 && GAMES.length) { closeStage(); tab = 'arcade'; render(); }
   }
@@ -2811,7 +2823,7 @@ async function examResult() {
 function cheatHtml() {
   const when = examDay && EXAM && daysUntil(EXAM.date) >= 0 ? `für ${examDay}` : 'aus allen Welten';
   return `<h2 class="section-title">Spickzettel</h2><p class="lead">Alles Wichtige ${when} auf einen Blick. Am Abend vorher einmal durchlesen, am Morgen nochmal.</p>
-  <div class="cheat">${WORLDS.map((t, ti) => `<details ${ti === 0 ? 'open' : ''}><summary><span class="sa">${artOf(t.art)}</span>${t.title}</summary>
+  <div class="cheat">${WORLDS.map((t, ti) => `<details ${ti === 0 ? 'open' : ''}><summary><span class="sa">${worldArt(t)}</span>${t.title}</summary>
     <div class="cbody">${t.learn.map(c => `<div><h4>${c.h}</h4>${learnBlocks(c, 'cheat')}</div>`).join('')}<div><button class="btn small primary" data-learnall="${ti}">Als Lernkarten ansehen</button></div></div></details>`).join('')}</div>`;
 }
 

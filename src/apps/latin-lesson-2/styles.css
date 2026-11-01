@@ -1,10 +1,30 @@
-/* Latin arena: Roman red instead of the default blue, plus vocabulary tables,
-   conjugation overviews and the two-line swipe cards. The shared design lives in core/core.css. */
-:root { --accent: #B8322A; --accent-soft: #F9E0DC; --accent-2: #F2A65A; --pen: #8C2A1F; --accent-strong: #B8322A; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --accent: #FF7B6B; --accent-soft: #4A1D1A; --accent-2: #FFB27A; --pen: #FFA294; --accent-strong: #C9473A; }
+/* Latin arena: an antique look with marble and terracotta, ashlar walls as page background,
+   Roman capitals (Cinzel) for headings and Alegreya for the Latin words themselves, plus vocabulary
+   tables, conjugation overviews and the two-line swipe cards. The shared design lives in core/core.css. */
+:root {
+  --paper: #F3EBDC; --grid: #E4D6BE; --card: #FFFBF3; --ink: #2B1D14; --ink-soft: #76604B; --line: #E2D2B8;
+  --accent: #A8322A; --accent-soft: #F6DED3; --accent-2: #D9A33A; --gold: #E8B04B; --gold-ink: #2B1D14;
+  --pen: #8C2A1F; --accent-strong: #A8322A; --go-strong: #2F7D4F; --good: #2F7D4F; --good-soft: #DDEFD9;
+  --shadow: 0 2px 0 var(--line), 0 10px 24px -14px rgba(43, 29, 20, .4);
+  --f-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --f-word: 'Alegreya', Georgia, serif;
+  --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 .5H120M0 30.5H120M.5 0V30M60.5 30V60' stroke='%237A5A3A' stroke-opacity='.13' fill='none'/%3E%3C/svg%3E");
+  --paper-size: 120px 60px;
+  --stripe: repeating-linear-gradient(180deg, var(--accent) 0 18px, var(--gold) 18px 22px);
+  --hero-pos: 30% 35%;
 }
-:root[data-theme="dark"] { --accent: #FF7B6B; --accent-soft: #4A1D1A; --accent-2: #FFB27A; --pen: #FFA294; --accent-strong: #C9473A; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #17110D; --grid: #2A1F17; --card: #241A14; --ink: #F5EBDD; --ink-soft: #C4AF96; --line: #4A3828; --accent: #F08A6E; --accent-soft: #4A231B; --accent-2: #F0BE5A; --gold: #F0BE5A; --gold-ink: #1E140C; --pen: #FFB49A; --accent-strong: #B8433A; --go-strong: #2F7D4F; --shadow: 0 2px 0 #0B0705, 0 10px 24px -14px rgba(0, 0, 0, .7); --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 .5H120M0 30.5H120M.5 0V30M60.5 30V60' stroke='%23FFE1BE' stroke-opacity='.07' fill='none'/%3E%3C/svg%3E"); }
+}
+:root[data-theme="dark"] { --paper: #17110D; --grid: #2A1F17; --card: #241A14; --ink: #F5EBDD; --ink-soft: #C4AF96; --line: #4A3828; --accent: #F08A6E; --accent-soft: #4A231B; --accent-2: #F0BE5A; --gold: #F0BE5A; --gold-ink: #1E140C; --pen: #FFB49A; --accent-strong: #B8433A; --go-strong: #2F7D4F; --shadow: 0 2px 0 #0B0705, 0 10px 24px -14px rgba(0, 0, 0, .7); --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 .5H120M0 30.5H120M.5 0V30M60.5 30V60' stroke='%23FFE1BE' stroke-opacity='.07' fill='none'/%3E%3C/svg%3E"); }
+
+/* Cinzel is set in capitals, so headings get a little air; Latin words stay in a readable book face */
+h1, h2, h3 { font-weight: 700; letter-spacing: .02em; }
+.countdown h1, .world-head h2, .section-title { font-weight: 900; }
+.type-word, .scard .swipe-la, .sort-card { font-family: var(--f-word); font-weight: 800; }
+.countdown { border-radius: 6px; }
+.world-art, .wimg { border-radius: 6px; }
+.node .bubble { border-radius: 14px; }
 
 .vtab { width: 100%; border-collapse: collapse; margin: 10px 0 4px; font-size: 16px; }
 .vtab td { padding: 8px 6px; border-bottom: 2px solid var(--line); vertical-align: top; }

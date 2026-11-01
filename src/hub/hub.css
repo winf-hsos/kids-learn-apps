@@ -1,7 +1,7 @@
 /* Start page. Builds on core/core.css (tokens, graph paper, typography). */
 .app.hub { padding-block: 0 60px; }
 .hub-head { margin-top: 28px; padding: 22px 22px 20px 26px; border-radius: 18px; background: var(--card); border: 3px solid var(--ink); box-shadow: var(--shadow); position: relative; overflow: hidden; }
-.hub-head::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px); }
+.hub-head::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: var(--stripe); }
 .hub-head .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); }
 .hub-head h1 { font-size: clamp(28px, 6.4vw, 44px); margin-top: 4px; }
 .hub-head h1 em { font-style: normal; color: var(--accent); }
@@ -14,6 +14,8 @@
 .hub-card { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 20px; background: var(--card); border: 3px solid var(--ink); box-shadow: 0 5px 0 var(--ink); color: inherit; text-decoration: none; transition: transform .12s; }
 .hub-card:hover { transform: translateY(-3px); }
 .hub-card:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+.hub-card.with-cover { flex-wrap: wrap; overflow: hidden; }
+.hub-cover { flex: 0 0 calc(100% + 32px); width: calc(100% + 32px); height: 150px; margin: -16px -16px 0; object-fit: cover; border-bottom: 3px solid var(--ink); }
 .hub-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 .hub-icon { width: 68px; height: 68px; flex: none; border-radius: 18px; overflow: hidden; color: var(--ink); }
 .hub-icon svg { width: 100%; height: 100%; }

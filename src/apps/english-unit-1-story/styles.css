@@ -1,10 +1,19 @@
-/* English app: teal instead of the default blue, plus vocabulary tables, listen
-   buttons, gap sentences and spelling cards. The shared design lives in core/core.css. */
-:root { --accent: #0F7B6C; --accent-soft: #D9F2EC; --accent-2: #F2B33D; --pen: #0B5E52; --accent-strong: #0F7B6C; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --accent: #4FD6C0; --accent-soft: #12332E; --accent-2: #F7C766; --pen: #7FE3D2; --accent-strong: #129C88; }
+/* English app: a British school notebook with ruled lines, London red and navy, Lilita One for headings,
+   plus vocabulary tables, listen buttons, gap sentences and spelling cards. The shared design lives in core/core.css. */
+:root {
+  --paper: #FBF7EE; --grid: #D9E3F1; --card: #FFFFFF; --ink: #14213D; --ink-soft: #56637F; --line: #DDD6C6;
+  --accent: #C8102E; --accent-soft: #FBE1E5; --accent-2: #2F6FDB; --pen: #1D3C8F; --accent-strong: #C8102E;
+  --f-display: 'Lilita One', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --paper-pattern: linear-gradient(transparent 31px, var(--grid) 31px);
+  --paper-size: 100% 32px;
+  --stripe: repeating-linear-gradient(-45deg, #C8102E 0 8px, #FFFFFF 8px 11px, #14213D 11px 19px, #FFFFFF 19px 22px);
+  --hero-pos: 60% 30%;
 }
-:root[data-theme="dark"] { --accent: #4FD6C0; --accent-soft: #12332E; --accent-2: #F7C766; --pen: #7FE3D2; --accent-strong: #129C88; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0F1424; --grid: #1E2742; --card: #18203A; --ink: #F3F0E8; --ink-soft: #A9B3CF; --line: #2C365A; --accent: #FF6B7D; --accent-soft: #46202A; --accent-2: #7FB2FF; --pen: #9DB5FF; --accent-strong: #D22B44; --shadow: 0 2px 0 #080B16, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+}
+:root[data-theme="dark"] { --paper: #0F1424; --grid: #1E2742; --card: #18203A; --ink: #F3F0E8; --ink-soft: #A9B3CF; --line: #2C365A; --accent: #FF6B7D; --accent-soft: #46202A; --accent-2: #7FB2FF; --pen: #9DB5FF; --accent-strong: #D22B44; --shadow: 0 2px 0 #080B16, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+h1, h2, h3 { letter-spacing: .015em; }
 
 .vtab { width: 100%; border-collapse: collapse; margin: 10px 0 4px; font-size: 16px; }
 .vtab td { padding: 8px 6px; border-bottom: 2px solid var(--line); vertical-align: top; }

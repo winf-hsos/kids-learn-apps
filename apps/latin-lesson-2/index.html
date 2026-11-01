@@ -7,7 +7,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20aria-hidden%3D%22true%22%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%23B8322A%22/%3E%0A%20%20%3Cpath%20d%3D%22M19%2054%20A33%2033%200%200%201%2081%2054%22%20fill%3D%22none%22%20stroke%3D%22%23F2A65A%22%20stroke-width%3D%2212%22%20stroke-linecap%3D%22round%22/%3E%0A%20%20%3Cpath%20d%3D%22M24%2066%20A26%2026%200%200%201%2076%2066%20Z%22%20fill%3D%22%23FFC21A%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22/%3E%0A%20%20%3Cpath%20d%3D%22M30%2066%20V82%20Q30%2088%2037%2086%20L42%2070%20Z%20M70%2066%20V82%20Q70%2088%2063%2086%20L58%2070%20Z%22%20fill%3D%22%23FFC21A%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linejoin%3D%22round%22/%3E%0A%20%20%3Cpath%20d%3D%22M14%2066%20H86%22%20stroke%3D%22%2315213F%22%20stroke-width%3D%223.2%22%20stroke-linecap%3D%22round%22/%3E%0A%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Dela+Gothic+One&family=Gochi+Hand&family=Patrick+Hand&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Dela+Gothic+One&family=Gochi+Hand&family=Patrick+Hand&family=Cinzel:wght@700;900&family=Alegreya:wght@700;800&display=swap">
 <style>
 /* Shared design for all learning apps: one centered column on graph paper like a school notebook,
    sticky status bar and fixed tab bar. Apps override the color tokens in their own styles.css. */
@@ -36,6 +36,10 @@
   --f-hand: 'Gochi Hand', 'Comic Sans MS', 'Segoe Print', cursive;
   /* calmer handwriting for what learners type, easier to read than --f-hand */
   --f-write: 'Patrick Hand', 'Segoe Print', 'Comic Sans MS', cursive;
+  /* page background and the decorative stripe on hero cards; apps swap these for their own look */
+  --paper-pattern: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  --paper-size: 24px 24px;
+  --stripe: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -60,10 +64,8 @@ html, body { min-height: 100%; }
 body {
   margin: 0;
   background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
+  background-image: var(--paper-pattern);
+  background-size: var(--paper-size);
   color: var(--ink);
   font-family: var(--f-body);
   font-size: 17px;
@@ -119,7 +121,10 @@ a.iconbtn { color: inherit; text-decoration: none; }
   position: relative; padding: 18px 20px 18px 22px; border-radius: 18px; background: var(--card); box-shadow: var(--shadow);
   border: 3px solid var(--ink); overflow: hidden; min-width: 0;
 }
-.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: repeating-linear-gradient(-45deg, var(--gold) 0 10px, var(--gold-ink) 10px 20px); }
+.countdown::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 10px; background: var(--stripe); }
+.countdown.with-img { --hero-h: clamp(140px, 32vw, 230px); }
+.countdown.with-img::before { top: calc(var(--hero-h) + 3px); }
+.hero-img { display: block; width: calc(100% + 42px); max-width: none; height: var(--hero-h); margin: -18px -20px 14px -22px; object-fit: cover; object-position: var(--hero-pos, center); border-bottom: 3px solid var(--ink); }
 .countdown .eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: var(--ink-soft); }
 .countdown h1 { font-size: clamp(26px, 6vw, 40px); margin-top: 4px; }
 .countdown h1 em { font-style: normal; color: var(--accent); }
@@ -141,6 +146,8 @@ button.tile:hover { border-color: var(--accent); }
 .world { margin-top: 30px; }
 .world-head { display: flex; align-items: center; gap: 14px; }
 .world-art { width: 64px; height: 64px; flex: none; background: var(--card); border: 3px solid var(--ink); border-radius: 16px; padding: 6px; color: var(--ink); box-shadow: var(--shadow); }
+.world-art:has(.wimg) { width: 76px; height: 76px; padding: 0; overflow: hidden; }
+.wimg { display: block; width: 100%; height: auto; aspect-ratio: 1; object-fit: cover; border-radius: 13px; }
 .world-head h2 { font-size: clamp(20px, 4.4vw, 26px); }
 .world-head p { margin: 2px 0 0; color: var(--ink-soft); font-size: 15px; }
 .world-num { font-family: var(--f-hand); color: var(--pen); font-size: 20px; }
@@ -174,7 +181,7 @@ button.tile:hover { border-color: var(--accent); }
 .lead { color: var(--ink-soft); margin: 0 0 16px; max-width: 60ch; }
 
 /* ---------- level screen ---------- */
-.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 24px 24px; overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.stage { position: fixed; inset: 0; z-index: 40; background: var(--paper); background-image: var(--paper-pattern); background-size: var(--paper-size); overflow-y: auto; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 .stage-inner { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 180px; }
 .stage-top { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; padding: 10px 0; background: var(--paper); z-index: 2; }
 .progress { flex: 1; height: 16px; border-radius: 99px; background: var(--card); border: 2px solid var(--line); overflow: hidden; }
@@ -417,6 +424,7 @@ button.tile:hover { border-color: var(--accent); }
   .world-prog small { display: none; }
   .world-head { flex-wrap: wrap; gap: 10px 12px; }
   .world-art { width: 52px; height: 52px; }
+  .world-art:has(.wimg) { width: 64px; height: 64px; }
   .world-head > div:nth-child(2) { flex: 1; }
   .world-prog { order: 3; width: 100%; text-align: left; margin-left: 0; }
   .node .lbl { font-size: 12px; }
@@ -425,13 +433,33 @@ button.tile:hover { border-color: var(--accent); }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
 
-/* Latin arena: Roman red instead of the default blue, plus vocabulary tables,
-   conjugation overviews and the two-line swipe cards. The shared design lives in core/core.css. */
-:root { --accent: #B8322A; --accent-soft: #F9E0DC; --accent-2: #F2A65A; --pen: #8C2A1F; --accent-strong: #B8322A; }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --accent: #FF7B6B; --accent-soft: #4A1D1A; --accent-2: #FFB27A; --pen: #FFA294; --accent-strong: #C9473A; }
+/* Latin arena: an antique look with marble and terracotta, ashlar walls as page background,
+   Roman capitals (Cinzel) for headings and Alegreya for the Latin words themselves, plus vocabulary
+   tables, conjugation overviews and the two-line swipe cards. The shared design lives in core/core.css. */
+:root {
+  --paper: #F3EBDC; --grid: #E4D6BE; --card: #FFFBF3; --ink: #2B1D14; --ink-soft: #76604B; --line: #E2D2B8;
+  --accent: #A8322A; --accent-soft: #F6DED3; --accent-2: #D9A33A; --gold: #E8B04B; --gold-ink: #2B1D14;
+  --pen: #8C2A1F; --accent-strong: #A8322A; --go-strong: #2F7D4F; --good: #2F7D4F; --good-soft: #DDEFD9;
+  --shadow: 0 2px 0 var(--line), 0 10px 24px -14px rgba(43, 29, 20, .4);
+  --f-display: 'Cinzel', 'Trajan Pro', Georgia, serif;
+  --f-word: 'Alegreya', Georgia, serif;
+  --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 .5H120M0 30.5H120M.5 0V30M60.5 30V60' stroke='%237A5A3A' stroke-opacity='.13' fill='none'/%3E%3C/svg%3E");
+  --paper-size: 120px 60px;
+  --stripe: repeating-linear-gradient(180deg, var(--accent) 0 18px, var(--gold) 18px 22px);
+  --hero-pos: 30% 35%;
 }
-:root[data-theme="dark"] { --accent: #FF7B6B; --accent-soft: #4A1D1A; --accent-2: #FFB27A; --pen: #FFA294; --accent-strong: #C9473A; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #17110D; --grid: #2A1F17; --card: #241A14; --ink: #F5EBDD; --ink-soft: #C4AF96; --line: #4A3828; --accent: #F08A6E; --accent-soft: #4A231B; --accent-2: #F0BE5A; --gold: #F0BE5A; --gold-ink: #1E140C; --pen: #FFB49A; --accent-strong: #B8433A; --go-strong: #2F7D4F; --shadow: 0 2px 0 #0B0705, 0 10px 24px -14px rgba(0, 0, 0, .7); --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 .5H120M0 30.5H120M.5 0V30M60.5 30V60' stroke='%23FFE1BE' stroke-opacity='.07' fill='none'/%3E%3C/svg%3E"); }
+}
+:root[data-theme="dark"] { --paper: #17110D; --grid: #2A1F17; --card: #241A14; --ink: #F5EBDD; --ink-soft: #C4AF96; --line: #4A3828; --accent: #F08A6E; --accent-soft: #4A231B; --accent-2: #F0BE5A; --gold: #F0BE5A; --gold-ink: #1E140C; --pen: #FFB49A; --accent-strong: #B8433A; --go-strong: #2F7D4F; --shadow: 0 2px 0 #0B0705, 0 10px 24px -14px rgba(0, 0, 0, .7); --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M0 .5H120M0 30.5H120M.5 0V30M60.5 30V60' stroke='%23FFE1BE' stroke-opacity='.07' fill='none'/%3E%3C/svg%3E"); }
+
+/* Cinzel is set in capitals, so headings get a little air; Latin words stay in a readable book face */
+h1, h2, h3 { font-weight: 700; letter-spacing: .02em; }
+.countdown h1, .world-head h2, .section-title { font-weight: 900; }
+.type-word, .scard .swipe-la, .sort-card { font-family: var(--f-word); font-weight: 800; }
+.countdown { border-radius: 6px; }
+.world-art, .wimg { border-radius: 6px; }
+.node .bubble { border-radius: 14px; }
 
 .vtab { width: 100%; border-collapse: collapse; margin: 10px 0 4px; font-size: 16px; }
 .vtab td { padding: 8px 6px; border-bottom: 2px solid var(--line); vertical-align: top; }
@@ -872,7 +900,7 @@ const FOOTBALL = [
 ];
 
 
-const MANIFEST = {"id": "latin-lesson-2", "title": "Latein-Arena: Klasse 6 – Lektion 2", "school": "Gymnasium", "subject": "Latein", "grade": "Klasse 6", "about": "Vokabeln aus Lektion 2 mit Akkusativ und Verbformen, dazu die Verben aus Salve und Lektion 1 und die Konjugationsklassen", "storeKey": "kla:latin-lesson-2", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-03", "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"}, "packs": ["football"], "hubUrl": "../../"};
+const MANIFEST = {"id": "latin-lesson-2", "title": "Latein-Arena: Klasse 6 – Lektion 2", "school": "Gymnasium", "subject": "Latein", "grade": "Klasse 6", "about": "Vokabeln aus Lektion 2 mit Akkusativ und Verbformen, dazu die Verben aus Salve und Lektion 1 und die Konjugationsklassen", "storeKey": "kla:latin-lesson-2", "exam": {"kind": "Vokabeltest", "gender": "m", "date": "2026-11-03", "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"}, "packs": ["football"], "cover": "img/hero.webp", "hubUrl": "../../"};
 
 // Vocabulary engine of the Latin app: accepted answers, quiz types, the match
 // level and the vocabulary tables on learn cards. Words are looked up by id in
@@ -1203,7 +1231,7 @@ const DUTIES = [
 // ---------------------------------------------------------------------------
 const TOPICS = [
   {
-    id: 'nouns', title: 'Familie und Haus', sub: 'Die Nomen aus Lektion 2, immer mit Akkusativ', art: 'domus', badge: 'Hausherr',
+    id: 'nouns', img: 'img/nouns.webp', title: 'Familie und Haus', sub: 'Die Nomen aus Lektion 2, immer mit Akkusativ', art: 'domus', badge: 'Hausherr',
     learn: [
       { h: 'So lernst du Nomen', p: 'Im Test steht das lateinische Nomen. Du schreibst die Bedeutung <b>und</b> den Akkusativ Singular dazu, also die mittlere Spalte aus dem Buch.', bullets: ['soror → sorōrem, Schwester', 'Bei Neutra (n.) sieht der Akkusativ aus wie der Nominativ: ātrium → ātrium.', 'līberī und parentēs gibt es nur im Plural.'] },
       { h: 'Familie', vocab: ['soror', 'frater', 'puer', 'puella', 'vir', 'liberi', 'parentes'] },
@@ -1219,7 +1247,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'verbs2', title: 'Verben aus Lektion 2', sub: 'Infinitiv, er/sie/es und sie: jede Form genau übersetzen', art: 'verba', badge: 'Verben-Profi',
+    id: 'verbs2', img: 'img/verbs2.webp', title: 'Verben aus Lektion 2', sub: 'Infinitiv, er/sie/es und sie: jede Form genau übersetzen', art: 'verba', badge: 'Verben-Profi',
     learn: [
       { h: 'So übersetzt du Verbformen', p: 'Im Test steht der Infinitiv, die 3. Person Singular oder die 3. Person Plural. Genau diese Form übersetzt du:', bullets: ['<b>amāre</b>: lieben (Infinitiv auf -re)', '<b>amat</b>: er/sie/es liebt (Endung -t), nicht „lieben“', '<b>amant</b>: sie lieben (Endung -nt)'] },
       { h: 'Mögen, wollen, müssen', vocab: ['amare', 'cupere', 'placere', 'debere', 'nondebere'] },
@@ -1236,7 +1264,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'words', title: 'Kleine Wörter', sub: 'Adverbien, cūr?, Salvēte! und sunt', art: 'tabula', badge: 'Wortjäger',
+    id: 'words', img: 'img/words.webp', title: 'Kleine Wörter', sub: 'Adverbien, cūr?, Salvēte! und sunt', art: 'tabula', badge: 'Wortjäger',
     learn: [
       { h: 'Kleine Wörter', p: 'Diese Wörter ändern ihre Form nie. Im Test reicht die Bedeutung.', vocab: WORD_IDS },
     ],
@@ -1248,7 +1276,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'verbs1', title: 'Verben aus Salve und Lektion 1', sub: 'Die Wiederholung: jetzt mit Infinitiv', art: 'laurus', badge: 'Wiederholer',
+    id: 'verbs1', img: 'img/verbs1.webp', title: 'Verben aus Salve und Lektion 1', sub: 'Die Wiederholung: jetzt mit Infinitiv', art: 'laurus', badge: 'Wiederholer',
     learn: [
       { h: 'Infinitive aus „Salve“', p: 'Diese Verben kennst du schon. Neu ist der Infinitiv in der ersten Spalte.', vocab: ['esse', 'clamare', 'venire', 'laborare', 'ludere', 'cantare', 'gaudere', 'currere'] },
       { h: 'Infinitive aus Lektion 1', vocab: ['exspectare', 'audire', 'rogare', 'quaerere', 'videre', 'intrare', 'ridere', 'tenere'] },
@@ -1262,7 +1290,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'conj', title: 'Konjugationsklassen', sub: 'Jedes Verb seiner Klasse zuordnen', art: 'columnae', badge: 'Baumeister',
+    id: 'conj', img: 'img/conj.webp', title: 'Konjugationsklassen', sub: 'Jedes Verb seiner Klasse zuordnen', art: 'columnae', badge: 'Baumeister',
     learn: [
       { h: 'Fünf Klassen', p: 'Woran du die Klasse erkennst:', conj: CONJ_ORDER },
       { h: '-ēre oder -ere?', p: 'Im Test stehen keine Hinweise wie „Pl.: capiunt“ und vielleicht auch keine Längenstriche. Diese Gruppen musst du deshalb auswendig wissen:', conjList: ['e', 'cons', 'mixed'] },
@@ -1277,7 +1305,7 @@ const TOPICS = [
     ],
   },
   {
-    id: 'sentences', title: 'Verben im Satz', sub: 'Aus dem Arbeitsheft: aus eins mach zwei, dēbet oder dēbent', art: 'verba', badge: 'Satzbauer',
+    id: 'sentences', img: 'img/sentences.webp', title: 'Verben im Satz', sub: 'Aus dem Arbeitsheft: aus eins mach zwei, dēbet oder dēbent', art: 'verba', badge: 'Satzbauer',
     learn: [
       { h: 'Einer oder mehrere?', p: 'Das Prädikat richtet sich nach dem Subjekt. Steht ein Subjekt da, endet das Verb auf -t, sind es mehrere (auch mit et verbunden), endet es auf -nt.', bullets: ['Aulus lūdit. Aulus spielt.', 'Aulus et Cornēlia lūdunt. Aulus und Cornelia spielen.', 'Bei der gemischten und der i-Konjugation kommt im Plural ein -i- dazu: Dēlia incipit, Dēlia et Crispīna incipiunt.'] },
       { h: 'dēbet oder dēbent', p: 'dēbēre steht mit einem Infinitiv. Der Infinitiv ist zwar ein Verb, aber kein Prädikat; das Prädikat ist dēbet oder dēbent.', bullets: ['Syrus labōrāre dēbet. Syrus muss arbeiten.', 'Servī labōrāre dēbent. Sklaven müssen arbeiten.', 'Puer clāmāre nōn dēbet. Der Junge darf nicht rufen.'] },
@@ -1340,6 +1368,7 @@ const APP = {
   topics: TOPICS,
   art: key => ART[key] || '',
   heroArt: () => ART.galea,
+  heroImg: 'img/hero.webp',
   learnExtras: vocabLearnExtras,
   quizTypes: VOCAB_QUIZ_TYPES,
   levelTypes: { vmatch: vocabMatchLevel },
@@ -1542,6 +1571,8 @@ const examName = EXAM ? EXAM.kind : 'Prüfung';
 const examArt = { f: { acc: 'die', dat: 'der', to: 'zur', good: 'eine gute' }, m: { acc: 'den', dat: 'dem', to: 'zum', good: 'einen guten' }, n: { acc: 'das', dat: 'dem', to: 'zum', good: 'ein gutes' } }[(EXAM && EXAM.gender) || 'f'];
 const examDay = EXAM ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
+// A world shows its picture (t.img, a file in the app's img/ folder) or else its drawing.
+const worldArt = t => t.img ? `<img class="wimg" src="${t.img}" alt="" loading="lazy">` : artOf(t.art);
 
 // Badges: generic ones, one per world and one per reward game the app uses.
 const BADGES = [
@@ -1789,12 +1820,13 @@ function homeHtml() {
   const all = WORLDS.reduce((s, t) => s + t.levels.length, 0);
   return `
   <section class="hero">
-    <div class="countdown">
+    <div class="countdown${APP.heroImg ? ' with-img' : ''}">
+      ${APP.heroImg ? `<img class="hero-img" src="${APP.heroImg}" alt="">` : ''}
       <div class="eyebrow">${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
       <h1>${headline}</h1>
       <p>${sub} <span class="hand">Du hast schon ${done} von ${all} Leveln geschafft.</span></p>
     </div>
-    ${APP.heroArt ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
+    ${APP.heroArt && !APP.heroImg ? `<div class="herobox" aria-hidden="true">${APP.heroArt()}</div>` : ''}
   </section>
   <div class="goalrow">
     <div class="tile">${ring(state.daily.xp / DAILY_GOAL)}<div><b>Tagesziel</b><span>${Math.min(state.daily.xp, DAILY_GOAL)} / ${DAILY_GOAL} XP heute</span></div></div>
@@ -1819,7 +1851,7 @@ function worldHtml(t, ti) {
       <span class="lbl">${lv.title}</span></button>`;
   }).join('');
   return `<section class="world">
-    <div class="world-head"><div class="world-art">${artOf(t.art)}</div>
+    <div class="world-head"><div class="world-art">${worldArt(t)}</div>
       <div style="min-width:0"><span class="world-num">Welt ${ti + 1}</span><h2>${t.title}</h2><p>${t.sub}</p></div>
       <div class="world-prog">${got}/${max} ${ICON.star().replace('<svg', '<svg style="width:16px;height:16px;display:inline;vertical-align:-2px"')}<small>${worldDone(ti) ? 'komplett' : ''}</small></div></div>
     <div class="path" style="--cols:${cols};--cols-sm:${colsSm}">${nodes}</div></section>`;
@@ -2149,7 +2181,7 @@ async function finish(ratio) {
   if (run.mode === 'level' && !wasDone && worldDone(run.t)) {
     const got = grantTickets(1); save(); renderStatus();
     Sound.fanfare(); Confetti.burst(220);
-    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${artOf(WORLDS[run.t].art)}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
+    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${worldArt(WORLDS[run.t])}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
       GAMES.length ? [{ label: 'Ab in die Arcade', cls: 'go' }, { label: 'Weiterlernen', cls: '' }] : [{ label: 'Weiterlernen', cls: 'go' }]);
     if (r === 0 && GAMES.length) { closeStage(); tab = 'arcade'; render(); }
   }
@@ -2457,7 +2489,7 @@ async function examResult() {
 function cheatHtml() {
   const when = examDay && EXAM && daysUntil(EXAM.date) >= 0 ? `für ${examDay}` : 'aus allen Welten';
   return `<h2 class="section-title">Spickzettel</h2><p class="lead">Alles Wichtige ${when} auf einen Blick. Am Abend vorher einmal durchlesen, am Morgen nochmal.</p>
-  <div class="cheat">${WORLDS.map((t, ti) => `<details ${ti === 0 ? 'open' : ''}><summary><span class="sa">${artOf(t.art)}</span>${t.title}</summary>
+  <div class="cheat">${WORLDS.map((t, ti) => `<details ${ti === 0 ? 'open' : ''}><summary><span class="sa">${worldArt(t)}</span>${t.title}</summary>
     <div class="cbody">${t.learn.map(c => `<div><h4>${c.h}</h4>${learnBlocks(c, 'cheat')}</div>`).join('')}<div><button class="btn small primary" data-learnall="${ti}">Als Lernkarten ansehen</button></div></div></details>`).join('')}</div>`;
 }
 
