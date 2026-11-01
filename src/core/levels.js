@@ -281,16 +281,23 @@ const Narrator = {
   el: null, btn: null,
   src(c) { for (const w of WORLDS) { const i = (w.learn || []).indexOf(c); if (i >= 0) return AUDIO[`${w.id}/${i}`] || null; } return null; },
   button(c) { return this.src(c) ? `<button class="btn small read-aloud" id="readaloud">${ICON.soundOn}<span>Vorlesen</span></button>` : ''; },
-  bind(c) { const b = $('#readaloud'); if (b) b.onclick = () => this.el ? this.stop() : this.play(this.src(c), b); },
-  play(src, b) {
-    this.stop();
-    this.el = new Audio(src); this.btn = b;
-    this.el.onended = () => this.stop();
-    this.el.play().catch(() => this.stop());
-    this.mark(true);
+  bind(c) { const b = $('#readaloud'); if (b) b.onclick = () => this.toggle(this.src(c), b); },
+  // First tap starts the card, then each tap pauses or resumes where it stopped.
+  toggle(src, b) {
+    if (!this.el) {
+      this.el = new Audio(src); this.btn = b;
+      this.el.onended = () => this.stop();
+      this.el.onplay = this.el.onpause = () => this.mark();
+    }
+    if (this.el.paused) this.el.play().catch(() => this.stop()); else this.el.pause();
   },
-  stop() { if (this.el) { this.el.pause(); this.el = null; } this.mark(false); this.btn = null; },
-  mark(on) { const b = this.btn; if (b && b.isConnected) { b.classList.toggle('on', on); b.querySelector('span').textContent = on ? 'Stopp' : 'Vorlesen'; } },
+  stop() { if (this.el) { this.el.onpause = null; this.el.pause(); this.el = null; } this.mark(); this.btn = null; },
+  mark() {
+    const b = this.btn; if (!b || !b.isConnected) return;
+    const [icon, label] = !this.el ? [ICON.soundOn, 'Vorlesen'] : this.el.paused ? [ICON.play, 'Weiterhören'] : [ICON.pause, 'Pause'];
+    b.classList.toggle('on', !!this.el);
+    b.innerHTML = `${icon}<span>${label}</span>`;
+  },
 };
 
 function learnCardHtml(c) { return `<div class="learn-card"><h2>${c.h}</h2>${learnBlocks(c, 'card')}</div>`; }
