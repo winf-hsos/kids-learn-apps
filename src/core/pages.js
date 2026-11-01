@@ -10,7 +10,7 @@ function cheatHtml() {
 function arcadeHtml() {
   if (!GAMES.length) return `<h2 class="section-title">Arcade</h2><p class="lead">In dieser App gibt es noch keine Spiele.</p>`;
   const ts = totalStars(), next = GAMES.find(g => g.stars > ts);
-  return `<h2 class="section-title">Arcade</h2><p class="lead">Hier gibt es die Belohnung fürs Lernen. Jedes Spiel kostet ein Ticket. Tickets bekommst du für jeden neuen Stern, für komplette Welten, fürs Tagesziel${APP.exam ? ` und für eine gute Probe-${examName}` : ''}.</p>
+  return `<h2 class="section-title">Arcade</h2><p class="lead">Hier gibt es die Belohnung fürs Lernen. Jedes Spiel kostet ein Ticket. Tickets bekommst du für jeden neuen Stern, für komplette Welten, fürs Tagesziel${APP.exam ? ` und für ${examArt.good} Probe-${examName}` : ''}.</p>
   <div class="ticketbar">${ICON.ticket}<div><b>${state.tickets} Ticket${state.tickets === 1 ? '' : 's'}</b><p>Du hast ${ts} Sterne. ${next ? `Nächstes Spiel ab ${next.stars} Sternen.` : 'Alle Spiele sind freigeschaltet!'}</p></div></div>
   <div class="games">${GAMES.map(g => {
     const unlocked = ts >= g.stars;

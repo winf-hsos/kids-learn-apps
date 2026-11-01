@@ -6,7 +6,12 @@ const GAME_DEFS = {
   runner: {
     name: 'Lab Runner', desc: 'Jump & Run durchs Labor. Springe über Flammen, sammle Schutzbrillen.',
     record: v => `Rekord: ${v} Punkte`, badge: { id: 'runner500', name: 'Laufwunder', desc: '500 Punkte im Lab Runner' },
-    play: (area, hud) => runnerGame(area, hud),
+    play: (area, hud) => runnerGame(area, hud, LAB_RUNNER),
+  },
+  legion: {
+    name: 'Legionärslauf', desc: 'Jump & Run über die Via Appia nach Rom. Spring über Amphoren und Säulen, weich Streitwagen aus und sammle Goldmünzen.',
+    record: v => `Rekord: ${v} Punkte`, badge: { id: 'legion500', name: 'Eilbote des Kaisers', desc: '500 Punkte im Legionärslauf' },
+    play: (area, hud) => runnerGame(area, hud, LEGION_RUN),
   },
   penalty: {
     name: 'Elfmeter-Quiz', desc: 'Schwere Fußballfrage richtig? Dann darfst du schießen. 5 Elfer gegen den Torwart.',
@@ -29,6 +34,20 @@ function gameThumb(id) {
   const thumbs = {
     runner: svg(`<rect width="200" height="100" fill="#1B2A55"/><rect y="78" width="200" height="22" fill="#2E3F73"/><circle cx="170" cy="20" r="8" fill="#FFD27A"/>
       <path d="M120 78 C128 64 130 56 126 46 C134 54 138 64 132 78 Z" fill="#FF8A1F"/><circle cx="60" cy="44" r="8" fill="#FFD6B0"/><rect x="53" y="40" width="14" height="5" rx="2" fill="#7FD3FF"/><rect x="54" y="52" width="12" height="16" rx="3" fill="#fff"/><path d="M56 68 l-4 10 M64 68 l5 9" stroke="#fff" stroke-width="3" stroke-linecap="round"/>`, '0 0 200 100'),
+    legion: svg(`<defs><linearGradient id="lgSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#24184F"/><stop offset=".5" stop-color="#B4507A"/><stop offset="1" stop-color="#FFC27A"/></linearGradient></defs>
+      <rect width="200" height="100" fill="url(#lgSky)"/><circle cx="150" cy="52" r="22" fill="#FFE0A0" opacity=".35"/><circle cx="150" cy="52" r="13" fill="#FFF1C4"/>
+      <path d="M0 70 Q30 60 70 66 T140 62 T200 64 V78 H0Z" fill="#7A3D5F"/>
+      <path fill="#A0525A" fill-rule="evenodd" d="M14 38 H190 V78 H14 Z ${Array.from({ length: 7 }, (_, i) => `M${22 + i * 24} 78 V62 a8 8 0 0 1 16 0 V78 Z`).join(' ')} ${Array.from({ length: 15 }, (_, i) => `M${18 + i * 11.4} 55 V48 a3.5 3.5 0 0 1 7 0 V55 Z`).join(' ')}"/><rect x="14" y="38" width="176" height="2" fill="#EBA677"/>
+      <path d="M178 78 Q175 60 183 50" stroke="#3A2440" stroke-width="4" fill="none"/><ellipse cx="184" cy="48" rx="22" ry="6" fill="#3A2440"/><ellipse cx="190" cy="43" rx="12" ry="4" fill="#3A2440"/>
+      <rect y="78" width="200" height="22" fill="#3E2A30"/><rect y="78" width="200" height="2.5" fill="#D9A273"/>${Array.from({ length: 9 }, (_, i) => `<rect x="${i * 24 + 2}" y="82" width="21" height="7" rx="3" fill="${['#7A5A50', '#6C4E48', '#86645A'][i % 3]}"/><rect x="${i * 26 - 8}" y="91" width="23" height="8" rx="3" fill="${['#735349', '#86645A', '#5F4442'][i % 3]}"/>`).join('')}
+      <path d="M124 78 C112 70 116 58 121 56 V52 H127 V56 C132 58 136 70 124 78 Z" fill="#C96A3E"/><path d="M121 53 Q114 53 117 60 M127 53 Q134 53 131 60" stroke="#8E3B22" stroke-width="1.6" fill="none"/>
+      <circle cx="96" cy="40" r="6" fill="#F2B92E" stroke="#A8700E" stroke-width="1.2"/>
+      <g transform="translate(44 26)"><path d="M3 52 L9 6" stroke="#7A4A26" stroke-width="2.2" stroke-linecap="round"/><path d="M9 6 L11 -8" stroke="#C9D1DA" stroke-width="1.5"/>
+      <path d="M15 38 l-6 7 l-3 7 M17 38 l7 6 l2 8" stroke="#D99A6C" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <path d="M9 31 H24 L26.5 42 H6.5 Z" fill="#B3261E"/><rect x="8" y="16.5" width="17" height="16" rx="4" fill="#C9D1DA"/><path d="M8.5 21 H24.5 M8.5 25 H24.5 M8.5 29 H24.5" stroke="#56606C"/>
+      <circle cx="19.5" cy="10" r="7.4" fill="#E5A87A"/><path d="M9.8 9.4 A8.8 8.8 0 0 1 27.4 9.4 Z M10.6 9 L6.6 14.6 L11.6 14 Z" fill="#E0AE45"/><circle cx="23.6" cy="9.4" r="1.1" fill="#2A1A14"/>
+      <path d="M9.6 1.6 Q17 -12 28.4 -0.4 Q19 -4.6 9.6 1.6 Z" fill="#E0352B"/>
+      <rect x="21" y="15" width="12" height="32" rx="4" fill="#C0302A" stroke="#F0C24B" stroke-width="1.6"/><circle cx="27" cy="31" r="3.2" fill="#F5D46A"/></g>`, '0 0 200 100'),
     penalty: svg(`<rect width="200" height="100" fill="#0F6B3E"/><path d="M40 20 H160 V70 H40 Z" fill="none" stroke="#fff" stroke-width="4"/><path d="M40 20 L52 30 H148 L160 20 M52 30 V70 M148 30 V70" stroke="#fff" stroke-width="1" opacity=".5"/>
       <circle cx="100" cy="86" r="8" fill="#fff" stroke="#111"/><rect x="92" y="38" width="16" height="26" rx="5" fill="#FFC21A"/><circle cx="100" cy="33" r="6" fill="#FFD6B0"/>`, '0 0 200 100'),
     kickups: svg(`<rect width="200" height="100" fill="#123B6B"/><circle cx="100" cy="36" r="14" fill="#fff" stroke="#111" stroke-width="2"/><path d="M100 26 l6 5 -2 7 h-8 l-2 -7z" fill="#111"/><path d="M80 92 Q100 70 120 92" fill="#FFD6B0"/><text x="160" y="30" fill="#FFC21A" font-size="22" font-weight="700" font-family="sans-serif">27</text>`, '0 0 200 100'),

@@ -1,7 +1,13 @@
 // ---------------------------------------------------------------------------
-// Lab Runner (jump & run). One ticket = 3 runs.
+// Endless runner engine (jump & run) shared by themed games. One ticket = 3 runs.
+// A theme names the game and draws its world:
+//   { id, title, intro, collected(n), badge, dust,
+//     obstacles: { kind: { w, h, vx, from } },   vx: extra speed towards the player,
+//                                                from: run time (s) before it can appear
+//     items: { coin, power } particle colors,
+//     drawBg(ctx, g, V), drawPlayer(ctx, g, alive), drawObstacle(ctx, g, o), drawItem(ctx, g, it) }
 // ---------------------------------------------------------------------------
-function runnerGame(area, hud) {
+function runnerGame(area, hud, T) {
   const { ctx, size, dispose } = setupCanvas(area);
   let tries = 3, raf = 0, last = 0, g = null, alive = false;
   // Logical view: the world is drawn scaled up on tall screens so the runner stays readable.
@@ -11,7 +17,7 @@ function runnerGame(area, hud) {
 
   const newRun = () => {
     const H = V.H;
-    g = { t: 0, speed: 330, dist: 0, score: 0, atoms: 0, obs: [], items: [], parts: [], next: 1.2, nextItem: 2.5, shield: false, shake: 0,
+    g = { t: 0, speed: 330, dist: 0, score: 0, coins: 0, obs: [], items: [], parts: [], next: 1.2, nextItem: 2.5, shield: false, shake: 0,
       p: { x: V.W * .18, y: 0, vy: 0, jumps: 0, w: 34, h: 52 }, ground: H * .8, bg: 0 };
     g.p.y = g.ground - g.p.h;
   };
@@ -20,28 +26,28 @@ function runnerGame(area, hud) {
     if (g.p.jumps < 2) { g.p.vy = g.p.jumps ? -560 : -640; g.p.jumps++; Sound.tone(g.p.jumps === 1 ? 420 : 620, .1, 'square', .05, 0, 800); }
   };
   const spawnObstacle = () => {
-    const kinds = g.t < 12 ? ['burner', 'beakers', 'acid'] : ['burner', 'beakers', 'acid', 'cylinder', 'burner'];
-    const k = pick(kinds);
-    const dims = { burner: [30, 62], beakers: [46, 40], acid: [86, 12], cylinder: [34, 96] }[k];
-    g.obs.push({ k, x: V.W + 30, w: dims[0], h: dims[1] });
+    const k = pick(Object.keys(T.obstacles).filter(k => g.t >= (T.obstacles[k].from || 0)));
+    const o = T.obstacles[k];
+    g.obs.push({ k, x: V.W + 30, w: o.w, h: o.h, vx: o.vx || 0, ph: Math.random() * 6 });
     const gap = clamp(1.25 - g.t * .012, .62, 1.25);
     g.next = gap + Math.random() * .8;
   };
   const spawnItem = () => {
-    const goggles = !g.shield && Math.random() < .25;
-    g.items.push({ k: goggles ? 'goggles' : 'atom', x: V.W + 30, y: g.ground - 80 - Math.random() * 110, r: 14 });
+    const power = !g.shield && Math.random() < .25;
+    g.items.push({ k: power ? 'power' : 'coin', x: V.W + 30, y: g.ground - 80 - Math.random() * 110, r: 14 });
     g.nextItem = 1.4 + Math.random() * 2;
   };
+  const burst = (x, y, n, c, up = 200) => { for (let i = 0; i < n; i++) g.parts.push({ x, y, vx: Math.random() * 200 - 100, vy: Math.random() * -up, life: .6, c }); };
   const hit = (a, b) => a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
 
   const end = () => {
     alive = false;
     const score = Math.floor(g.score);
-    const isNew = recordGame('runner', score);
-    if (score >= 500) award('runner500');
+    const isNew = recordGame(T.id, score);
+    if (score >= 500 && T.badge) award(T.badge);
     tries--;
     Sound.tone(300, .3, 'sawtooth', .08, 0, 90);
-    overlay(area, `<p class="hand" style="color:#FFC21A">${isNew ? 'Neuer Rekord!' : 'Autsch!'}</p><h2>${score} Punkte</h2><p>Rekord: ${state.games.runner} · ${g.atoms} Atome gesammelt</p>
+    overlay(area, `<p class="hand" style="color:#FFC21A">${isNew ? 'Neuer Rekord!' : 'Autsch!'}</p><h2>${score} Punkte</h2><p>Rekord: ${state.games[T.id]} · ${T.collected(g.coins)}</p>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">${tries > 0 ? `<button class="btn go" id="rAgain">Nochmal (${tries} übrig)</button>` : ''}<button class="btn" id="rBack">Zurück</button></div>
       ${tries <= 0 ? '<p>Für weitere Läufe brauchst du ein neues Ticket.</p>' : ''}`);
     if (isNew) Confetti.burst(100);
@@ -50,9 +56,76 @@ function runnerGame(area, hud) {
   };
   const start = () => { hideOverlay(area); newRun(); alive = true; last = performance.now(); Sound.whistle(); };
 
-  // ---- drawing ----
-  const drawBg = () => {
-    const { W, H } = size;
+  const loop = now => {
+    const dt = Math.min(.033, (now - last) / 1000 || 0); last = now;
+    view();
+    if (g) { g.ground = V.H * .8; g.p.x = V.W * .18; if (!alive && g.p.jumps === 0) g.p.y = g.ground - g.p.h; }
+    if (g && alive) {
+      g.t += dt; g.speed = 330 + g.t * 9; g.bg += g.speed * dt; g.score += dt * 10 + g.speed * dt * .02;
+      const p = g.p, falling = p.vy > 0;
+      p.vy += 1700 * dt; p.y += p.vy * dt;
+      if (p.y >= g.ground - p.h) {
+        if (falling && p.jumps && T.dust) burst(p.x + 17, g.ground - 2, 8, T.dust, 120);
+        p.y = g.ground - p.h; p.vy = 0; p.jumps = 0;
+      }
+      g.next -= dt; if (g.next <= 0) spawnObstacle();
+      g.nextItem -= dt; if (g.nextItem <= 0) spawnItem();
+      const box = { x: p.x + 6, y: p.y + 4, w: p.w - 10, h: p.h - 6 };
+      for (const o of g.obs) {
+        o.x -= (g.speed + o.vx) * dt;
+        if (!o.hit && hit(box, { x: o.x + 4, y: g.ground - o.h + 4, w: o.w - 8, h: o.h - 4 })) {
+          o.hit = true;
+          if (g.shield) { g.shield = false; g.shake = .3; Sound.tone(800, .15, 'square', .06, 0, 300); }
+          else { g.shake = .4; end(); break; }
+        }
+      }
+      g.obs = g.obs.filter(o => o.x > -120);
+      for (const it of g.items) {
+        it.x -= g.speed * dt;
+        if (!it.got && Math.hypot(it.x - (p.x + 17), it.y - (p.y + 26)) < 34) {
+          it.got = true;
+          if (it.k === 'coin') { g.score += 25; g.coins++; Sound.coin(); } else { g.shield = true; Sound.tone(700, .2, 'triangle', .1, 0, 1200); }
+          burst(it.x, it.y, 10, T.items[it.k]);
+        }
+      }
+      g.items = g.items.filter(it => it.x > -40 && !it.got);
+      if (T.dust && p.jumps === 0 && Math.random() < dt * 14) burst(p.x + 8, g.ground - 2, 1, T.dust, 60);
+    }
+    if (g) {
+      ctx.save(); ctx.scale(V.k, V.k);
+      if (g.shake > 0) { g.shake -= dt; ctx.translate((Math.random() - .5) * 10, (Math.random() - .5) * 10); }
+      T.drawBg(ctx, g, V); g.obs.forEach(o => T.drawObstacle(ctx, g, o)); g.items.forEach(it => T.drawItem(ctx, g, it)); T.drawPlayer(ctx, g, alive);
+      for (const pt of g.parts) { pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.vy += 500 * dt; pt.life -= dt; ctx.globalAlpha = Math.max(0, pt.life / .6); ctx.fillStyle = pt.c; ctx.fillRect(pt.x, pt.y, 4, 4); }
+      ctx.globalAlpha = 1; g.parts = g.parts.filter(pt => pt.life > 0);
+      ctx.restore();
+      ctx.font = '700 22px "Dela Gothic One", sans-serif'; ctx.textAlign = 'right';
+      ctx.fillStyle = 'rgba(0,0,0,.35)'; ctx.fillText(Math.floor(g.score), size.W - 14, 36);
+      ctx.fillStyle = '#fff'; ctx.fillText(Math.floor(g.score), size.W - 16, 34);
+      hud(`Rekord ${state.games[T.id] || 0}`);
+    }
+    raf = requestAnimationFrame(loop);
+  };
+  newRun();
+  overlay(area, `<h2>${T.title}</h2>${T.intro}<p><b>Springen:</b> Leertaste, Pfeil hoch oder tippen. Zweimal drücken für einen Doppelsprung.</p><button class="btn go" id="rGo" style="margin-top:12px">Start (3 Läufe)</button>`);
+  $('#rGo').onclick = start;
+  const key = e => { if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) { e.preventDefault(); jump(); } };
+  const tap = e => { if (e.target.closest('.overlay')) return; e.preventDefault(); jump(); };
+  addEventListener('keydown', key); area.addEventListener('pointerdown', tap);
+  raf = requestAnimationFrame(loop);
+  return () => { cancelAnimationFrame(raf); removeEventListener('keydown', key); area.removeEventListener('pointerdown', tap); dispose(); };
+}
+
+// ---------------------------------------------------------------------------
+// Lab Runner: through the chemistry lab, over burners, beakers, acid and gas bottles.
+// ---------------------------------------------------------------------------
+const LAB_RUNNER = {
+  id: 'runner', title: 'Lab Runner', badge: 'runner500',
+  intro: '<p>Lauf durchs Labor! Springe über Brenner, Bechergläser, Säurepfützen und Gasflaschen. Sammle Atome für Punkte, eine Schutzbrille schützt dich einmal.</p>',
+  collected: n => `${n} Atome gesammelt`,
+  obstacles: { burner: { w: 30, h: 62 }, beakers: { w: 46, h: 40 }, acid: { w: 86, h: 12 }, cylinder: { w: 34, h: 96, from: 12 } },
+  items: { coin: '#5CE1E6', power: '#7CF29A' },
+  drawBg(ctx, g, V) {
+    const { W, H } = V;
     const sky = ctx.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, '#16224A'); sky.addColorStop(1, '#24366B');
     ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
     // wall tiles
@@ -76,8 +149,8 @@ function runnerGame(area, hud) {
     ctx.fillStyle = '#FFC21A'; ctx.fillRect(0, g.ground, W, 4);
     const fo = g.bg % 60; ctx.fillStyle = 'rgba(255,255,255,.07)';
     for (let x = -fo; x < W; x += 60) ctx.fillRect(x, g.ground + 18, 30, 4);
-  };
-  const drawPlayer = () => {
+  },
+  drawPlayer(ctx, g, alive) {
     const p = g.p, run = alive && p.jumps === 0, ph = g.t * 14;
     ctx.save(); ctx.translate(p.x, p.y);
     // legs
@@ -97,8 +170,8 @@ function runnerGame(area, hud) {
     ctx.strokeStyle = '#1B1B2F'; ctx.lineWidth = 1.5; ctx.stroke();
     if (g.shield) { ctx.strokeStyle = 'rgba(124,242,154,.6)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(17, 26, 36, 0, Math.PI * 2); ctx.stroke(); }
     ctx.restore();
-  };
-  const drawObs = o => {
+  },
+  drawObstacle(ctx, g, o) {
     const y = g.ground - o.h;
     if (o.k === 'burner') {
       ctx.fillStyle = '#9AA6BB'; ctx.fillRect(o.x + 10, y + 22, 10, o.h - 30);
@@ -118,10 +191,10 @@ function runnerGame(area, hud) {
       ctx.fillStyle = '#333'; ctx.fillRect(o.x + 11, y, 12, 12);
       ctx.fillStyle = '#fff'; ctx.save(); ctx.translate(o.x + o.w / 2, y + 50); ctx.rotate(Math.PI / 4); ctx.fillRect(-9, -9, 18, 18); ctx.restore();
     }
-  };
-  const drawItem = it => {
+  },
+  drawItem(ctx, g, it) {
     ctx.save(); ctx.translate(it.x, it.y + Math.sin(g.t * 4 + it.x * .01) * 5);
-    if (it.k === 'atom') {
+    if (it.k === 'coin') {
       ctx.strokeStyle = '#5CE1E6'; ctx.lineWidth = 2;
       for (let a = 0; a < 3; a++) { ctx.beginPath(); ctx.ellipse(0, 0, 15, 6, a * Math.PI / 3 + g.t, 0, Math.PI * 2); ctx.stroke(); }
       ctx.fillStyle = '#FFC21A'; ctx.beginPath(); ctx.arc(0, 0, 4.5, 0, Math.PI * 2); ctx.fill();
@@ -130,58 +203,5 @@ function runnerGame(area, hud) {
       ctx.fillStyle = '#1B1B2F'; ctx.fillRect(-2, -5, 4, 10);
     }
     ctx.restore();
-  };
-
-  const loop = now => {
-    const dt = Math.min(.033, (now - last) / 1000 || 0); last = now;
-    view();
-    if (g) { g.ground = V.H * .8; g.p.x = V.W * .18; if (!alive && g.p.jumps === 0) g.p.y = g.ground - g.p.h; }
-    if (g && alive) {
-      g.t += dt; g.speed = 330 + g.t * 9; g.bg += g.speed * dt; g.score += dt * 10 + g.speed * dt * .02;
-      const p = g.p;
-      p.vy += 1700 * dt; p.y += p.vy * dt;
-      if (p.y >= g.ground - p.h) { p.y = g.ground - p.h; p.vy = 0; p.jumps = 0; }
-      g.next -= dt; if (g.next <= 0) spawnObstacle();
-      g.nextItem -= dt; if (g.nextItem <= 0) spawnItem();
-      const box = { x: p.x + 6, y: p.y + 4, w: p.w - 10, h: p.h - 6 };
-      for (const o of g.obs) {
-        o.x -= g.speed * dt;
-        if (!o.hit && hit(box, { x: o.x + 4, y: g.ground - o.h + 4, w: o.w - 8, h: o.h - 4 })) {
-          o.hit = true;
-          if (g.shield) { g.shield = false; g.shake = .3; Sound.tone(800, .15, 'square', .06, 0, 300); }
-          else { g.shake = .4; end(); break; }
-        }
-      }
-      g.obs = g.obs.filter(o => o.x > -120);
-      for (const it of g.items) {
-        it.x -= g.speed * dt;
-        if (!it.got && Math.hypot(it.x - (p.x + 17), it.y - (p.y + 26)) < 34) {
-          it.got = true;
-          if (it.k === 'atom') { g.score += 25; g.atoms++; Sound.coin(); } else { g.shield = true; Sound.tone(700, .2, 'triangle', .1, 0, 1200); }
-          for (let i = 0; i < 10; i++) g.parts.push({ x: it.x, y: it.y, vx: Math.random() * 200 - 100, vy: Math.random() * -200, life: .6, c: it.k === 'atom' ? '#5CE1E6' : '#7CF29A' });
-        }
-      }
-      g.items = g.items.filter(it => it.x > -40 && !it.got);
-    }
-    if (g) {
-      ctx.save(); ctx.scale(V.k, V.k);
-      if (g.shake > 0) { g.shake -= dt; ctx.translate((Math.random() - .5) * 10, (Math.random() - .5) * 10); }
-      drawBg(); g.obs.forEach(drawObs); g.items.forEach(drawItem); drawPlayer();
-      for (const pt of g.parts) { pt.x += pt.vx * dt; pt.y += pt.vy * dt; pt.vy += 500 * dt; pt.life -= dt; ctx.globalAlpha = Math.max(0, pt.life / .6); ctx.fillStyle = pt.c; ctx.fillRect(pt.x, pt.y, 4, 4); }
-      ctx.globalAlpha = 1; g.parts = g.parts.filter(pt => pt.life > 0);
-      ctx.restore();
-      ctx.fillStyle = '#fff'; ctx.font = '700 22px "Dela Gothic One", sans-serif'; ctx.textAlign = 'right';
-      ctx.fillText(Math.floor(g.score), size.W - 16, 34);
-      hud(`Rekord ${state.games.runner}`);
-    }
-    raf = requestAnimationFrame(loop);
-  };
-  newRun();
-  overlay(area, `<h2>Lab Runner</h2><p>Lauf durchs Labor! Springe über Brenner, Bechergläser, Säurepfützen und Gasflaschen. Sammle Atome für Punkte, eine Schutzbrille schützt dich einmal.</p><p><b>Springen:</b> Leertaste, Pfeil hoch oder tippen. Zweimal drücken für einen Doppelsprung.</p><button class="btn go" id="rGo" style="margin-top:12px">Start (3 Läufe)</button>`);
-  $('#rGo').onclick = start;
-  const key = e => { if (['Space', 'ArrowUp', 'KeyW'].includes(e.code)) { e.preventDefault(); jump(); } };
-  const tap = e => { if (e.target.closest('.overlay')) return; e.preventDefault(); jump(); };
-  addEventListener('keydown', key); area.addEventListener('pointerdown', tap);
-  raf = requestAnimationFrame(loop);
-  return () => { cancelAnimationFrame(raf); removeEventListener('keydown', key); area.removeEventListener('pointerdown', tap); dispose(); };
-}
+  },
+};
