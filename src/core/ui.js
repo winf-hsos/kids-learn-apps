@@ -42,11 +42,10 @@ function ring(p) {
 }
 
 function heroText() {
-  if (!EXAM) return { headline: `Hey ${MANIFEST.kid}, los geht's!`, sub: MANIFEST.about || '' };
+  if (!EXAM) return { headline: `Los geht's!`, sub: MANIFEST.about || '' };
   const dl = daysUntil(EXAM.date), k = EXAM.kind;
   const headline = dl > 1 ? `Noch <em>${dl} Tage</em> bis zur ${k}` : dl === 1 ? `<em>Morgen</em> ist ${k}` : dl === 0 ? `<em>Heute</em> ist ${k}!` : `${k} geschrieben`;
-  const who = EXAM.teacher ? `${MANIFEST.subject} bei ${EXAM.teacher}` : MANIFEST.subject;
-  const sub = dl >= 0 ? `${examDay}, ${shortDate(EXAM.date)} · ${who} · Thema: ${EXAM.topics}.` : 'Du kannst trotzdem weiter üben und spielen.';
+  const sub = dl >= 0 ? `${examDay}, ${shortDate(EXAM.date)} · ${MANIFEST.subject} · Thema: ${EXAM.topics}.` : 'Du kannst trotzdem weiter üben und spielen.';
   return { headline, sub };
 }
 
@@ -59,7 +58,7 @@ function homeHtml() {
   return `
   <section class="hero">
     <div class="countdown">
-      <div class="eyebrow">Hey ${MANIFEST.kid} · ${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
+      <div class="eyebrow">${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
       <h1>${headline}</h1>
       <p>${sub} <span class="hand">Du hast schon ${done} von ${all} Leveln geschafft.</span></p>
     </div>

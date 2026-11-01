@@ -24,6 +24,8 @@ CORE_AFTER = [
     "games/arcade.js", "engine.js", "ui.js", "levels.js", "exam.js", "pages.js",
     "games/runner.js", "games/penalty.js", "games/kickups.js", "games/quiz.js", "boot.js",
 ]
+# Apps are grouped by school on the start page; kids' names never appear on the public site.
+SCHOOLS = ["Gymnasium", "Grundschule", "Kita"]
 FONTS = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
@@ -34,11 +36,6 @@ FONTS = (
 
 def read(path: pathlib.Path) -> str:
     return path.read_text(encoding="utf-8")
-
-
-def possessive(name: str) -> str:
-    """German possessive for first names: "Max' ...", "Lenas ..."."""
-    return name + ("'" if name[-1].lower() in "sßxz" else "s")
 
 
 def favicon(icon_svg: str) -> str:
@@ -60,6 +57,8 @@ def load_apps() -> list[dict]:
     apps = []
     for folder in sorted(p for p in (SRC / "apps").iterdir() if p.is_dir()):
         manifest = json.loads(read(folder / "manifest.json"))
+        if manifest.get("school") not in SCHOOLS:
+            raise SystemExit(f"{folder}: school must be one of {SCHOOLS} (no names, the site is public).")
         if manifest["id"] != folder.name:
             raise SystemExit(f"{folder}: manifest id must match the folder name.")
         icon = folder / "icon.svg"
@@ -80,7 +79,7 @@ def build_app(app: dict) -> None:
     if (folder / "styles.css").exists():
         css += "\n" + read(folder / "styles.css")
     body = read(CORE / "shell.html")
-    html = page(f"{possessive(m['kid'])} {m['title']}", app["icon"], css, body, "\n\n".join(parts))
+    html = page(m["title"], app["icon"], css, body, "\n\n".join(parts))
     out = ROOT / "apps" / m["id"] / "index.html"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html, encoding="utf-8", newline="\n")
@@ -95,6 +94,7 @@ def build_hub(apps: list[dict]) -> None:
     js = "\n\n".join([
         read(CORE / "util.js"),
         read(CORE / "icons.js"),
+        "const SCHOOLS = " + json.dumps(SCHOOLS) + ";",
         "const APPS = " + json.dumps(listing, ensure_ascii=False) + ";",
         read(SRC / "hub" / "hub.js"),
     ])

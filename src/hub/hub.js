@@ -1,4 +1,4 @@
-// Start page: lists every app (APPS is injected by build.py) grouped by kid,
+// Start page: lists every app (APPS is injected by build.py) grouped by school (no names: the site is public),
 // with exam countdown and the progress each app stored on this device.
 
 function summaryOf(id) {
@@ -40,16 +40,16 @@ function appOrder(a, b) {
 }
 
 function renderHub() {
-  const kids = [...new Set(APPS.map(a => a.kid))];
+  const schools = SCHOOLS.filter(s => APPS.some(a => a.school === s));
   $('#hub').innerHTML = `
     <header class="hub-head">
       <div class="eyebrow">Lernapps</div>
       <h1>Wähle deine <em>Lernapp</em></h1>
       <p class="hand">Jede App merkt sich deinen Fortschritt auf diesem Gerät.</p>
     </header>
-    ${kids.map(k => `<section class="hub-kid">
+    ${schools.map(k => `<section class="hub-group">
       <h2>${k}</h2>
-      <div class="hub-grid">${APPS.filter(a => a.kid === k).sort(appOrder).map(appCard).join('')}</div>
+      <div class="hub-grid">${APPS.filter(a => a.school === k).sort(appOrder).map(appCard).join('')}</div>
     </section>`).join('')}`;
 }
 

@@ -422,8 +422,8 @@ button.tile:hover { border-color: var(--accent); }
 .hub-head h1 em { font-style: normal; color: var(--accent); }
 .hub-head p { margin: 8px 0 0; }
 
-.hub-kid { margin-top: 30px; }
-.hub-kid h2 { font-family: var(--f-hand); font-size: 30px; color: var(--pen); }
+.hub-group { margin-top: 30px; }
+.hub-group h2 { font-family: var(--f-hand); font-size: 30px; color: var(--pen); }
 .hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 14px; margin-top: 10px; }
 
 .hub-card { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 20px; background: var(--card); border: 3px solid var(--ink); box-shadow: 0 5px 0 var(--ink); color: inherit; text-decoration: none; transition: transform .12s; }
@@ -518,9 +518,11 @@ const TYPE_ICON = {
 };
 
 
-const APPS = [{"id": "chemistry-lab", "title": "Chemie-Labor", "kid": "Max", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "teacher": "Dr. Reschke", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "url": "apps/chemistry-lab/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <defs><linearGradient id=\"chemistry-lab-icon-flame\" x1=\"0\" y1=\"1\" x2=\"0\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2E6BFF\"/><stop offset=\".7\" stop-color=\"#7FB2FF\"/><stop offset=\"1\" stop-color=\"#C9E4FF\" stop-opacity=\".3\"/></linearGradient></defs>\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#0B1020\"/>\n  <path d=\"M50 12 C61 30 64 44 59 58 C57 65 43 65 41 58 C36 44 39 30 50 12 Z\" fill=\"url(#chemistry-lab-icon-flame)\"/>\n  <path d=\"M50 38 C54 46 55 52 53 58 C52 61 48 61 47 58 C45 52 46 46 50 38 Z\" fill=\"#A8ECFF\"/>\n  <rect x=\"45\" y=\"64\" width=\"10\" height=\"18\" fill=\"#9AA6BB\"/>\n  <path d=\"M41 82 L45 76 H55 L59 82 Z\" fill=\"#9AA6BB\"/>\n  <rect x=\"30\" y=\"82\" width=\"40\" height=\"7\" rx=\"3\" fill=\"#5E6A82\"/>\n</svg>"}];
+const SCHOOLS = ["Gymnasium", "Grundschule", "Kita"];
 
-// Start page: lists every app (APPS is injected by build.py) grouped by kid,
+const APPS = [{"id": "chemistry-lab", "title": "Chemie-Labor", "school": "Gymnasium", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "url": "apps/chemistry-lab/", "icon": "<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\" aria-hidden=\"true\">\n  <defs><linearGradient id=\"chemistry-lab-icon-flame\" x1=\"0\" y1=\"1\" x2=\"0\" y2=\"0\"><stop offset=\"0\" stop-color=\"#2E6BFF\"/><stop offset=\".7\" stop-color=\"#7FB2FF\"/><stop offset=\"1\" stop-color=\"#C9E4FF\" stop-opacity=\".3\"/></linearGradient></defs>\n  <rect width=\"100\" height=\"100\" rx=\"22\" fill=\"#0B1020\"/>\n  <path d=\"M50 12 C61 30 64 44 59 58 C57 65 43 65 41 58 C36 44 39 30 50 12 Z\" fill=\"url(#chemistry-lab-icon-flame)\"/>\n  <path d=\"M50 38 C54 46 55 52 53 58 C52 61 48 61 47 58 C45 52 46 46 50 38 Z\" fill=\"#A8ECFF\"/>\n  <rect x=\"45\" y=\"64\" width=\"10\" height=\"18\" fill=\"#9AA6BB\"/>\n  <path d=\"M41 82 L45 76 H55 L59 82 Z\" fill=\"#9AA6BB\"/>\n  <rect x=\"30\" y=\"82\" width=\"40\" height=\"7\" rx=\"3\" fill=\"#5E6A82\"/>\n</svg>"}];
+
+// Start page: lists every app (APPS is injected by build.py) grouped by school (no names: the site is public),
 // with exam countdown and the progress each app stored on this device.
 
 function summaryOf(id) {
@@ -562,16 +564,16 @@ function appOrder(a, b) {
 }
 
 function renderHub() {
-  const kids = [...new Set(APPS.map(a => a.kid))];
+  const schools = SCHOOLS.filter(s => APPS.some(a => a.school === s));
   $('#hub').innerHTML = `
     <header class="hub-head">
       <div class="eyebrow">Lernapps</div>
       <h1>Wähle deine <em>Lernapp</em></h1>
       <p class="hand">Jede App merkt sich deinen Fortschritt auf diesem Gerät.</p>
     </header>
-    ${kids.map(k => `<section class="hub-kid">
+    ${schools.map(k => `<section class="hub-group">
       <h2>${k}</h2>
-      <div class="hub-grid">${APPS.filter(a => a.kid === k).sort(appOrder).map(appCard).join('')}</div>
+      <div class="hub-grid">${APPS.filter(a => a.school === k).sort(appOrder).map(appCard).join('')}</div>
     </section>`).join('')}`;
 }
 

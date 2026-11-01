@@ -1,5 +1,5 @@
-// Learning content for Max's chemistry test (class 6, chapter 1 "Sicher experimentieren").
-// Sources: Max's notebook (Heft) and textbook pages 4-16. UI text is German on purpose.
+// Learning content for a grade 6 chemistry test (chapter 1 "Sicher experimentieren").
+// Sources: the student's notebook (Heft) and textbook pages 4-16. UI text is German on purpose.
 
 // ---------------------------------------------------------------------------
 // Lab devices: key = art id in art.js
@@ -136,7 +136,7 @@ const TOPICS = [
         { t: 'Das Reagenzglas wird zum Erhitzen bis oben hin gefüllt.', ok: false, x: 'Höchstens ein Drittel füllen, sonst spritzt es leicht heraus.' },
         { t: 'Leon gibt die Chemikalienreste in das Abfallgefäß.', ok: true, x: 'Reste kommen in das gekennzeichnete Sammelgefäß.' },
         { t: 'Emma kippt die Chemikalienreste in den Ausguss.', ok: false, x: 'Chemikalienreste gehören ins Abfallgefäß, nicht ins Abwasser.' },
-        { t: 'Nach dem Versuch prüft Max, ob Gas- und Wasserhähne geschlossen sind.', ok: true, x: 'Genau so, damit kein Gas ausströmt.' },
+        { t: 'Nach dem Versuch prüft Tim, ob Gas- und Wasserhähne geschlossen sind.', ok: true, x: 'Genau so, damit kein Gas ausströmt.' },
         { t: 'Finn fängt schon mal an, bevor die Lehrkraft den Aufbau geprüft hat.', ok: false, x: 'Erst nach Aufforderung durch die Lehrkraft beginnen.' },
         { t: 'Der Stopfen der Chemikalienflasche wird umgekehrt auf den Tisch gelegt.', ok: true, x: 'So wird der Stopfen nicht verunreinigt und der Tisch nicht verschmutzt.' },
         { t: 'Lara experimentiert im Sitzen, weil sie müde ist.', ok: false, x: 'Man experimentiert im Stehen, damit man schnell ausweichen kann.' },
@@ -219,7 +219,7 @@ const TOPICS = [
       { h: 'Der Teclubrenner', p: 'Der Gasbrenner (Teclubrenner) ist eine Wärmequelle. Er wird über einen Sicherheitsschlauch an die Gasleitung am Tisch angeschlossen. Das Gas strömt durch die feine Gasdüse in das Brennerrohr und reißt dabei Luft mit. Oben am Brennerrohr wird das Gas-Luft-Gemisch entzündet.', burner: true },
       { h: 'Die Teile', bullets: ['Brennerrohr: Hier mischen sich Gas und Luft, oben brennt die Flamme.', 'Luftregulierung: Je weiter man sie nach unten dreht, desto mehr Luft strömt seitlich ins Rohr.', 'Gasdüse: Durch die feine Öffnung strömt das Gas ins Brennerrohr.', 'Gasregulierschraube: Damit stellt man die Gasmenge (Flammenhöhe) ein.', 'Gasanschluss mit Schlauch: Verbindung zur Gasleitung am Tisch.', 'Brennerfuß: sorgt dafür, dass der Brenner sicher steht.'] },
       { h: 'Drei Flammen', flames: true, bullets: ['Leuchtende Flamme: Luftzufuhr geschlossen, gelb, leuchtet, rußt stark, „nur“ bis ca. 900 °C, ruhig.', 'Nicht leuchtende Flamme: Luftzufuhr halb geöffnet, blau, bis ca. 1100 °C. Das ist die Arbeitsflamme, mit ihr wird meistens erhitzt.', 'Rauschende Flamme: Luftzufuhr ganz offen, hellblau mit innerem Kegel, rauscht, sehr heiß, bis ca. 1500 °C.'] },
-      { h: 'Dein Arbeitsblatt (Dr. Reschke)', p: 'Auf dem Arbeitsblatt werden die Merkmale zwei Gruppen zugeordnet. Nicht leuchtende/rauschende Flamme: blau, rauschend, viel Luftzufuhr, Arbeitsflamme, heiß. Leuchtende Flamme: gelb, wenig Luftzufuhr, rußend, warm.' },
+      { h: 'Dein Arbeitsblatt', p: 'Auf dem Arbeitsblatt werden die Merkmale zwei Gruppen zugeordnet. Nicht leuchtende/rauschende Flamme: blau, rauschend, viel Luftzufuhr, Arbeitsflamme, heiß. Leuchtende Flamme: gelb, wenig Luftzufuhr, rußend, warm.' },
       { h: 'Vor dem Benutzen: 8 Schritte', steps: ['Schutzbrille aufsetzen', 'Den Brenner standsicher auf den Tisch stellen', 'Prüfen: Gaszufuhr am Tisch und am Brenner sind geschlossen', 'Luftzufuhr schließen', 'Brenner anschließen', 'Gaszufuhr am Tisch öffnen', 'Gaszufuhr am Brenner öffnen', 'Streichholz/Gasanzünder: Gas sofort entzünden (Kopf nicht über dem Brenner!)'] },
       { h: 'Nach dem Benutzen: 3 Schritte', steps: ['Luftzufuhr am Brenner schließen', 'Gasregulierschraube am Brenner schließen', 'Gaszufuhr am Tisch zudrehen'] },
       { h: 'Wenn die Flamme zurückschlägt', p: 'Wird bei der nicht leuchtenden oder rauschenden Flamme die Gaszufuhr verringert, kann die Flamme in das Brennerrohr bis zur Gasdüse zurückschlagen und dort weiterbrennen. Das Rohr wird sehr heiß. Dann sofort die Gaszufuhr am Tisch schließen. Erst nach dem Abkühlen mit geschlossener Luftzufuhr neu anzünden.' },

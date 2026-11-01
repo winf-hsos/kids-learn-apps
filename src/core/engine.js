@@ -1,7 +1,7 @@
 // Engine core: app configuration, persistent state, rewards and quiz items.
 //
 // Every app provides two globals before this file runs:
-//   MANIFEST  injected by build.py from the app's manifest.json (id, kid, subject, exam, ...)
+//   MANIFEST  injected by build.py from the app's manifest.json (id, school, subject, exam, ...)
 //   APP       the app's config object (topics, ranks, games, art and optional extensions)
 
 const WORLDS = APP.topics;
@@ -105,7 +105,7 @@ function addXp(n) {
   if (after > before) {
     setTimeout(() => {
       Sound.fanfare(); Confetti.burst(160);
-      modal(`<div style="width:90px;margin:0 auto">${ICON.medal('var(--accent)', '#fff')}</div><p class="hand">Neuer Rang!</p><h2>${RANKS[after].name}</h2><p>Du hast ${RANKS[after].xp} XP geknackt. Weiter so, ${MANIFEST.kid}!</p>`);
+      modal(`<div style="width:90px;margin:0 auto">${ICON.medal('var(--accent)', '#fff')}</div><p class="hand">Neuer Rang!</p><h2>${RANKS[after].name}</h2><p>Du hast ${RANKS[after].xp} XP geknackt. Weiter so!</p>`);
     }, 600);
   }
   checkBadges(); save(); renderStatus();

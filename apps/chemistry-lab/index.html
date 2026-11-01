@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Max' Chemie-Labor</title>
+<title>Chemie-Labor</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20100%20100%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20aria-hidden%3D%22true%22%3E%0A%20%20%3Cdefs%3E%3ClinearGradient%20id%3D%22chemistry-lab-icon-flame%22%20x1%3D%220%22%20y1%3D%221%22%20x2%3D%220%22%20y2%3D%220%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%232E6BFF%22/%3E%3Cstop%20offset%3D%22.7%22%20stop-color%3D%22%237FB2FF%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23C9E4FF%22%20stop-opacity%3D%22.3%22/%3E%3C/linearGradient%3E%3C/defs%3E%0A%20%20%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%230B1020%22/%3E%0A%20%20%3Cpath%20d%3D%22M50%2012%20C61%2030%2064%2044%2059%2058%20C57%2065%2043%2065%2041%2058%20C36%2044%2039%2030%2050%2012%20Z%22%20fill%3D%22url%28%23chemistry-lab-icon-flame%29%22/%3E%0A%20%20%3Cpath%20d%3D%22M50%2038%20C54%2046%2055%2052%2053%2058%20C52%2061%2048%2061%2047%2058%20C45%2052%2046%2046%2050%2038%20Z%22%20fill%3D%22%23A8ECFF%22/%3E%0A%20%20%3Crect%20x%3D%2245%22%20y%3D%2264%22%20width%3D%2210%22%20height%3D%2218%22%20fill%3D%22%239AA6BB%22/%3E%0A%20%20%3Cpath%20d%3D%22M41%2082%20L45%2076%20H55%20L59%2082%20Z%22%20fill%3D%22%239AA6BB%22/%3E%0A%20%20%3Crect%20x%3D%2230%22%20y%3D%2282%22%20width%3D%2240%22%20height%3D%227%22%20rx%3D%223%22%20fill%3D%22%235E6A82%22/%3E%0A%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -691,7 +691,7 @@ const FOOTBALL = [
 ];
 
 
-const MANIFEST = {"id": "chemistry-lab", "title": "Chemie-Labor", "kid": "Max", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "teacher": "Dr. Reschke", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "packs": ["football"], "hubUrl": "../../"};
+const MANIFEST = {"id": "chemistry-lab", "title": "Chemie-Labor", "school": "Gymnasium", "subject": "Chemie", "grade": "Klasse 6", "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe", "storeKey": "max-chemie-ka-v1", "exam": {"kind": "Klassenarbeit", "date": "2026-10-28", "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"}, "packs": ["football"], "hubUrl": "../../"};
 
 // Inline SVG artwork. Line art uses currentColor so it follows the theme;
 // liquids use var(--liquid). GHS pictograms keep their real white/red/black look.
@@ -878,8 +878,8 @@ function burnerSvg(opts = {}) {
 }
 
 
-// Learning content for Max's chemistry test (class 6, chapter 1 "Sicher experimentieren").
-// Sources: Max's notebook (Heft) and textbook pages 4-16. UI text is German on purpose.
+// Learning content for a grade 6 chemistry test (chapter 1 "Sicher experimentieren").
+// Sources: the student's notebook (Heft) and textbook pages 4-16. UI text is German on purpose.
 
 // ---------------------------------------------------------------------------
 // Lab devices: key = art id in art.js
@@ -1016,7 +1016,7 @@ const TOPICS = [
         { t: 'Das Reagenzglas wird zum Erhitzen bis oben hin gefüllt.', ok: false, x: 'Höchstens ein Drittel füllen, sonst spritzt es leicht heraus.' },
         { t: 'Leon gibt die Chemikalienreste in das Abfallgefäß.', ok: true, x: 'Reste kommen in das gekennzeichnete Sammelgefäß.' },
         { t: 'Emma kippt die Chemikalienreste in den Ausguss.', ok: false, x: 'Chemikalienreste gehören ins Abfallgefäß, nicht ins Abwasser.' },
-        { t: 'Nach dem Versuch prüft Max, ob Gas- und Wasserhähne geschlossen sind.', ok: true, x: 'Genau so, damit kein Gas ausströmt.' },
+        { t: 'Nach dem Versuch prüft Tim, ob Gas- und Wasserhähne geschlossen sind.', ok: true, x: 'Genau so, damit kein Gas ausströmt.' },
         { t: 'Finn fängt schon mal an, bevor die Lehrkraft den Aufbau geprüft hat.', ok: false, x: 'Erst nach Aufforderung durch die Lehrkraft beginnen.' },
         { t: 'Der Stopfen der Chemikalienflasche wird umgekehrt auf den Tisch gelegt.', ok: true, x: 'So wird der Stopfen nicht verunreinigt und der Tisch nicht verschmutzt.' },
         { t: 'Lara experimentiert im Sitzen, weil sie müde ist.', ok: false, x: 'Man experimentiert im Stehen, damit man schnell ausweichen kann.' },
@@ -1099,7 +1099,7 @@ const TOPICS = [
       { h: 'Der Teclubrenner', p: 'Der Gasbrenner (Teclubrenner) ist eine Wärmequelle. Er wird über einen Sicherheitsschlauch an die Gasleitung am Tisch angeschlossen. Das Gas strömt durch die feine Gasdüse in das Brennerrohr und reißt dabei Luft mit. Oben am Brennerrohr wird das Gas-Luft-Gemisch entzündet.', burner: true },
       { h: 'Die Teile', bullets: ['Brennerrohr: Hier mischen sich Gas und Luft, oben brennt die Flamme.', 'Luftregulierung: Je weiter man sie nach unten dreht, desto mehr Luft strömt seitlich ins Rohr.', 'Gasdüse: Durch die feine Öffnung strömt das Gas ins Brennerrohr.', 'Gasregulierschraube: Damit stellt man die Gasmenge (Flammenhöhe) ein.', 'Gasanschluss mit Schlauch: Verbindung zur Gasleitung am Tisch.', 'Brennerfuß: sorgt dafür, dass der Brenner sicher steht.'] },
       { h: 'Drei Flammen', flames: true, bullets: ['Leuchtende Flamme: Luftzufuhr geschlossen, gelb, leuchtet, rußt stark, „nur“ bis ca. 900 °C, ruhig.', 'Nicht leuchtende Flamme: Luftzufuhr halb geöffnet, blau, bis ca. 1100 °C. Das ist die Arbeitsflamme, mit ihr wird meistens erhitzt.', 'Rauschende Flamme: Luftzufuhr ganz offen, hellblau mit innerem Kegel, rauscht, sehr heiß, bis ca. 1500 °C.'] },
-      { h: 'Dein Arbeitsblatt (Dr. Reschke)', p: 'Auf dem Arbeitsblatt werden die Merkmale zwei Gruppen zugeordnet. Nicht leuchtende/rauschende Flamme: blau, rauschend, viel Luftzufuhr, Arbeitsflamme, heiß. Leuchtende Flamme: gelb, wenig Luftzufuhr, rußend, warm.' },
+      { h: 'Dein Arbeitsblatt', p: 'Auf dem Arbeitsblatt werden die Merkmale zwei Gruppen zugeordnet. Nicht leuchtende/rauschende Flamme: blau, rauschend, viel Luftzufuhr, Arbeitsflamme, heiß. Leuchtende Flamme: gelb, wenig Luftzufuhr, rußend, warm.' },
       { h: 'Vor dem Benutzen: 8 Schritte', steps: ['Schutzbrille aufsetzen', 'Den Brenner standsicher auf den Tisch stellen', 'Prüfen: Gaszufuhr am Tisch und am Brenner sind geschlossen', 'Luftzufuhr schließen', 'Brenner anschließen', 'Gaszufuhr am Tisch öffnen', 'Gaszufuhr am Brenner öffnen', 'Streichholz/Gasanzünder: Gas sofort entzünden (Kopf nicht über dem Brenner!)'] },
       { h: 'Nach dem Benutzen: 3 Schritte', steps: ['Luftzufuhr am Brenner schließen', 'Gasregulierschraube am Brenner schließen', 'Gaszufuhr am Tisch zudrehen'] },
       { h: 'Wenn die Flamme zurückschlägt', p: 'Wird bei der nicht leuchtenden oder rauschenden Flamme die Gaszufuhr verringert, kann die Flamme in das Brennerrohr bis zur Gasdüse zurückschlagen und dort weiterbrennen. Das Rohr wird sehr heiß. Dann sofort die Gaszufuhr am Tisch schließen. Erst nach dem Abkühlen mit geschlossener Luftzufuhr neu anzünden.' },
@@ -1492,7 +1492,7 @@ const APP = {
   levelTypes: { label: labelLevel, sim: simLevel },
   exam: { mix: { safety: 3, rules: 4, devices: 4, burner: 4, hazards: 3 }, writes: 2, art: 'stift' },
   intro: { title: 'Dein Chemie-Labor', tip: 'Tipp: Starte mit der Welt „Sicherheit im Fachraum“.' },
-  // Max loves football, so the praise and the reward games lean that way.
+  // The learner loves football, so the praise and the reward games lean that way.
   praise: ['Richtig!', 'Volltreffer!', 'Stark!', 'Tor!', 'Genau so!', 'Top!', 'Wie ein Profi!', 'Traumpass!', 'Sauber!'],
   trivia: FOOTBALL,
   games: [{ id: 'runner', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'kickups', stars: 20 }, { id: 'proquiz', stars: 30 }],
@@ -1503,7 +1503,7 @@ const APP = {
     { xp: 800, name: 'Brenner-Bändiger' },
     { xp: 1300, name: 'Chemie-Kapitän' },
     { xp: 2000, name: 'Laborleiter' },
-    { xp: 3000, name: 'Professor Max' },
+    { xp: 3000, name: 'Chemie-Professor' },
   ],
 };
 
@@ -1635,7 +1635,7 @@ function questionBox(q, idx, total, onAnswer, timeLimit) {
 // Engine core: app configuration, persistent state, rewards and quiz items.
 //
 // Every app provides two globals before this file runs:
-//   MANIFEST  injected by build.py from the app's manifest.json (id, kid, subject, exam, ...)
+//   MANIFEST  injected by build.py from the app's manifest.json (id, school, subject, exam, ...)
 //   APP       the app's config object (topics, ranks, games, art and optional extensions)
 
 const WORLDS = APP.topics;
@@ -1739,7 +1739,7 @@ function addXp(n) {
   if (after > before) {
     setTimeout(() => {
       Sound.fanfare(); Confetti.burst(160);
-      modal(`<div style="width:90px;margin:0 auto">${ICON.medal('var(--accent)', '#fff')}</div><p class="hand">Neuer Rang!</p><h2>${RANKS[after].name}</h2><p>Du hast ${RANKS[after].xp} XP geknackt. Weiter so, ${MANIFEST.kid}!</p>`);
+      modal(`<div style="width:90px;margin:0 auto">${ICON.medal('var(--accent)', '#fff')}</div><p class="hand">Neuer Rang!</p><h2>${RANKS[after].name}</h2><p>Du hast ${RANKS[after].xp} XP geknackt. Weiter so!</p>`);
     }, 600);
   }
   checkBadges(); save(); renderStatus();
@@ -1869,11 +1869,10 @@ function ring(p) {
 }
 
 function heroText() {
-  if (!EXAM) return { headline: `Hey ${MANIFEST.kid}, los geht's!`, sub: MANIFEST.about || '' };
+  if (!EXAM) return { headline: `Los geht's!`, sub: MANIFEST.about || '' };
   const dl = daysUntil(EXAM.date), k = EXAM.kind;
   const headline = dl > 1 ? `Noch <em>${dl} Tage</em> bis zur ${k}` : dl === 1 ? `<em>Morgen</em> ist ${k}` : dl === 0 ? `<em>Heute</em> ist ${k}!` : `${k} geschrieben`;
-  const who = EXAM.teacher ? `${MANIFEST.subject} bei ${EXAM.teacher}` : MANIFEST.subject;
-  const sub = dl >= 0 ? `${examDay}, ${shortDate(EXAM.date)} · ${who} · Thema: ${EXAM.topics}.` : 'Du kannst trotzdem weiter üben und spielen.';
+  const sub = dl >= 0 ? `${examDay}, ${shortDate(EXAM.date)} · ${MANIFEST.subject} · Thema: ${EXAM.topics}.` : 'Du kannst trotzdem weiter üben und spielen.';
   return { headline, sub };
 }
 
@@ -1886,7 +1885,7 @@ function homeHtml() {
   return `
   <section class="hero">
     <div class="countdown">
-      <div class="eyebrow">Hey ${MANIFEST.kid} · ${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
+      <div class="eyebrow">${MANIFEST.subject}${MANIFEST.grade ? ' ' + MANIFEST.grade : ''}</div>
       <h1>${headline}</h1>
       <p>${sub} <span class="hand">Du hast schon ${done} von ${all} Leveln geschafft.</span></p>
     </div>
@@ -2971,7 +2970,7 @@ function boot() {
     const intro = APP.intro || {};
     const when = EXAM && daysUntil(EXAM.date) >= 0 ? ` für die ${EXAM.kind} am ${examDay}` : '';
     const games = GAMES.length ? `, und jeder neue Stern bringt ein Ticket für die Arcade mit ${GAMES.slice(0, 2).map(g => g.name).join(', ')} und mehr` : '';
-    modal(`${APP.heroArt ? `<div style="width:110px;margin:0 auto">${APP.heroArt()}</div>` : ''}<p class="hand">Hey ${MANIFEST.kid}!</p><h2>${intro.title || MANIFEST.title}</h2><p>Hier trainierst du alles${when}. Für jedes Level gibt es bis zu 3 Sterne${games}.</p>${intro.tip ? `<p>${intro.tip}</p>` : ''}`,
+    modal(`${APP.heroArt ? `<div style="width:110px;margin:0 auto">${APP.heroArt()}</div>` : ''}<p class="hand">Willkommen!</p><h2>${intro.title || MANIFEST.title}</h2><p>Hier trainierst du alles${when}. Für jedes Level gibt es bis zu 3 Sterne${games}.</p>${intro.tip ? `<p>${intro.tip}</p>` : ''}`,
       [{ label: "Los geht's!", cls: 'go' }]).then(() => Sound.click());
   }
 }

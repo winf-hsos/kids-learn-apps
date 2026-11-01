@@ -4,9 +4,9 @@ Gamified study apps for our kids, built for specific school tests and published 
 
 **Live:** https://winf-hsos.github.io/kids-learn-apps/
 
-| App | Kid | Subject | Link |
+| App | School | Subject | Link |
 | --- | --- | --- | --- |
-| Chemie-Labor | Max | Chemistry, grade 6 (lab safety, lab equipment, Bunsen burner, hazardous substances) | [apps/chemistry-lab](https://winf-hsos.github.io/kids-learn-apps/apps/chemistry-lab/) |
+| Chemie-Labor | Gymnasium | Chemistry, grade 6 (lab safety, lab equipment, Bunsen burner, hazardous substances) | [apps/chemistry-lab](https://winf-hsos.github.io/kids-learn-apps/apps/chemistry-lab/) |
 
 ## How the apps work
 
@@ -16,7 +16,7 @@ All apps share one engine and one look, so every new app gets the same gamificat
 - **Level types:** learn cards, multiple choice (optionally timed), swipe cards, matching, sorting, ordering, memory, picture quiz and written answers with keyword feedback; apps can add their own types (the chemistry app adds a burner simulator, a labeling task and a GHS pictogram quiz)
 - **Mistake box** that collects wrong answers for repetition, and a **mock exam** with a German school grade
 - **Arcade:** tickets earned for new stars, finished worlds, the daily goal and good mock exams unlock reward games (jump & run, penalty-shootout quiz, keepy-uppy, expert trivia quiz)
-- **Start page** listing all apps by kid, with exam countdown and the progress stored on the device
+- **Start page** listing all apps by school (Gymnasium, Grundschule, Kita), with exam countdown and the progress stored on the device
 
 Progress lives in the browser's `localStorage`, one entry per app plus a small summary the start page reads.
 
@@ -32,7 +32,7 @@ src/
   packs/                   trivia packs for the quiz games (football.js)
   hub/                     start page script, styles and icon
   apps/<id>/
-    manifest.json          kid, subject, exam date, store key, packs, script order
+    manifest.json          school, subject, exam date, store key, packs, script order
     app.js                 APP config: topics, ranks, games and extensions
     content.js, ...        learning content, artwork and app-specific level types
     styles.css, icon.svg   optional extra styles and the start page icon

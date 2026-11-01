@@ -1,7 +1,7 @@
 {
   "id": "chemistry-lab",
   "title": "Chemie-Labor",
-  "kid": "Max",
+  "school": "Gymnasium",
   "subject": "Chemie",
   "grade": "Klasse 6",
   "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe",
@@ -9,7 +9,6 @@
   "exam": {
     "kind": "Klassenarbeit",
     "date": "2026-10-28",
-    "teacher": "Dr. Reschke",
     "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"
   },
   "packs": ["football"],
