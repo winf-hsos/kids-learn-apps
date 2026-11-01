@@ -1,0 +1,6 @@
+# Source material (scans of notebooks and textbooks) never goes into this public repo
+*.pdf
+*.heic
+desktop.ini
+.claude/
+__pycache__/

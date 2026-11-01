@@ -1,0 +1,54 @@
+/* Chemistry lab: extra tokens for the artwork plus the burner labeling and simulator levels.
+   The shared design lives in core/core.css. */
+:root {
+  --liquid: rgba(34, 87, 230, .28); --rubber: #C2563A; --hot: #E0423C; --lens: rgba(120, 190, 255, .25);
+  --metal-a: #9AA6BB; --metal-b: #E6ECF5;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --liquid: rgba(112, 151, 255, .35); --rubber: #E07A5C; --hot: #FF6B63; --lens: rgba(140, 200, 255, .18); --metal-a: #5E6A82; --metal-b: #A9B5CA; }
+}
+:root[data-theme="dark"] { --liquid: rgba(112, 151, 255, .35); --rubber: #E07A5C; --hot: #FF6B63; --lens: rgba(140, 200, 255, .18); --metal-a: #5E6A82; --metal-b: #A9B5CA; }
+
+.figure.ghs { background: transparent; border: 0; box-shadow: none; padding: 0; }
+/* label */
+.label-wrap { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.label-svg { background: var(--card); border: 3px solid var(--ink); border-radius: 20px; padding: 10px; color: var(--ink); }
+.label-svg .hot { cursor: pointer; }
+.label-svg .hot.ok circle { fill: var(--good); stroke: var(--good); }
+.label-svg .hot.ok text { fill: #fff; }
+.label-svg .hot.target circle { stroke: var(--gold); stroke-width: 5; }
+.label-chips { display: grid; gap: 8px; }
+.label-chip { border: 3px solid var(--line); background: var(--card); border-radius: 12px; padding: 10px 12px; text-align: left; font-weight: 700; box-shadow: 0 3px 0 var(--line); }
+.label-chip.sel { border-color: var(--accent); background: var(--accent-soft); }
+.label-chip.ok { border-color: var(--good); background: var(--good-soft); opacity: .7; cursor: default; }
+.label-chip .num { color: var(--good); margin-right: 6px; }
+/* sim */
+.sim { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
+.sim-view { background: #0B1020; border-radius: 22px; position: relative; overflow: hidden; border: 3px solid var(--ink); }
+.sim-view svg { width: 100%; height: auto; }
+.sim-readout { position: absolute; left: 12px; top: 12px; right: 12px; display: flex; justify-content: space-between; gap: 8px; color: #EAF0FD; font-weight: 700; font-size: 14px; }
+.sim-readout .temp { font-family: var(--f-display); font-size: 22px; color: #FFD27A; }
+.ctrl { background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 14px; }
+.ctrl label { font-weight: 700; display: flex; justify-content: space-between; gap: 10px; }
+.ctrl label span { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ctrl input[type=range] { width: 100%; accent-color: var(--accent); height: 32px; }
+.tasks { display: grid; gap: 8px; margin-top: 12px; }
+.task { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--card); font-size: 15px; }
+.task .box { width: 24px; height: 24px; border-radius: 7px; border: 2px solid var(--ink-soft); flex: none; display: grid; place-items: center; }
+.task.done { border-color: var(--good); background: var(--good-soft); }
+.task.done .box { background: var(--good); border-color: var(--good); color: #fff; }
+.task.active { border-color: var(--gold); }
+.hold { height: 5px; background: var(--line); border-radius: 9px; overflow: hidden; margin-top: 6px; }
+.hold i { display: block; height: 100%; background: var(--gold); width: 0; }
+.flames3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: #0B1020; border-radius: 16px; padding: 12px; margin: 10px 0 12px; color: #EAF0FD; text-align: center; font-size: 13px; }
+.flames3 svg { height: 120px; width: 100%; }
+.ghs-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.ghs-item { text-align: center; font-size: 13px; }
+.ghs-item svg { width: 74px; height: 74px; margin: 0 auto; }
+.ghs-item b { display: block; font-size: 14px; }
+
+@media (max-width: 640px) {
+  .label-wrap, .sim { grid-template-columns: 1fr; }
+  .sim-view { position: sticky; top: 64px; z-index: 3; height: 36vh; }
+  .sim-view svg { height: 100%; }
+}

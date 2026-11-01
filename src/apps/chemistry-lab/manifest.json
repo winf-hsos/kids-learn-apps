@@ -1,0 +1,17 @@
+{
+  "id": "chemistry-lab",
+  "title": "Chemie-Labor",
+  "kid": "Max",
+  "subject": "Chemie",
+  "grade": "Klasse 6",
+  "about": "Sicherheit im Fachraum, Laborgeräte, Gasbrenner und Gefahrstoffe",
+  "storeKey": "max-chemie-ka-v1",
+  "exam": {
+    "kind": "Klassenarbeit",
+    "date": "2026-10-28",
+    "teacher": "Dr. Reschke",
+    "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"
+  },
+  "packs": ["football"],
+  "scripts": ["art.js", "content.js", "levels.js", "app.js"]
+}
