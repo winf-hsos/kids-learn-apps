@@ -1,11 +1,13 @@
 # Kids Learn Apps: notes for Claude
 
-Claude builds and maintains all learning apps for Nicolas' three kids in this repo. Each app prepares one kid for one concrete school test. Nicolas puts the source material (notebook pages, textbook scans, worksheets) into a folder in his Google Drive, usually `G:\Meine Ablage\02 - Gemeinsame Unterlagen\Apps\<year> - <topic>`, and asks for an app.
+Claude builds and maintains all learning apps for Nicolas' kids in this repo. Each app prepares one kid for one concrete school test.
+
+This repo holds only code and is public. Everything private lives in Nicolas' Google Drive under `G:\Meine Ablage\02 - Gemeinsame Unterlagen\Apps\`: the scans of notebooks, textbooks and worksheets, their transcriptions, and `STATUS.md` with the kids, all apps (including older ones not yet moved here), upcoming tests and open questions. **Read that folder's `CLAUDE.md` and `STATUS.md` before working on an app**, and update `STATUS.md` when you finish. The user skill `lernapp` describes the whole workflow from scan to published app.
 
 ## Rules
 
 - **Never commit source scans or photos** (PDFs, images of notebooks or textbook pages). The repo is public, the textbooks are copyrighted and the notebooks are private. Only the learning content written into `content.js` goes into the repo. `.gitignore` blocks PDFs, but check images too.
-- **Public repo, little personal data:** first names, grade and subject are fine, and so is the teacher's name in an exam manifest (the chemistry app names Max's teacher; Nicolas knows and has not asked to remove it). No surnames, school names, photos or addresses.
+- **Public repo, little personal data:** no surnames, school names, photos or addresses. First names and teachers' names are an open question (see `STATUS.md`); until it is settled, add no new ones beyond what an app already shows.
 - **Content follows the kid's material exactly** (terms, order of steps, definitions as taught in class), because the grade depends on it. When the material is ambiguous, ask Nicolas instead of guessing.
 - **Code is English, UI is German.** No stakkato sentence chains in UI text (see the global CLAUDE.md).
 - **Never change a published app's `storeKey`** or the ids of its worlds and levels' positions: the kids' progress is keyed on them. Append new levels at the end of a world. The chemistry app keeps its legacy key `max-chemie-ka-v1` so Max's progress from the old single-app repo carries over (same origin `winf-hsos.github.io`).
@@ -14,8 +16,7 @@ Claude builds and maintains all learning apps for Nicolas' three kids in this re
 
 ## The kids
 
-- **Max:** grade 6 in the school year 2026/27, loves hard football quizzes and simple jump & run games, so his apps use the football trivia pack and the football-flavored reward games.
-- The other two kids have no app yet. Ask Nicolas for first name, grade and interests before building their first app, and pick reward games and a trivia pack that fit them (new packs go into `src/packs/`).
+Who the kids are, their grades and what they like is recorded in `STATUS.md` in the Drive folder, not here, because this repo is public. Pick reward games, ranks and a trivia pack that fit the kid (new packs go into `src/packs/`). Whether apps should show the kid's name publicly is still an open question there; follow what `STATUS.md` says.
 
 ## Architecture
 
