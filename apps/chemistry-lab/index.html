@@ -271,6 +271,55 @@ button.tile:hover { border-color: var(--accent); }
 .kw .hit { color: var(--good); border-color: var(--good); background: var(--good-soft); }
 .kw .miss { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
 .selfrate { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.points { display: grid; gap: 8px; }
+.points label { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--paper); cursor: pointer; }
+.points input { width: 22px; height: 22px; flex: none; margin-top: 1px; accent-color: var(--good); }
+
+/* ---------- more answer kinds (items.js) ---------- */
+.qimg { margin: 6px 0 14px; }
+.qimg img, .hint img { display: block; max-width: 100%; max-height: 300px; margin: 0 auto; border-radius: 14px; border: 3px solid var(--ink); background: #fff; cursor: zoom-in; }
+.hint-row { margin: 14px 0 4px; }
+.hint-row .btn svg { width: 20px; height: 20px; }
+.hint { margin-top: 10px; padding: 14px 16px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 22%, var(--card)); border: 2px solid var(--gold); }
+.hint p { margin: 0 0 6px; }
+.hint .src { font-size: 14px; color: var(--ink-soft); }
+.zoom { position: fixed; inset: 0; z-index: 90; background: rgba(0, 0, 0, .85); display: grid; place-items: center; gap: 12px; padding: 16px; grid-template-rows: 1fr auto; }
+.zoom img { max-width: 100%; max-height: 82vh; object-fit: contain; border-radius: 10px; background: #fff; }
+.bd-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.bd-chip, .bd-slot, .bd-gap, .bd-l, .bd-r, .bd-grow .seg button { border: 3px solid var(--line); background: var(--card); color: var(--ink); border-radius: 12px; padding: 10px 14px; font-size: 17px; font-weight: 700; box-shadow: 0 3px 0 var(--line); text-align: left; }
+.bd-chip[disabled] { opacity: .3; box-shadow: none; }
+.bd-picked { display: grid; gap: 8px; min-height: 56px; padding: 10px; border: 2px dashed var(--line); border-radius: 14px; }
+.bd-slot { border-color: var(--accent); }
+.bd-pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bd-pairs .col { display: grid; gap: 8px; align-content: start; }
+.bd-l, .bd-r { display: flex; gap: 8px; align-items: center; font-size: 16px; }
+.bd-l.sel { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 20%, var(--card)); }
+.tag { min-width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 14px; flex: none; }
+.tag:empty { background: var(--paper); }
+.bd-groups { display: grid; gap: 10px; }
+.bd-grow { display: grid; gap: 6px; padding: 10px 12px; border-radius: 14px; border: 2px solid var(--line); background: var(--card); }
+.bd-grow > span { font-weight: 700; }
+.bd-grow .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.bd-grow .seg button { padding: 6px 12px; font-size: 15px; }
+.bd-grow .seg button.on { border-color: var(--accent); background: var(--accent-soft); }
+.bd-cloze { font-size: 20px; line-height: 2.1; }
+.bd-gap { padding: 2px 12px; font-size: 18px; margin: 0 2px; border-style: dashed; }
+.bd-gap.filled { border-style: solid; border-color: var(--accent); }
+.bd-multi.on { border-color: var(--accent); background: var(--accent-soft); }
+.bd-multi.on kbd { background: var(--accent); color: #fff; border-color: var(--accent); }
+.bd-slot.right, .bd-gap.right, .bd-l.right, .bd-grow.right, .bd-multi.right { border-color: var(--good); background: var(--good-soft); }
+.bd-slot.wrong, .bd-gap.wrong, .bd-l.wrong, .bd-grow.wrong, .bd-multi.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.bd-multi.missed { border-color: var(--good); border-style: dashed; }
+
+/* ---------- parents' view (parents.js) ---------- */
+.ptable { overflow-x: auto; }
+.ptable table { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--card); border-radius: 14px; overflow: hidden; }
+.ptable th, .ptable td { padding: 8px 10px; border-bottom: 2px solid var(--line); text-align: left; }
+.plist { display: grid; gap: 10px; padding-left: 22px; }
+.plist .muted { font-size: 14px; }
+.pbtns { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+.pcode { min-height: 90px; font-family: ui-monospace, monospace; font-size: 12px; word-break: break-all; }
+.bad-text { color: var(--bad); font-weight: 700; }
 
 
 
@@ -522,6 +571,8 @@ function daysUntil(s) { const now = new Date(); now.setHours(0, 0, 0, 0); return
 const WEEKDAYS = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
 const weekdayOf = s => WEEKDAYS[parseDate(s).getDay()];
 function shortDate(s) { const d = parseDate(s); return `${d.getDate()}.${d.getMonth() + 1}.`; }
+// A period after a solution, unless it already ends with a punctuation mark.
+const endDot = t => /[.!?…]$/.test(String(t).replace(/<[^>]*>/g, '').trim()) ? '' : '.';
 
 
 // Inline SVG icons for the shared UI. Colors come from the theme tokens in core.css.
@@ -543,6 +594,7 @@ const ICON = {
   box: `<svg viewBox="0 0 24 24"><path d="M3 8l9-4 9 4v9l-9 4-9-4z M3 8l9 4 9-4 M12 12v9" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>`,
   exam: `<svg viewBox="0 0 24 24"><rect x="5" y="4" width="14" height="17" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9 4V2.8h6V4 M8.5 10l1.5 1.5 3-3 M8.5 16h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   apps: `<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2" fill="currentColor"/></svg>`,
+  bulb: `<svg viewBox="0 0 24 24"><path d="M9 18h6 M10 21h4 M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   bolt: `<svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z" fill="var(--gold)" stroke="var(--gold-ink)" stroke-width="1.4" stroke-linejoin="round"/></svg>`,
   medal: (c1, c2) => `<svg viewBox="0 0 64 64"><path d="M20 4h10l4 18H24z" fill="var(--accent)"/><path d="M44 4H34l-4 18h10z" fill="var(--bad)"/><circle cx="32" cy="40" r="19" fill="${c1}" stroke="var(--ink)" stroke-width="3"/><circle cx="32" cy="40" r="12" fill="none" stroke="${c2}" stroke-width="3"/><path d="M32 32l2.4 5 5.4.6-4 3.6 1.1 5.3L32 43.8l-4.9 2.7 1.1-5.3-4-3.6 5.4-.6z" fill="${c2}"/></svg>`,
 };
@@ -1903,7 +1955,8 @@ const PRAISE = APP.praise || ['Richtig!', 'Volltreffer!', 'Stark!', 'Genau so!',
 const examName = EXAM ? EXAM.kind : 'Prüfung';
 // German articles for the exam name, from manifest exam.gender (f: die Klassenarbeit, m: der Vokabeltest).
 const examArt = { f: { acc: 'die', dat: 'der', to: 'zur', good: 'eine gute' }, m: { acc: 'den', dat: 'dem', to: 'zum', good: 'einen guten' }, n: { acc: 'das', dat: 'dem', to: 'zum', good: 'ein gutes' } }[(EXAM && EXAM.gender) || 'f'];
-const examDay = EXAM ? weekdayOf(EXAM.date) : '';
+// An exam may have no date yet; then there is no countdown.
+const examDay = EXAM && EXAM.date ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
 // A world shows its picture (t.img, a file in the app's img/ folder) or else its drawing.
 const worldArt = t => t.img ? `<img class="wimg" src="${t.img}" alt="" loading="lazy">` : artOf(t.art);
@@ -1969,7 +2022,8 @@ const starsOf = (t, l) => (state.levels[levelKey(t, l)] || {}).stars || 0;
 const totalStars = () => Object.values(state.levels).reduce((s, v) => s + (v.stars || 0), 0);
 const maxStarsOf = lv => lv.type === 'learn' ? 1 : 3;
 const maxStars = () => WORLDS.reduce((s, t) => s + t.levels.reduce((a, lv) => a + maxStarsOf(lv), 0), 0);
-const isUnlocked = (t, l) => l === 0 || starsOf(t, l - 1) > 0;
+// A level opens once the one before has a star; levels that already have stars (e.g. from a takeover) stay open.
+const isUnlocked = (t, l) => l === 0 || starsOf(t, l) > 0 || starsOf(t, l - 1) > 0;
 const worldDone = t => WORLDS[t].levels.every((_, l) => starsOf(t, l) > 0);
 function rankIndex(xp = state.xp) { let r = 0; RANKS.forEach((k, i) => { if (xp >= k.xp) r = i; }); return r; }
 
@@ -2070,7 +2124,15 @@ const QUIZ_TYPES = Object.assign({
   mc: { keys: lv => lv.items.map((_, i) => i), item: (lv, k, ref) => lv.items[+k] ? mcFrom(lv.items[+k], ref) : null },
   swipe: { keys: lv => lv.items.map((_, i) => i), item: (lv, k, ref) => lv.items[+k] ? swipeFrom(lv, lv.items[+k], ref) : null },
   imgquiz: { keys: lv => lv.pool, item: (lv, k, ref) => APP.entity(k) ? imgItem(k, lv.pool, ref, lv.prompt) : null },
+  // Mixed rounds: each item names its own kind (mc when none is given, or type, order, pairs, groups, cloze, multi).
+  mix: { keys: lv => lv.items.map((_, i) => i), item: (lv, k, ref) => mixItem(lv.items[+k], ref) },
 }, APP.quizTypes || {});
+TYPE_ICON.mix = TYPE_ICON.mix || TYPE_ICON.mc;
+
+function mixItem(it, ref) {
+  if (!it) return null;
+  return !it.kind || it.kind === 'mc' ? mcFrom(it, ref, { img: it.img, hint: it.hint }) : { ...it, ref };
+}
 
 function itemFromRef(ref) {
   const [tid, l, key] = ref.split('|');
@@ -2139,7 +2201,7 @@ function ring(p) {
 }
 
 function heroText() {
-  if (!EXAM) return { headline: `Los geht's!`, sub: MANIFEST.about || '' };
+  if (!EXAM || !EXAM.date) return { headline: `Los geht's!`, sub: EXAM ? `${MANIFEST.subject} · Thema: ${EXAM.topics}. Der Termin ${examArt.dat} ${EXAM.kind} steht noch nicht fest.` : MANIFEST.about || '' };
   const dl = daysUntil(EXAM.date), k = EXAM.kind;
   const headline = dl > 1 ? `Noch <em>${dl} Tage</em> bis ${examArt.to} ${k}` : dl === 1 ? `<em>Morgen</em> ist ${k}` : dl === 0 ? `<em>Heute</em> ist ${k}!` : `${k} geschrieben`;
   const sub = dl >= 0 ? `${examDay}, ${shortDate(EXAM.date)} · ${MANIFEST.subject} · Thema: ${EXAM.topics}.` : 'Du kannst trotzdem weiter üben und spielen.';
@@ -2295,7 +2357,7 @@ function startMistakes() {
 }
 
 // ---------------------------------------------------------------------------
-// Quiz engine (mc, swipe and typed answers), also used for the mistake box and the exam
+// Quiz engine (mc, swipe, typed answers and the kinds in items.js), also used for the mistake box and the exam
 // ---------------------------------------------------------------------------
 function quizStep() {
   if (run.i >= run.items.length) {
@@ -2307,13 +2369,16 @@ function quizStep() {
   const top = stageTop(run.i / run.total, run.mode === 'exam' ? '' : comboHtml());
   if (it.kind === 'swipe') return swipeStep(it, title, top);
   if (it.kind === 'type') return typeStep(it, title, top);
+  if (BOARD_KINDS[it.kind]) return boardStep(it, title, top);
   openStage(`${top}
     ${run.timer && run.mode === 'level' ? '<div class="timer"><i id="tbar"></i></div>' : ''}
     <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
     ${it.fig ? `<div class="figure ${it.figClass || ''}">${it.fig}</div>` : ''}
+    ${mediaHtml(it)}
     <div class="question">${it.q}</div>
-    <div class="options">${it.o.map((o, i) => `<button class="opt" data-i="${i}"><kbd>${i + 1}</kbd><span>${o}</span></button>`).join('')}</div>`);
-  bindQuit();
+    <div class="options">${it.o.map((o, i) => `<button class="opt" data-i="${i}"><kbd>${i + 1}</kbd><span>${o}</span></button>`).join('')}</div>
+    ${hintHtml(it)}`);
+  bindQuit(); bindHint(it);
   let answered = false, t0 = performance.now(), raf = 0;
   const choose = i => {
     if (answered) return; answered = true; cancelAnimationFrame(raf);
@@ -2329,9 +2394,9 @@ function quizStep() {
     if (i >= 0) btns[i].classList.add(ok ? 'right' : 'wrong');
     if (!ok) btns[it.a].classList.add('right');
     const fast = run.timer && (performance.now() - t0) / 1000 < run.timer / 2;
-    const xp = scoreAnswer(ok, it.ref, ok && fast ? 5 : 0);
+    const xp = scoreAnswer(ok, it.ref, (ok && fast ? 5 : 0) + hintBonus());
     const title = i < 0 ? 'Zeit abgelaufen!' : ok ? pick(PRAISE) + (fast ? ' Blitzschnell!' : '') : 'Nicht ganz.';
-    showSheet(ok, title, (ok ? '' : `Richtig ist: <b>${it.o[it.a]}</b>. `) + (it.x || ''), xp, () => { run.i++; quizStep(); });
+    showSheet(ok, title, (ok ? '' : `Richtig ist: <b>${it.o[it.a]}</b>${endDot(it.o[it.a])} `) + (it.x || ''), xp, () => { run.i++; quizStep(); });
   };
   $$('.opt').forEach(b => b.onclick = () => choose(+b.dataset.i));
   onKey(e => { const n = +e.key; if (n >= 1 && n <= it.o.length) choose(n - 1); });
@@ -2397,13 +2462,15 @@ function typeStep(it, title, top) {
   const exam = run.mode === 'exam';
   openStage(`${top}
     <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    ${mediaHtml(it)}
     ${it.lead ? `<div class="type-lead">${it.lead}</div>` : ''}
     <div class="type-word">${it.q}</div>
     <form class="type-form" id="tform" autocomplete="off">
-      ${it.fields.map((f, i) => `<label class="tfield"><span>${f.label}</span><input id="tf${i}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="${i < it.fields.length - 1 ? 'next' : 'done'}"></label>`).join('')}
+      ${it.fields.map((f, i) => `<label class="tfield"><span>${f.label}</span><input id="tf${i}" type="text" ${f.numeric ? 'inputmode="numeric" pattern="[0-9]*"' : ''} autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="${i < it.fields.length - 1 ? 'next' : 'done'}"></label>`).join('')}
+      ${hintHtml(it)}
       <div class="type-btns"><button class="btn primary" type="submit">${exam ? 'Weiter' : 'Prüfen'}</button><button class="btn" type="button" id="tskip">Weiß ich nicht</button></div>
     </form>`);
-  bindQuit();
+  bindQuit(); bindHint(it);
   const inputs = it.fields.map((_, i) => $('#tf' + i));
   inputs[0].focus({ preventScroll: true });
   inputs.forEach((inp, i) => inp.addEventListener('keydown', e => {
@@ -2421,9 +2488,9 @@ function typeStep(it, title, top) {
       if (ok) run.correct++; else noteMistake(it.ref);
       Sound.click(); return setTimeout(() => { run.i++; quizStep(); }, 350);
     }
-    const xp = scoreAnswer(ok, it.ref);
+    const xp = scoreAnswer(ok, it.ref, hintBonus());
     const lines = it.fields.map((f, i) => res[i].ok && !res[i].typo ? '' :
-      `${it.fields.length > 1 ? f.label + ': ' : ''}${res[i].ok ? 'Achte auf die Schreibweise:' : 'Richtig ist'} <b>${f.sol}</b>.${res[i].hint ? ' ' + res[i].hint : ''}`);
+      `${it.fields.length > 1 ? f.label + ': ' : ''}${res[i].ok ? 'Achte auf die Schreibweise:' : 'Richtig ist'} <b>${f.sol}</b>${endDot(f.sol)}${res[i].hint ? ' ' + res[i].hint : ''}`);
     showSheet(ok, ok ? pick(PRAISE) : pts > 0 ? 'Halb richtig.' : 'Nicht ganz.', [...lines, it.x].filter(Boolean).join('<br>'), xp, () => { run.i++; quizStep(); });
   };
   $('#tform').onsubmit = e => { e.preventDefault(); check(false); };
@@ -2459,8 +2526,9 @@ function judgeAnswer(text, accept, traps = [], strict = false) {
 // What the learner should have answered, for result lists.
 function itemSolution(it) {
   if (it.kind === 'swipe') return swipeVerdict(it);
-  if (it.kind === 'type') return 'Richtig: ' + it.fields.map(f => f.sol).join(' · ') + '.';
-  return 'Richtig: ' + it.o[it.a] + '.';
+  if (it.kind === 'type') return (t => 'Richtig: ' + t + endDot(t))(it.fields.map(f => f.sol).join(' · '));
+  if (BOARD_KINDS[it.kind]) return (t => 'Richtig: ' + t + endDot(t))(BOARD_KINDS[it.kind].sol(it));
+  return 'Richtig: ' + it.o[it.a] + endDot(it.o[it.a]);
 }
 
 // ---------------------------------------------------------------------------
@@ -2665,8 +2733,9 @@ function orderLevel() {
 }
 
 // ---------------------------------------------------------------------------
-// Free-text answers with keyword check. Each entry of it.k is a group of
-// accepted spellings; the first one is the label shown to the learner.
+// Free-text answers. Either a keyword check (each entry of it.k is a group of
+// accepted spellings, the first one is the label shown to the learner) or, with
+// it.points, a checklist of key points that the learner ticks off honestly.
 // ---------------------------------------------------------------------------
 function keywordScore(text, groups) {
   const t = norm(' ' + text + ' ');
@@ -2685,8 +2754,9 @@ function writeTask(it, header, onDone) {
   try { const d = sessionStorage.getItem('draft:' + it.q); if (d) ans.value = d; } catch (e) { }
   ans.oninput = () => { try { sessionStorage.setItem('draft:' + it.q, ans.value); } catch (e) { } };
   const check = () => {
-    const ks = keywordScore(ans.value, it.k);
     $('#check').disabled = true; $('#skip').disabled = true; ans.readOnly = true;
+    if (it.points) return checklist();
+    const ks = keywordScore(ans.value, it.k);
     $('#fb').innerHTML = `<div class="model"><h4>Musterlösung</h4><p>${it.m}</p>
       <div class="kw">${it.k.map((g, i) => `<span class="${ks.hits[i] ? 'hit' : 'miss'}">${ks.hits[i] ? '✔' : '✖'} ${g[0]}</span>`).join('')}</div>
       <p class="muted" style="font-size:14px;margin-top:8px">Du hast ${ks.hits.filter(Boolean).length} von ${it.k.length} Schlüsselbegriffen genannt. Vergleiche ehrlich mit der Musterlösung:</p></div>
@@ -2696,6 +2766,17 @@ function writeTask(it, header, onDone) {
       onDone((ks.ratio + +b.dataset.r) / 2, ans.value);
     });
     $('.selfrate .btn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+  const checklist = () => {
+    $('#fb').innerHTML = `<div class="model"><h4>Musterlösung</h4><p>${it.m}</p>
+      <p class="muted" style="font-size:14px;margin:10px 0 6px">Hake ab, was in deiner Antwort vorkommt. Sei ehrlich, nur so weißt du, was noch fehlt.</p>
+      <div class="points">${it.points.map((p, i) => `<label><input type="checkbox" data-p="${i}"> <span>${p}</span></label>`).join('')}</div></div>
+      <div class="selfrate"><button class="btn go" id="pdone">Fertig abgehakt</button></div>`;
+    $('#pdone').onclick = () => {
+      try { sessionStorage.removeItem('draft:' + it.q); } catch (e) { }
+      onDone($$('.points input:checked').length / it.points.length, ans.value);
+    };
+    $('.points').scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
   $('#check').onclick = check;
   $('#skip').onclick = () => { ans.value = ''; check(); };
@@ -2749,6 +2830,191 @@ function memoryLevel() {
 }
 
 
+// More answer kinds for quiz items, besides mc, swipe and type (levels.js):
+//   order  { q, items: [...in the right order] }               tap the cards in order
+//   pairs  { q, pairs: [[left, right], ...] }                    connect left and right
+//   groups { q, groups: [name, ...], items: [[text, gi], ...] }  pick the group of each item
+//   cloze  { q, s: 'text with ___', answers: [...], o: [...] }  fill the gaps with chips
+//   multi  { q, o: [...], right: [index, ...] }                  tick all right options
+// Every item may also have img (a picture to the question), hint ({ x, q, img }:
+// a tip with its source, using it halves the XP) and x (explanation afterwards).
+
+const BOARD_KINDS = {
+  order: {
+    body: it => {
+      it._cards = shuffle(it.items.map((t, i) => ({ t, i })));
+      return `<div class="bd-picked" id="bdPicked"></div><div class="bd-chips">${it._cards.map((c, k) => `<button class="bd-chip" data-k="${k}">${c.t}</button>`).join('')}</div>`;
+    },
+    bind(it, ready) {
+      const picked = [];
+      const paint = () => {
+        $('#bdPicked').innerHTML = picked.length ? picked.map((k, n) => `<button class="bd-slot" data-n="${n}"><b>${n + 1}.</b> ${it._cards[k].t}</button>`).join('') : '<span class="muted">Tippe die Karten in der richtigen Reihenfolge an.</span>';
+        $$('.bd-chip').forEach(b => b.disabled = picked.includes(+b.dataset.k));
+        $$('.bd-slot').forEach(b => b.onclick = () => { picked.splice(+b.dataset.n); Sound.click(); paint(); });
+        ready(picked.length === it.items.length);
+      };
+      $$('.bd-chip').forEach(b => b.onclick = () => { picked.push(+b.dataset.k); Sound.click(); paint(); });
+      paint();
+      return () => {
+        const hits = picked.map((k, n) => it._cards[k].i === n);
+        $$('.bd-slot').forEach((b, n) => b.classList.add(hits[n] ? 'right' : 'wrong'));
+        return hits;
+      };
+    },
+    sol: it => it.items.join(' → '),
+  },
+  pairs: {
+    body: it => {
+      it._right = shuffle(it.pairs.map((p, i) => ({ t: p[1], i })));
+      return `<div class="bd-pairs"><div class="col">${it.pairs.map((p, i) => `<button class="bd-l" data-i="${i}"><span class="tag"></span>${p[0]}</button>`).join('')}</div>
+        <div class="col">${it._right.map((r, k) => `<button class="bd-r" data-k="${k}"><span class="tag"></span>${r.t}</button>`).join('')}</div></div>`;
+    },
+    bind(it, ready) {
+      const link = {}; let sel = null;
+      const paint = () => {
+        $$('.bd-l').forEach(b => { const i = +b.dataset.i; b.classList.toggle('sel', sel === i); $('.tag', b).textContent = link[i] !== undefined ? i + 1 : ''; });
+        $$('.bd-r').forEach(b => { const k = +b.dataset.k, i = Object.keys(link).find(x => link[x] === k); $('.tag', b).textContent = i !== undefined ? +i + 1 : ''; });
+        ready(Object.keys(link).length === it.pairs.length);
+      };
+      $$('.bd-l').forEach(b => b.onclick = () => { sel = +b.dataset.i; delete link[sel]; Sound.click(); paint(); });
+      $$('.bd-r').forEach(b => b.onclick = () => {
+        if (sel === null) { toast('Erst links antippen', 'Wähle zuerst ein Feld in der linken Spalte.'); return; }
+        const k = +b.dataset.k;
+        Object.keys(link).forEach(x => { if (link[x] === k) delete link[x]; });
+        link[sel] = k; sel = null; Sound.click(); paint();
+      });
+      paint();
+      return () => {
+        const hits = it.pairs.map((_, i) => it._right[link[i]].i === i);
+        $$('.bd-l').forEach((b, i) => b.classList.add(hits[i] ? 'right' : 'wrong'));
+        return hits;
+      };
+    },
+    sol: it => it.pairs.map(p => `${p[0]} – ${p[1]}`).join(' · '),
+  },
+  groups: {
+    body: it => {
+      it._items = shuffle(it.items);
+      return `<div class="bd-groups">${it._items.map((x, n) => `<div class="bd-grow"><span>${x[0]}</span><div class="seg">${it.groups.map((g, gi) => `<button data-n="${n}" data-g="${gi}">${g}</button>`).join('')}</div></div>`).join('')}</div>`;
+    },
+    bind(it, ready) {
+      const pick = {};
+      $$('.bd-grow .seg button').forEach(b => b.onclick = () => {
+        pick[b.dataset.n] = +b.dataset.g; Sound.click();
+        $$(`.bd-grow .seg button[data-n="${b.dataset.n}"]`).forEach(x => x.classList.toggle('on', x === b));
+        ready(Object.keys(pick).length === it.items.length);
+      });
+      return () => {
+        const hits = it._items.map((x, n) => pick[n] === x[1]);
+        $$('.bd-grow').forEach((r, n) => r.classList.add(hits[n] ? 'right' : 'wrong'));
+        return hits;
+      };
+    },
+    sol: it => it.groups.map((g, gi) => `${g}: ${it.items.filter(x => x[1] === gi).map(x => x[0]).join(', ')}`).join(' · '),
+  },
+  cloze: {
+    body: it => {
+      it._chips = shuffle(it.o || it.answers);
+      const parts = it.s.split('___');
+      return `<div class="bd-cloze">${parts.map((p, n) => p + (n < parts.length - 1 ? `<button class="bd-gap" data-n="${n}">…</button>` : '')).join('')}</div>
+        <div class="bd-chips">${it._chips.map((c, k) => `<button class="bd-chip" data-k="${k}">${c}</button>`).join('')}</div>`;
+    },
+    bind(it, ready) {
+      const fill = it.answers.map(() => null);
+      const paint = () => {
+        $$('.bd-gap').forEach((g, n) => { g.textContent = fill[n] === null ? '…' : it._chips[fill[n]]; g.classList.toggle('filled', fill[n] !== null); });
+        $$('.bd-chip').forEach(b => b.disabled = fill.includes(+b.dataset.k));
+        ready(fill.every(x => x !== null));
+      };
+      $$('.bd-chip').forEach(b => b.onclick = () => { const n = fill.indexOf(null); if (n >= 0) { fill[n] = +b.dataset.k; Sound.click(); paint(); } });
+      $$('.bd-gap').forEach(g => g.onclick = () => { fill[+g.dataset.n] = null; paint(); });
+      paint();
+      return () => {
+        const hits = fill.map((k, n) => normAnswer(it._chips[k]) === normAnswer(it.answers[n]));
+        $$('.bd-gap').forEach((g, n) => g.classList.add(hits[n] ? 'right' : 'wrong'));
+        return hits;
+      };
+    },
+    sol: it => it.answers.join(', '),
+  },
+  multi: {
+    body: it => {
+      it._order = shuffle(it.o.map((_, i) => i));
+      return `<p class="muted" style="margin:0 0 8px">Tippe alle richtigen Antworten an.</p><div class="options">${it._order.map(i => `<button class="opt bd-multi" data-i="${i}"><kbd>✓</kbd><span>${it.o[i]}</span></button>`).join('')}</div>`;
+    },
+    bind(it, ready) {
+      const on = new Set();
+      $$('.bd-multi').forEach(b => b.onclick = () => {
+        const i = +b.dataset.i; on.has(i) ? on.delete(i) : on.add(i);
+        b.classList.toggle('on', on.has(i)); Sound.click(); ready(on.size > 0);
+      });
+      return () => {
+        const hits = it.o.map((_, i) => on.has(i) === it.right.includes(i));
+        $$('.bd-multi').forEach(b => { const i = +b.dataset.i; if (it.right.includes(i)) b.classList.add(on.has(i) ? 'right' : 'missed'); else if (on.has(i)) b.classList.add('wrong'); });
+        return hits;
+      };
+    },
+    sol: it => it.right.map(i => it.o[i]).join(' · '),
+  },
+};
+
+// Picture to the question; a tap opens it large.
+function mediaHtml(it) {
+  return it.img ? `<figure class="qimg"><img src="${it.img}" alt="${esc(it.imgAlt || 'Bild zur Frage')}" data-zoom></figure>` : '';
+}
+function hintHtml(it) {
+  return it.hint && run.mode !== 'exam' ? `<div class="hint-row"><button class="btn small" id="hintBtn" type="button">${ICON.bulb} Tipp</button><div class="hint" id="hint" hidden></div></div>` : '';
+}
+function bindHint(it) {
+  run.hinted = false;
+  const b = $('#hintBtn'); if (!b) return;
+  b.onclick = () => {
+    run.hinted = true; b.disabled = true; Sound.click();
+    const h = $('#hint'), t = it.hint;
+    h.innerHTML = `<p>${t.x}</p>${t.q ? `<p class="src">Aus: ${t.q}</p>` : ''}${t.img ? `<img src="${t.img}" alt="Bild zum Tipp" data-zoom>` : ''}`;
+    h.hidden = false; h.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  };
+}
+// A hint halves the reward but keeps the answer correct.
+const hintBonus = () => run.hinted ? -5 : 0;
+
+document.addEventListener('click', e => {
+  const img = e.target.closest('[data-zoom]'); if (!img) return;
+  const z = document.createElement('div');
+  z.className = 'zoom'; z.innerHTML = `<img src="${img.src}" alt="${esc(img.alt)}"><button class="btn" type="button">Schließen</button>`;
+  z.onclick = () => z.remove();
+  document.body.appendChild(z);
+});
+
+function boardStep(it, title, top) {
+  const kind = BOARD_KINDS[it.kind], exam = run.mode === 'exam';
+  openStage(`${top}
+    <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    ${mediaHtml(it)}
+    <div class="question">${it.q}</div>
+    ${kind.body(it)}
+    ${hintHtml(it)}
+    <div class="type-btns"><button class="btn primary" id="bdCheck" disabled>${exam ? 'Weiter' : 'Prüfen'}</button><button class="btn" id="bdSkip">Weiß ich nicht</button></div>`);
+  bindQuit(); bindHint(it);
+  let done = false;
+  const evaluate = kind.bind(it, ok => { $('#bdCheck').disabled = !ok; });
+  const check = skip => {
+    if (done) return; done = true;
+    const hits = skip ? [false] : evaluate();
+    const pts = hits.filter(Boolean).length / hits.length, ok = pts === 1;
+    $$('#stage button:not(#quit)').forEach(b => { if (!b.closest('.sheet')) b.disabled = true; });
+    if (exam) {
+      run.answers.push({ it, ok, pts }); if (ok) run.correct++; else noteMistake(it.ref);
+      Sound.click(); return setTimeout(() => { run.i++; quizStep(); }, 350);
+    }
+    const xp = scoreAnswer(ok, it.ref, hintBonus());
+    showSheet(ok, ok ? pick(PRAISE) : pts >= .5 ? 'Fast!' : 'Nicht ganz.', [ok ? '' : `Richtig ist: <b>${kind.sol(it)}</b>${endDot(kind.sol(it))}`, it.x].filter(Boolean).join('<br>'), xp, () => { run.i++; quizStep(); });
+  };
+  $('#bdCheck').onclick = () => check(false);
+  $('#bdSkip').onclick = () => check(true);
+}
+
+
 // Mock exam: quiz items mixed from several worlds plus write tasks, graded at the end.
 // APP.exam = { mix: { worldId: count, ... }, writes: n, art: artKey, types: [levelType, ...] }
 // types optionally limits the quiz items to levels of these types.
@@ -2790,7 +3056,7 @@ async function examResult() {
   const max = run.items.length + run.writes.length * 3;
   const pts = Math.round((mcPts + wPts) * 2) / 2, pct = Math.round(pts / max * 100), grade = gradeFor(pct);
   const mins = Math.max(1, Math.round((Date.now() - run.started) / 60000));
-  const xp = 40 + mcPts * 5 + Math.round(wPts * 5);
+  const xp = 40 + Math.round(mcPts * 5 + wPts * 5);
   addXp(xp);
   if (!state.examBest || +grade < +state.examBest) state.examBest = grade;
   if (+grade <= 2) award('exam2');
@@ -2860,15 +3126,134 @@ function badgesHtml() {
   </div>
   <div class="badges">${BADGES.map((b, i) => `<div class="badge ${state.badges[b.id] ? '' : 'off'}"><div class="medal">${ICON.medal(cols[i % 4], 'var(--ink)')}</div><b>${b.name}</b><span>${b.desc}</span></div>`).join('')}</div>
   <div style="margin-top:30px;display:flex;gap:10px;flex-wrap:wrap">
-    <button class="btn small" id="resetBtn">Fortschritt zurücksetzen</button>
+    <button class="btn small" id="parentsBtn">Für Eltern: Überblick und Spielstand sichern</button>
   </div>`;
 }
 
 document.addEventListener('click', async e => {
   if (e.target.id !== 'resetBtn') return;
   const r = await modal('<h2>Wirklich alles löschen?</h2><p>XP, Sterne, Tickets und Abzeichen werden auf null gesetzt.</p>', [{ label: 'Abbrechen', cls: 'primary' }, { label: 'Ja, zurücksetzen', cls: '' }]);
-  if (r === 1) { Object.assign(state, defaultState()); save(); render(); }
+  if (r === 1) { Object.assign(state, defaultState(), { seenIntro: true, legacyDone: true }); save(); closeStage(); render(); }
 });
+
+
+// Parents' view (stats, open mistakes with solutions), backup and restore of the
+// progress as a code or file, and the takeover of an older app's progress.
+// APP.legacy = { key, prefix, convert(old) -> state fields } names the old app's
+// localStorage key and backup code prefix; its progress is taken over once.
+
+const BACKUP_PREFIX = 'KLA1:';
+const toB64 = t => { const b = new TextEncoder().encode(t); let s = ''; for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); };
+const fromB64 = b => new TextDecoder().decode(Uint8Array.from(atob(b.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0)));
+
+function backupCode() {
+  return BACKUP_PREFIX + toB64(JSON.stringify({ app: MANIFEST.id, v: 1, saved: new Date().toISOString(), state }));
+}
+
+// Reads a backup code of this app or, through APP.legacy, of the app it replaces.
+function readBackup(text) {
+  text = String(text).trim();
+  try {
+    if (text.startsWith(BACKUP_PREFIX)) {
+      const d = JSON.parse(fromB64(text.slice(BACKUP_PREFIX.length)));
+      if (d.app !== MANIFEST.id) return { error: 'Dieser Code gehört zu einer anderen Lernapp.' };
+      return { state: d.state, saved: d.saved };
+    }
+    const L = APP.legacy;
+    if (L && L.prefix && text.startsWith(L.prefix)) {
+      const old = L.decode ? L.decode(text) : JSON.parse(fromB64(text.slice(L.prefix.length)));
+      if (!old) return { error: 'Der Code ist unvollständig. Kopiere ihn bitte noch einmal ganz.' };
+      return { state: Object.assign(defaultState(), L.convert(old)), legacy: true };
+    }
+  } catch (e) { return { error: 'Der Code ist unvollständig. Kopiere ihn bitte noch einmal ganz.' }; }
+  return { error: 'Das ist kein Spielstand-Code dieser App.' };
+}
+
+function applyState(s) {
+  const fresh = defaultState();
+  Object.keys(state).forEach(k => delete state[k]);
+  Object.assign(state, fresh, s, { games: Object.assign(fresh.games, s.games), seenIntro: true });
+  state.tickets = Math.min(state.tickets, TICKET_CAP);
+  save();
+}
+
+// Takes over the older app's progress once, if this app has not been used yet.
+(function takeOverLegacy() {
+  const L = APP.legacy;
+  if (!L || state.legacyDone) return;
+  let raw = null;
+  try { raw = localStorage.getItem(L.key); } catch (e) { return; }
+  state.legacyDone = true;
+  if (!raw || state.answered > 0) { save(); return; }
+  try {
+    applyState(Object.assign(L.convert(JSON.parse(raw)), { legacyDone: true }));
+    setTimeout(() => toast('Spielstand übernommen', 'Dein Fortschritt aus der alten App ist jetzt hier.', ICON.check), 800);
+  } catch (e) { save(); }
+})();
+
+function parentsHtml() {
+  const acc = state.answered ? Math.round(state.correct / state.answered * 100) : 0;
+  const refsByWorld = WORLDS.map(t => Object.keys(state.mistakes).filter(r => r.startsWith(t.id + '|')).length);
+  const mistakes = Object.entries(state.mistakes).sort((a, b) => b[1].n - a[1].n).slice(0, 25)
+    .map(([ref, m]) => ({ it: itemFromRef(ref), n: m.n, w: WORLDS.find(t => ref.startsWith(t.id + '|')) })).filter(x => x.it);
+  return `${stageTop(1)}
+    <h1 class="section-title">Für Eltern</h1>
+    <p class="lead">Wie es läuft, was noch nicht sitzt und wie Sie den Fortschritt sichern oder auf ein anderes Gerät bringen.</p>
+    <div class="statgrid">
+      <div class="stat"><b>${state.answered}</b><span>Antworten gegeben</span></div>
+      <div class="stat"><b>${acc} %</b><span>davon richtig</span></div>
+      <div class="stat"><b>${totalStars()}/${maxStars()}</b><span>Sterne</span></div>
+      <div class="stat"><b>${state.streak.days || 0}</b><span>Tage in Folge</span></div>
+    </div>
+    <h2 class="section-title" style="font-size:22px">Stand pro Welt</h2>
+    <div class="ptable"><table><tr><th>Welt</th><th>Level geschafft</th><th>Sterne</th><th>offene Fehler</th></tr>
+      ${WORLDS.map((t, ti) => `<tr><td>${t.title}</td><td>${t.levels.filter((_, l) => starsOf(ti, l) > 0).length} / ${t.levels.length}</td>
+        <td>${t.levels.reduce((s, _, l) => s + starsOf(ti, l), 0)} / ${t.levels.reduce((s, lv) => s + maxStarsOf(lv), 0)}</td><td>${refsByWorld[ti]}</td></tr>`).join('')}</table></div>
+    <h2 class="section-title" style="font-size:22px">Was noch nicht sitzt</h2>
+    ${mistakes.length ? `<ol class="plist">${mistakes.map(x => `<li><div>${x.it.kind === 'swipe' ? x.it.t : x.it.q}</div><div class="muted">${itemSolution(x.it)} · ${x.n}× falsch${x.w ? ' · ' + x.w.title : ''}</div></li>`).join('')}</ol>`
+      : '<p class="muted">Die Fehlerkiste ist leer.</p>'}
+    <h2 class="section-title" style="font-size:22px">Fortschritt sichern</h2>
+    <p class="muted">Der Fortschritt liegt nur in diesem Browser. Mit dem Code oder der Datei lässt er sich auf einem anderen Gerät wiederherstellen.${state.backedUp ? ` Zuletzt gesichert am ${new Date(state.backedUp).toLocaleDateString('de-DE')}.` : ''}</p>
+    <div class="pbtns"><button class="btn small primary" id="bkCopy">Code kopieren</button><button class="btn small" id="bkFile">Als Datei speichern</button></div>
+    <textarea class="answer pcode" id="bkCode" readonly hidden></textarea>
+    <h2 class="section-title" style="font-size:22px">Wiederherstellen</h2>
+    <p class="muted">Code einfügen oder Datei wählen. ${APP.legacy ? 'Auch Codes aus der alten Version der App funktionieren.' : ''}</p>
+    <textarea class="answer pcode" id="rsCode" placeholder="Code hier einfügen"></textarea>
+    <div class="pbtns"><button class="btn small primary" id="rsLoad">Code laden</button><label class="btn small">Datei wählen<input type="file" id="rsFile" accept=".txt,text/plain" hidden></label></div>
+    <p id="rsMsg"></p>
+    <div style="margin-top:30px"><button class="btn small" id="resetBtn">Fortschritt zurücksetzen</button></div>`;
+}
+
+function openParents() {
+  openStage(parentsHtml());
+  bindQuit();
+  const marked = () => { state.backedUp = Date.now(); save(); };
+  $('#bkCopy').onclick = async () => {
+    const code = backupCode(), box = $('#bkCode');
+    box.value = code; box.hidden = false; box.select();
+    try { await navigator.clipboard.writeText(code); toast('Kopiert', 'Der Code ist in der Zwischenablage.', ICON.check); } catch (e) { toast('Bitte selbst kopieren', 'Markieren Sie den Code im Feld und kopieren Sie ihn.'); }
+    marked();
+  };
+  $('#bkFile').onclick = () => {
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([backupCode()], { type: 'text/plain' }));
+    a.download = `Spielstand ${MANIFEST.title.replace(/[^\wäöüÄÖÜß -]+/g, '')} ${todayStr()}.txt`;
+    a.click(); URL.revokeObjectURL(a.href); marked();
+  };
+  const restore = async text => {
+    const r = readBackup(text), msg = $('#rsMsg');
+    if (r.error) { msg.textContent = r.error; msg.className = 'bad-text'; return; }
+    const s = r.state, stars = Object.values(s.levels || {}).reduce((a, v) => a + (v.stars || 0), 0);
+    const ok = await modal(`<h2>Spielstand laden?</h2><p>${r.legacy ? 'Aus der alten App: ' : ''}${s.xp} XP, ${stars} Sterne${r.saved ? `, gesichert am ${new Date(r.saved).toLocaleDateString('de-DE')}` : ''}. Der jetzige Stand auf diesem Gerät wird ersetzt.</p>`,
+      [{ label: 'Laden', cls: 'go' }, { label: 'Abbrechen', cls: '' }]);
+    if (ok !== 0) return;
+    applyState(s); closeStage(); render(); toast('Spielstand geladen', `${s.xp} XP und ${stars} Sterne sind da.`, ICON.check);
+  };
+  $('#rsLoad').onclick = () => restore($('#rsCode').value);
+  $('#rsFile').onchange = e => { const f = e.target.files[0]; if (f) f.text().then(restore); };
+}
+
+document.addEventListener('click', e => { if (e.target.closest('#parentsBtn')) { Sound.click(); openParents(); } });
 
 
 // ---------------------------------------------------------------------------
@@ -3696,7 +4081,7 @@ function boot() {
   if (!state.seenIntro) {
     state.seenIntro = true; save();
     const intro = APP.intro || {};
-    const when = EXAM && daysUntil(EXAM.date) >= 0 ? ` für ${examArt.acc} ${EXAM.kind} am ${examDay}` : '';
+    const when = examDay && daysUntil(EXAM.date) >= 0 ? ` für ${examArt.acc} ${EXAM.kind} am ${examDay}` : '';
     const games = GAMES.length ? `, und je ${STARS_PER_TICKET} neue Sterne bringen ein Ticket für die Arcade mit ${GAMES.slice(0, 2).map(g => g.name).join(', ')} und mehr` : '';
     modal(`${APP.heroArt ? `<div style="width:110px;margin:0 auto">${APP.heroArt()}</div>` : ''}<p class="hand">Willkommen!</p><h2>${intro.title || MANIFEST.title}</h2><p>Hier trainierst du alles${when}. Für jedes Level gibt es bis zu 3 Sterne${games}.</p>${intro.tip ? `<p>${intro.tip}</p>` : ''}`,
       [{ label: "Los geht's!", cls: 'go' }]).then(() => Sound.click());

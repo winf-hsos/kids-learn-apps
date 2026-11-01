@@ -1,0 +1,17 @@
+{
+  "id": "peace-city-ride",
+  "title": "Ritt zur Friedensstadt",
+  "school": "Grundschule",
+  "subject": "Sachunterricht",
+  "grade": "Klasse 4",
+  "about": "Osnabrücks Geschichte von der Furt an der Hase bis zum Westfälischen Frieden und zum Steckenpferdreiten",
+  "storeKey": "kla:peace-city-ride",
+  "exam": {
+    "kind": "Arbeit",
+    "gender": "f",
+    "topics": "Entstehung Osnabrücks, Reformation, Dreißigjähriger Krieg, Westfälischer Friede und Steckenpferdreiten"
+  },
+  "scripts": ["data.js", "content.js", "art.js", "app.js"],
+  "fonts": ["Fredoka:wght@500;600;700"],
+  "cover": "img/hero.webp"
+}

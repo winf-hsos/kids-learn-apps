@@ -16,7 +16,8 @@ const PRAISE = APP.praise || ['Richtig!', 'Volltreffer!', 'Stark!', 'Genau so!',
 const examName = EXAM ? EXAM.kind : 'Prüfung';
 // German articles for the exam name, from manifest exam.gender (f: die Klassenarbeit, m: der Vokabeltest).
 const examArt = { f: { acc: 'die', dat: 'der', to: 'zur', good: 'eine gute' }, m: { acc: 'den', dat: 'dem', to: 'zum', good: 'einen guten' }, n: { acc: 'das', dat: 'dem', to: 'zum', good: 'ein gutes' } }[(EXAM && EXAM.gender) || 'f'];
-const examDay = EXAM ? weekdayOf(EXAM.date) : '';
+// An exam may have no date yet; then there is no countdown.
+const examDay = EXAM && EXAM.date ? weekdayOf(EXAM.date) : '';
 const artOf = key => (APP.art && APP.art(key)) || '';
 // A world shows its picture (t.img, a file in the app's img/ folder) or else its drawing.
 const worldArt = t => t.img ? `<img class="wimg" src="${t.img}" alt="" loading="lazy">` : artOf(t.art);
@@ -82,7 +83,8 @@ const starsOf = (t, l) => (state.levels[levelKey(t, l)] || {}).stars || 0;
 const totalStars = () => Object.values(state.levels).reduce((s, v) => s + (v.stars || 0), 0);
 const maxStarsOf = lv => lv.type === 'learn' ? 1 : 3;
 const maxStars = () => WORLDS.reduce((s, t) => s + t.levels.reduce((a, lv) => a + maxStarsOf(lv), 0), 0);
-const isUnlocked = (t, l) => l === 0 || starsOf(t, l - 1) > 0;
+// A level opens once the one before has a star; levels that already have stars (e.g. from a takeover) stay open.
+const isUnlocked = (t, l) => l === 0 || starsOf(t, l) > 0 || starsOf(t, l - 1) > 0;
 const worldDone = t => WORLDS[t].levels.every((_, l) => starsOf(t, l) > 0);
 function rankIndex(xp = state.xp) { let r = 0; RANKS.forEach((k, i) => { if (xp >= k.xp) r = i; }); return r; }
 
@@ -183,7 +185,15 @@ const QUIZ_TYPES = Object.assign({
   mc: { keys: lv => lv.items.map((_, i) => i), item: (lv, k, ref) => lv.items[+k] ? mcFrom(lv.items[+k], ref) : null },
   swipe: { keys: lv => lv.items.map((_, i) => i), item: (lv, k, ref) => lv.items[+k] ? swipeFrom(lv, lv.items[+k], ref) : null },
   imgquiz: { keys: lv => lv.pool, item: (lv, k, ref) => APP.entity(k) ? imgItem(k, lv.pool, ref, lv.prompt) : null },
+  // Mixed rounds: each item names its own kind (mc when none is given, or type, order, pairs, groups, cloze, multi).
+  mix: { keys: lv => lv.items.map((_, i) => i), item: (lv, k, ref) => mixItem(lv.items[+k], ref) },
 }, APP.quizTypes || {});
+TYPE_ICON.mix = TYPE_ICON.mix || TYPE_ICON.mc;
+
+function mixItem(it, ref) {
+  if (!it) return null;
+  return !it.kind || it.kind === 'mc' ? mcFrom(it, ref, { img: it.img, hint: it.hint }) : { ...it, ref };
+}
 
 function itemFromRef(ref) {
   const [tid, l, key] = ref.split('|');

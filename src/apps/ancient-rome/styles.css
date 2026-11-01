@@ -1,0 +1,31 @@
+/* Ancient Rome: the look of a Pompeian wall painting, with deep red panels, ochre and black,
+   a chalky plaster background with red, black and ochre bands and Roman capitals (Marcellus SC) for headings.
+   The shared design lives in core/core.css. */
+:root {
+  --paper: #F4E9D6; --grid: #E6D5B8; --card: #FFF9EE; --ink: #1E1410; --ink-soft: #6E5642; --line: #E0CDAE;
+  --accent: #9E2B25; --accent-soft: #F5DCD2; --accent-2: #C98A2B; --gold: #E3A93C; --gold-ink: #1E1410;
+  --pen: #8A231E; --accent-strong: #9E2B25; --go-strong: #2D6E62; --good: #2D6E62; --good-soft: #D9EEE8;
+  --shadow: 0 2px 0 var(--line), 0 10px 24px -14px rgba(30, 20, 16, .45);
+  --f-display: 'Marcellus SC', 'Trajan Pro', Georgia, serif;
+  --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Ccircle cx='20' cy='30' r='1.2' fill='%237A5A3A' fill-opacity='.14'/%3E%3Ccircle cx='65' cy='12' r='.9' fill='%237A5A3A' fill-opacity='.12'/%3E%3Ccircle cx='48' cy='70' r='1.4' fill='%237A5A3A' fill-opacity='.1'/%3E%3Ccircle cx='82' cy='52' r='.8' fill='%237A5A3A' fill-opacity='.14'/%3E%3C/svg%3E");
+  --paper-size: 90px 90px;
+  --stripe: repeating-linear-gradient(180deg, var(--accent) 0 22px, #1E1410 22px 26px, var(--gold) 26px 30px, #1E1410 30px 34px);
+  --hero-pos: 50% 40%;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #160F0C; --grid: #2A1D16; --card: #231813; --ink: #F6EBDC; --ink-soft: #C6AE94; --line: #4A3426; --accent: #EE8A72; --accent-soft: #4A201A; --accent-2: #EDB55A; --gold: #EDB55A; --gold-ink: #1E140C; --pen: #FFB39C; --accent-strong: #B23A31; --go-strong: #2D6E62; --good: #6FC7B3; --good-soft: #17352F; --shadow: 0 2px 0 #0B0705, 0 10px 24px -14px rgba(0, 0, 0, .7); --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Ccircle cx='20' cy='30' r='1.2' fill='%23FFE1BE' fill-opacity='.08'/%3E%3Ccircle cx='65' cy='12' r='.9' fill='%23FFE1BE' fill-opacity='.07'/%3E%3Ccircle cx='48' cy='70' r='1.4' fill='%23FFE1BE' fill-opacity='.06'/%3E%3C/svg%3E"); }
+}
+:root[data-theme="dark"] { --paper: #160F0C; --grid: #2A1D16; --card: #231813; --ink: #F6EBDC; --ink-soft: #C6AE94; --line: #4A3426; --accent: #EE8A72; --accent-soft: #4A201A; --accent-2: #EDB55A; --gold: #EDB55A; --gold-ink: #1E140C; --pen: #FFB39C; --accent-strong: #B23A31; --go-strong: #2D6E62; --good: #6FC7B3; --good-soft: #17352F; --shadow: 0 2px 0 #0B0705, 0 10px 24px -14px rgba(0, 0, 0, .7); --paper-pattern: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Ccircle cx='20' cy='30' r='1.2' fill='%23FFE1BE' fill-opacity='.08'/%3E%3Ccircle cx='65' cy='12' r='.9' fill='%23FFE1BE' fill-opacity='.07'/%3E%3Ccircle cx='48' cy='70' r='1.4' fill='%23FFE1BE' fill-opacity='.06'/%3E%3C/svg%3E"); }
+
+h1, h2, h3 { letter-spacing: .02em; }
+.countdown { border-radius: 4px; }
+.world-art, .wimg { border-radius: 4px; }
+
+/* Comparison tables on learn cards (myth vs. research, villa vs. insula, then vs. today) */
+.ctab { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 10px 0 4px; font-size: 15px; }
+.ctab th { text-align: left; font-family: var(--f-display); font-weight: 400; color: var(--pen); padding: 6px 4px; border-bottom: 3px solid var(--accent); }
+.ctab td { padding: 8px 4px; border-bottom: 2px solid var(--line); vertical-align: top; }
+.ctab th, .ctab td { overflow-wrap: break-word; hyphens: auto; }
+.ctab th:first-child, .ctab td:first-child { width: 28%; font-weight: 700; }
+.ctab tr:last-child td { border-bottom: 0; }
+@media (max-width: 480px) { .ctab { font-size: 13.5px; } }

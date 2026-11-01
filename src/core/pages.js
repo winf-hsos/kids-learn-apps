@@ -40,12 +40,12 @@ function badgesHtml() {
   </div>
   <div class="badges">${BADGES.map((b, i) => `<div class="badge ${state.badges[b.id] ? '' : 'off'}"><div class="medal">${ICON.medal(cols[i % 4], 'var(--ink)')}</div><b>${b.name}</b><span>${b.desc}</span></div>`).join('')}</div>
   <div style="margin-top:30px;display:flex;gap:10px;flex-wrap:wrap">
-    <button class="btn small" id="resetBtn">Fortschritt zurücksetzen</button>
+    <button class="btn small" id="parentsBtn">Für Eltern: Überblick und Spielstand sichern</button>
   </div>`;
 }
 
 document.addEventListener('click', async e => {
   if (e.target.id !== 'resetBtn') return;
   const r = await modal('<h2>Wirklich alles löschen?</h2><p>XP, Sterne, Tickets und Abzeichen werden auf null gesetzt.</p>', [{ label: 'Abbrechen', cls: 'primary' }, { label: 'Ja, zurücksetzen', cls: '' }]);
-  if (r === 1) { Object.assign(state, defaultState()); save(); render(); }
+  if (r === 1) { Object.assign(state, defaultState(), { seenIntro: true, legacyDone: true }); save(); closeStage(); render(); }
 });

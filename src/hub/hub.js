@@ -7,6 +7,7 @@ function summaryOf(id) {
 
 function examPill(exam) {
   if (!exam) return '';
+  if (!exam.date) return `<span class="pill">${exam.kind}: Termin folgt</span>`;
   const dl = daysUntil(exam.date);
   if (dl < 0) return `<span class="pill done">${exam.kind} war am ${shortDate(exam.date)}</span>`;
   const when = dl === 0 ? 'heute' : dl === 1 ? 'morgen' : `in ${dl} Tagen`;

@@ -1,0 +1,19 @@
+{
+  "id": "english-quest",
+  "title": "English Quest: Klasse 6 – Unit 1",
+  "school": "Gymnasium",
+  "subject": "Englisch",
+  "grade": "Klasse 6",
+  "about": "Unit 1 „The new boy“: Vokabeln von S. 209–217, unregelmäßige Verben, Simple Past mit Fragen, Kurzantworten und Verneinung, dazu Lückentexte, Hören und Text-Check",
+  "storeKey": "kla:english-quest",
+  "exam": {
+    "kind": "Englischarbeit",
+    "gender": "f",
+    "date": "2026-10-08",
+    "topics": "Simple Past mit Fragen, Kurzantworten und Verneinung, unregelmäßige Verben und die Vokabeln von S. 209–217"
+  },
+  "packs": ["football"],
+  "scripts": ["data.js", "lang.js", "quiz.js", "content.js", "legacy.js", "art.js", "app.js"],
+  "fonts": ["Alfa Slab One"],
+  "cover": "img/hero.webp"
+}

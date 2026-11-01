@@ -1,0 +1,19 @@
+{
+  "id": "ancient-rome",
+  "title": "Zeitreise ins alte Rom",
+  "school": "Gymnasium",
+  "subject": "Geschichte",
+  "grade": "Klasse 6",
+  "about": "Gründung Roms zwischen Mythos und Forschung, Alltag, familia, Ämter der Republik, historische Quellen und die schriftliche Beurteilung",
+  "storeKey": "kla:ancient-rome",
+  "exam": {
+    "kind": "Klassenarbeit",
+    "gender": "f",
+    "date": "2026-11-05",
+    "topics": "Gründung Roms, Alltagsleben, familia, Ämter der Republik, historische Quellen und schriftliche Beurteilung"
+  },
+  "packs": ["football"],
+  "scripts": ["worlds-a.js", "worlds-b.js", "worlds-c.js", "art.js", "app.js"],
+  "fonts": ["Marcellus SC"],
+  "cover": "img/hero.webp"
+}

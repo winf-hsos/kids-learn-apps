@@ -1,0 +1,22 @@
+/* Ritt zur Friedensstadt: parchment and timber-frame colours of an old town, the red of the
+   city flag, Fredoka for friendly headings, plus the marker for the teacher's guiding questions.
+   The shared design lives in core/core.css. */
+:root {
+  --paper: #F6EDDA; --grid: #E6D7B9; --card: #FFFBF2; --ink: #3A2A1A; --ink-soft: #7A6450; --line: #E4D3B4;
+  --accent: #C0262D; --accent-soft: #F8DEDD; --accent-2: #5E9E4A; --gold: #F2B632; --gold-ink: #3A2A1A;
+  --pen: #2E5E8C; --accent-strong: #C0262D; --go-strong: #3E8A3A; --good: #3E8A3A; --good-soft: #DDF0D6;
+  --shadow: 0 2px 0 var(--line), 0 10px 24px -14px rgba(58, 42, 26, .4);
+  --f-display: 'Fredoka', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --paper-pattern: radial-gradient(circle at 1px 1px, var(--grid) 1.5px, transparent 2px);
+  --paper-size: 22px 22px;
+  --stripe: repeating-conic-gradient(var(--accent) 0 25%, #FFFFFF 0 50%) 0 0 / 10px 20px;
+  --hero-pos: 50% 40%;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #1A140E; --grid: #2C2218; --card: #261D15; --ink: #F6EDDA; --ink-soft: #C9B597; --line: #48392A; --accent: #FF7A6E; --accent-soft: #4A2220; --accent-2: #8FCB7A; --gold: #F5C24E; --pen: #9CC4EE; --accent-strong: #C93A36; --go-strong: #3E8A3A; --shadow: 0 2px 0 #0C0906, 0 10px 24px -14px rgba(0, 0, 0, .7); }
+}
+:root[data-theme="dark"] { --paper: #1A140E; --grid: #2C2218; --card: #261D15; --ink: #F6EDDA; --ink-soft: #C9B597; --line: #48392A; --accent: #FF7A6E; --accent-soft: #4A2220; --accent-2: #8FCB7A; --gold: #F5C24E; --pen: #9CC4EE; --accent-strong: #C93A36; --go-strong: #3E8A3A; --shadow: 0 2px 0 #0C0906, 0 10px 24px -14px rgba(0, 0, 0, .7); }
+
+h1, h2, h3 { font-weight: 600; letter-spacing: 0; }
+.question { font-size: 21px; }
+.lf { display: inline-block; vertical-align: 2px; margin-right: 4px; padding: 1px 8px; border-radius: 8px; background: var(--accent); color: #fff; font-family: var(--f-body); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }

@@ -24,7 +24,7 @@ function startMistakes() {
 }
 
 // ---------------------------------------------------------------------------
-// Quiz engine (mc, swipe and typed answers), also used for the mistake box and the exam
+// Quiz engine (mc, swipe, typed answers and the kinds in items.js), also used for the mistake box and the exam
 // ---------------------------------------------------------------------------
 function quizStep() {
   if (run.i >= run.items.length) {
@@ -36,13 +36,16 @@ function quizStep() {
   const top = stageTop(run.i / run.total, run.mode === 'exam' ? '' : comboHtml());
   if (it.kind === 'swipe') return swipeStep(it, title, top);
   if (it.kind === 'type') return typeStep(it, title, top);
+  if (BOARD_KINDS[it.kind]) return boardStep(it, title, top);
   openStage(`${top}
     ${run.timer && run.mode === 'level' ? '<div class="timer"><i id="tbar"></i></div>' : ''}
     <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
     ${it.fig ? `<div class="figure ${it.figClass || ''}">${it.fig}</div>` : ''}
+    ${mediaHtml(it)}
     <div class="question">${it.q}</div>
-    <div class="options">${it.o.map((o, i) => `<button class="opt" data-i="${i}"><kbd>${i + 1}</kbd><span>${o}</span></button>`).join('')}</div>`);
-  bindQuit();
+    <div class="options">${it.o.map((o, i) => `<button class="opt" data-i="${i}"><kbd>${i + 1}</kbd><span>${o}</span></button>`).join('')}</div>
+    ${hintHtml(it)}`);
+  bindQuit(); bindHint(it);
   let answered = false, t0 = performance.now(), raf = 0;
   const choose = i => {
     if (answered) return; answered = true; cancelAnimationFrame(raf);
@@ -58,9 +61,9 @@ function quizStep() {
     if (i >= 0) btns[i].classList.add(ok ? 'right' : 'wrong');
     if (!ok) btns[it.a].classList.add('right');
     const fast = run.timer && (performance.now() - t0) / 1000 < run.timer / 2;
-    const xp = scoreAnswer(ok, it.ref, ok && fast ? 5 : 0);
+    const xp = scoreAnswer(ok, it.ref, (ok && fast ? 5 : 0) + hintBonus());
     const title = i < 0 ? 'Zeit abgelaufen!' : ok ? pick(PRAISE) + (fast ? ' Blitzschnell!' : '') : 'Nicht ganz.';
-    showSheet(ok, title, (ok ? '' : `Richtig ist: <b>${it.o[it.a]}</b>. `) + (it.x || ''), xp, () => { run.i++; quizStep(); });
+    showSheet(ok, title, (ok ? '' : `Richtig ist: <b>${it.o[it.a]}</b>${endDot(it.o[it.a])} `) + (it.x || ''), xp, () => { run.i++; quizStep(); });
   };
   $$('.opt').forEach(b => b.onclick = () => choose(+b.dataset.i));
   onKey(e => { const n = +e.key; if (n >= 1 && n <= it.o.length) choose(n - 1); });
@@ -126,13 +129,15 @@ function typeStep(it, title, top) {
   const exam = run.mode === 'exam';
   openStage(`${top}
     <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    ${mediaHtml(it)}
     ${it.lead ? `<div class="type-lead">${it.lead}</div>` : ''}
     <div class="type-word">${it.q}</div>
     <form class="type-form" id="tform" autocomplete="off">
-      ${it.fields.map((f, i) => `<label class="tfield"><span>${f.label}</span><input id="tf${i}" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="${i < it.fields.length - 1 ? 'next' : 'done'}"></label>`).join('')}
+      ${it.fields.map((f, i) => `<label class="tfield"><span>${f.label}</span><input id="tf${i}" type="text" ${f.numeric ? 'inputmode="numeric" pattern="[0-9]*"' : ''} autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="${i < it.fields.length - 1 ? 'next' : 'done'}"></label>`).join('')}
+      ${hintHtml(it)}
       <div class="type-btns"><button class="btn primary" type="submit">${exam ? 'Weiter' : 'Prüfen'}</button><button class="btn" type="button" id="tskip">Weiß ich nicht</button></div>
     </form>`);
-  bindQuit();
+  bindQuit(); bindHint(it);
   const inputs = it.fields.map((_, i) => $('#tf' + i));
   inputs[0].focus({ preventScroll: true });
   inputs.forEach((inp, i) => inp.addEventListener('keydown', e => {
@@ -150,9 +155,9 @@ function typeStep(it, title, top) {
       if (ok) run.correct++; else noteMistake(it.ref);
       Sound.click(); return setTimeout(() => { run.i++; quizStep(); }, 350);
     }
-    const xp = scoreAnswer(ok, it.ref);
+    const xp = scoreAnswer(ok, it.ref, hintBonus());
     const lines = it.fields.map((f, i) => res[i].ok && !res[i].typo ? '' :
-      `${it.fields.length > 1 ? f.label + ': ' : ''}${res[i].ok ? 'Achte auf die Schreibweise:' : 'Richtig ist'} <b>${f.sol}</b>.${res[i].hint ? ' ' + res[i].hint : ''}`);
+      `${it.fields.length > 1 ? f.label + ': ' : ''}${res[i].ok ? 'Achte auf die Schreibweise:' : 'Richtig ist'} <b>${f.sol}</b>${endDot(f.sol)}${res[i].hint ? ' ' + res[i].hint : ''}`);
     showSheet(ok, ok ? pick(PRAISE) : pts > 0 ? 'Halb richtig.' : 'Nicht ganz.', [...lines, it.x].filter(Boolean).join('<br>'), xp, () => { run.i++; quizStep(); });
   };
   $('#tform').onsubmit = e => { e.preventDefault(); check(false); };
@@ -188,8 +193,9 @@ function judgeAnswer(text, accept, traps = [], strict = false) {
 // What the learner should have answered, for result lists.
 function itemSolution(it) {
   if (it.kind === 'swipe') return swipeVerdict(it);
-  if (it.kind === 'type') return 'Richtig: ' + it.fields.map(f => f.sol).join(' · ') + '.';
-  return 'Richtig: ' + it.o[it.a] + '.';
+  if (it.kind === 'type') return (t => 'Richtig: ' + t + endDot(t))(it.fields.map(f => f.sol).join(' · '));
+  if (BOARD_KINDS[it.kind]) return (t => 'Richtig: ' + t + endDot(t))(BOARD_KINDS[it.kind].sol(it));
+  return 'Richtig: ' + it.o[it.a] + endDot(it.o[it.a]);
 }
 
 // ---------------------------------------------------------------------------
@@ -394,8 +400,9 @@ function orderLevel() {
 }
 
 // ---------------------------------------------------------------------------
-// Free-text answers with keyword check. Each entry of it.k is a group of
-// accepted spellings; the first one is the label shown to the learner.
+// Free-text answers. Either a keyword check (each entry of it.k is a group of
+// accepted spellings, the first one is the label shown to the learner) or, with
+// it.points, a checklist of key points that the learner ticks off honestly.
 // ---------------------------------------------------------------------------
 function keywordScore(text, groups) {
   const t = norm(' ' + text + ' ');
@@ -414,8 +421,9 @@ function writeTask(it, header, onDone) {
   try { const d = sessionStorage.getItem('draft:' + it.q); if (d) ans.value = d; } catch (e) { }
   ans.oninput = () => { try { sessionStorage.setItem('draft:' + it.q, ans.value); } catch (e) { } };
   const check = () => {
-    const ks = keywordScore(ans.value, it.k);
     $('#check').disabled = true; $('#skip').disabled = true; ans.readOnly = true;
+    if (it.points) return checklist();
+    const ks = keywordScore(ans.value, it.k);
     $('#fb').innerHTML = `<div class="model"><h4>Musterlösung</h4><p>${it.m}</p>
       <div class="kw">${it.k.map((g, i) => `<span class="${ks.hits[i] ? 'hit' : 'miss'}">${ks.hits[i] ? '✔' : '✖'} ${g[0]}</span>`).join('')}</div>
       <p class="muted" style="font-size:14px;margin-top:8px">Du hast ${ks.hits.filter(Boolean).length} von ${it.k.length} Schlüsselbegriffen genannt. Vergleiche ehrlich mit der Musterlösung:</p></div>
@@ -425,6 +433,17 @@ function writeTask(it, header, onDone) {
       onDone((ks.ratio + +b.dataset.r) / 2, ans.value);
     });
     $('.selfrate .btn').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+  const checklist = () => {
+    $('#fb').innerHTML = `<div class="model"><h4>Musterlösung</h4><p>${it.m}</p>
+      <p class="muted" style="font-size:14px;margin:10px 0 6px">Hake ab, was in deiner Antwort vorkommt. Sei ehrlich, nur so weißt du, was noch fehlt.</p>
+      <div class="points">${it.points.map((p, i) => `<label><input type="checkbox" data-p="${i}"> <span>${p}</span></label>`).join('')}</div></div>
+      <div class="selfrate"><button class="btn go" id="pdone">Fertig abgehakt</button></div>`;
+    $('#pdone').onclick = () => {
+      try { sessionStorage.removeItem('draft:' + it.q); } catch (e) { }
+      onDone($$('.points input:checked').length / it.points.length, ans.value);
+    };
+    $('.points').scrollIntoView({ behavior: 'smooth', block: 'center' });
   };
   $('#check').onclick = check;
   $('#skip').onclick = () => { ans.value = ''; check(); };

@@ -21,3 +21,5 @@ function daysUntil(s) { const now = new Date(); now.setHours(0, 0, 0, 0); return
 const WEEKDAYS = ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'];
 const weekdayOf = s => WEEKDAYS[parseDate(s).getDay()];
 function shortDate(s) { const d = parseDate(s); return `${d.getDate()}.${d.getMonth() + 1}.`; }
+// A period after a solution, unless it already ends with a punctuation mark.
+const endDot = t => /[.!?…]$/.test(String(t).replace(/<[^>]*>/g, '').trim()) ? '' : '.';

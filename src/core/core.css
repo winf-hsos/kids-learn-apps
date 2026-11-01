@@ -260,6 +260,55 @@ button.tile:hover { border-color: var(--accent); }
 .kw .hit { color: var(--good); border-color: var(--good); background: var(--good-soft); }
 .kw .miss { color: var(--bad); border-color: var(--bad); background: var(--bad-soft); }
 .selfrate { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.points { display: grid; gap: 8px; }
+.points label { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; border: 2px solid var(--line); background: var(--paper); cursor: pointer; }
+.points input { width: 22px; height: 22px; flex: none; margin-top: 1px; accent-color: var(--good); }
+
+/* ---------- more answer kinds (items.js) ---------- */
+.qimg { margin: 6px 0 14px; }
+.qimg img, .hint img { display: block; max-width: 100%; max-height: 300px; margin: 0 auto; border-radius: 14px; border: 3px solid var(--ink); background: #fff; cursor: zoom-in; }
+.hint-row { margin: 14px 0 4px; }
+.hint-row .btn svg { width: 20px; height: 20px; }
+.hint { margin-top: 10px; padding: 14px 16px; border-radius: 14px; background: color-mix(in srgb, var(--gold) 22%, var(--card)); border: 2px solid var(--gold); }
+.hint p { margin: 0 0 6px; }
+.hint .src { font-size: 14px; color: var(--ink-soft); }
+.zoom { position: fixed; inset: 0; z-index: 90; background: rgba(0, 0, 0, .85); display: grid; place-items: center; gap: 12px; padding: 16px; grid-template-rows: 1fr auto; }
+.zoom img { max-width: 100%; max-height: 82vh; object-fit: contain; border-radius: 10px; background: #fff; }
+.bd-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.bd-chip, .bd-slot, .bd-gap, .bd-l, .bd-r, .bd-grow .seg button { border: 3px solid var(--line); background: var(--card); color: var(--ink); border-radius: 12px; padding: 10px 14px; font-size: 17px; font-weight: 700; box-shadow: 0 3px 0 var(--line); text-align: left; }
+.bd-chip[disabled] { opacity: .3; box-shadow: none; }
+.bd-picked { display: grid; gap: 8px; min-height: 56px; padding: 10px; border: 2px dashed var(--line); border-radius: 14px; }
+.bd-slot { border-color: var(--accent); }
+.bd-pairs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bd-pairs .col { display: grid; gap: 8px; align-content: start; }
+.bd-l, .bd-r { display: flex; gap: 8px; align-items: center; font-size: 16px; }
+.bd-l.sel { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 20%, var(--card)); }
+.tag { min-width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent); font-size: 14px; flex: none; }
+.tag:empty { background: var(--paper); }
+.bd-groups { display: grid; gap: 10px; }
+.bd-grow { display: grid; gap: 6px; padding: 10px 12px; border-radius: 14px; border: 2px solid var(--line); background: var(--card); }
+.bd-grow > span { font-weight: 700; }
+.bd-grow .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.bd-grow .seg button { padding: 6px 12px; font-size: 15px; }
+.bd-grow .seg button.on { border-color: var(--accent); background: var(--accent-soft); }
+.bd-cloze { font-size: 20px; line-height: 2.1; }
+.bd-gap { padding: 2px 12px; font-size: 18px; margin: 0 2px; border-style: dashed; }
+.bd-gap.filled { border-style: solid; border-color: var(--accent); }
+.bd-multi.on { border-color: var(--accent); background: var(--accent-soft); }
+.bd-multi.on kbd { background: var(--accent); color: #fff; border-color: var(--accent); }
+.bd-slot.right, .bd-gap.right, .bd-l.right, .bd-grow.right, .bd-multi.right { border-color: var(--good); background: var(--good-soft); }
+.bd-slot.wrong, .bd-gap.wrong, .bd-l.wrong, .bd-grow.wrong, .bd-multi.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.bd-multi.missed { border-color: var(--good); border-style: dashed; }
+
+/* ---------- parents' view (parents.js) ---------- */
+.ptable { overflow-x: auto; }
+.ptable table { width: 100%; border-collapse: collapse; font-size: 15px; background: var(--card); border-radius: 14px; overflow: hidden; }
+.ptable th, .ptable td { padding: 8px 10px; border-bottom: 2px solid var(--line); text-align: left; }
+.plist { display: grid; gap: 10px; padding-left: 22px; }
+.plist .muted { font-size: 14px; }
+.pbtns { display: flex; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+.pcode { min-height: 90px; font-family: ui-monospace, monospace; font-size: 12px; word-break: break-all; }
+.bad-text { color: var(--bad); font-weight: 700; }
 
 
 

@@ -39,7 +39,7 @@ async function examResult() {
   const max = run.items.length + run.writes.length * 3;
   const pts = Math.round((mcPts + wPts) * 2) / 2, pct = Math.round(pts / max * 100), grade = gradeFor(pct);
   const mins = Math.max(1, Math.round((Date.now() - run.started) / 60000));
-  const xp = 40 + mcPts * 5 + Math.round(wPts * 5);
+  const xp = 40 + Math.round(mcPts * 5 + wPts * 5);
   addXp(xp);
   if (!state.examBest || +grade < +state.examBest) state.examBest = grade;
   if (+grade <= 2) award('exam2');
