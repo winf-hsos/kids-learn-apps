@@ -30,7 +30,7 @@ FONTS = (
     '<link rel="preconnect" href="https://fonts.googleapis.com">\n'
     '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
     '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700'
-    '&family=Dela+Gothic+One&family=Gochi+Hand&display=swap">'
+    '&family=Dela+Gothic+One&family=Gochi+Hand&family=Patrick+Hand&display=swap">'
 )
 
 

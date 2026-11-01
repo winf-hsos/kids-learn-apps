@@ -10,8 +10,8 @@ function cheatHtml() {
 function arcadeHtml() {
   if (!GAMES.length) return `<h2 class="section-title">Arcade</h2><p class="lead">In dieser App gibt es noch keine Spiele.</p>`;
   const ts = totalStars(), next = GAMES.find(g => g.stars > ts);
-  return `<h2 class="section-title">Arcade</h2><p class="lead">Hier gibt es die Belohnung fürs Lernen. Jedes Spiel kostet ein Ticket. Tickets bekommst du für jeden neuen Stern, für komplette Welten, fürs Tagesziel${APP.exam ? ` und für ${examArt.good} Probe-${examName}` : ''}.</p>
-  <div class="ticketbar">${ICON.ticket}<div><b>${state.tickets} Ticket${state.tickets === 1 ? '' : 's'}</b><p>Du hast ${ts} Sterne. ${next ? `Nächstes Spiel ab ${next.stars} Sternen.` : 'Alle Spiele sind freigeschaltet!'}</p></div></div>
+  return `<h2 class="section-title">Arcade</h2><p class="lead">Hier gibt es die Belohnung fürs Lernen, und jedes Spiel kostet ein Ticket. Ein Ticket bekommst du für je ${STARS_PER_TICKET} neue Sterne, für jede komplette Welt, fürs Tagesziel${APP.exam ? ` und für ${examArt.good} Probe-${examName}` : ''}. Mehr als ${TICKET_CAP} Tickets kannst du nicht ansparen.</p>
+  <div class="ticketbar">${ICON.ticket}<div><b>${state.tickets} Ticket${state.tickets === 1 ? '' : 's'}</b><p>Du hast ${ts} ${ts === 1 ? 'Stern' : 'Sterne'}. Noch ${STARS_PER_TICKET - (state.starBank || 0)} neue ${STARS_PER_TICKET - (state.starBank || 0) === 1 ? 'Stern' : 'Sterne'} bis zum nächsten Ticket. ${next ? `Nächstes Spiel ab ${next.stars} Sternen.` : 'Alle Spiele sind freigeschaltet!'}</p></div></div>
   <div class="games">${GAMES.map(g => {
     const unlocked = ts >= g.stars;
     return `<button class="game ${unlocked ? '' : 'locked'}" data-game="${g.id}"><div class="thumb">${gameThumb(g.id)}</div><div class="body"><h3>${g.name}</h3><p>${g.desc}</p>
@@ -22,7 +22,7 @@ function arcadeHtml() {
 function tryGame(id) {
   const g = GAMES.find(x => x.id === id);
   if (totalStars() < g.stars) { Sound.wrong(); toast('Noch gesperrt', `Sammle ${g.stars} Sterne im Lernpfad.`, ICON.lock); return; }
-  if (state.tickets < 1) { Sound.wrong(); toast('Keine Tickets', 'Schaffe ein Level mit neuen Sternen, dann gibt es Tickets.', ICON.ticket); return; }
+  if (state.tickets < 1) { Sound.wrong(); toast('Keine Tickets', `Hol dir neue Sterne im Lernpfad, für je ${STARS_PER_TICKET} gibt es ein Ticket.`, ICON.ticket); return; }
   state.tickets--; save(); renderStatus();
   openGame(id);
 }

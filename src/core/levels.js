@@ -201,14 +201,16 @@ async function finish(ratio) {
   if (run.cleanup) { run.cleanup(); run.cleanup = null; }
   const isLearn = run.mode === 'level' && run.lv.type === 'learn';
   const stars = run.mode === 'level' ? (isLearn ? 1 : starsFor(ratio)) : 0;
-  let newStars = 0, prevTotal = totalStars(), wasDone = false;
+  let newStars = 0, earned = 0, prevTotal = totalStars(), wasDone = false;
   if (run.mode === 'level') {
     const k = levelKey(run.t, run.l), prev = state.levels[k] || { stars: 0 };
     wasDone = worldDone(run.t);
     newStars = Math.max(0, stars - prev.stars);
     state.levels[k] = { stars: Math.max(prev.stars, stars), best: Math.max(prev.best || 0, Math.round(ratio * 100)) };
     if (stars > 0) run.xp += 15 + stars * 10;
-    state.tickets += newStars;
+    state.starBank = (state.starBank || 0) + newStars;
+    earned = grantTickets(Math.floor(state.starBank / STARS_PER_TICKET));
+    state.starBank %= STARS_PER_TICKET;
   } else if (run.mode === 'mistakes') {
     run.xp += 10;
   }
@@ -223,7 +225,7 @@ async function finish(ratio) {
     <h1>${isLearn ? 'Gelernt!' : run.mode === 'level' ? titles[stars] : 'Repariert!'}</h1>
     ${run.mode === 'level' ? `<div class="bigstars">${(isLearn ? [0] : [0, 1, 2]).map(i => ICON.star(true).replace('<svg', `<svg data-s="${i}"`)).join('')}</div>` : '<div style="height:20px"></div>'}
     <p class="lead" style="margin:0 auto 10px">${msg}</p>
-    <div class="rewards"><div class="reward">${APP.xpIcon || ICON.bolt}+${run.xp} XP</div>${newStars ? `<div class="reward">${ICON.ticket}+${newStars}</div>` : ''}</div>
+    <div class="rewards"><div class="reward">${APP.xpIcon || ICON.bolt}+${run.xp} XP</div>${earned ? `<div class="reward">${ICON.ticket}+${earned}</div>` : ''}</div>
     <div class="actions">
       ${run.mode === 'level' ? `<button class="btn" id="again">Nochmal</button>` : ''}
       ${hasNext && stars > 0 ? `<button class="btn go" id="nextLvl">Nächstes Level</button>` : ''}
@@ -237,12 +239,12 @@ async function finish(ratio) {
   $('#toMap').onclick = () => { closeStage(); render(); };
   onKey(e => { if (e.key === 'Enter') { e.preventDefault(); ($('#nextLvl') || $('#toMap')).click(); } });
   checkBadges(); save(); renderStatus();
-  if (newStars) setTimeout(() => { const c = $('#ticketChip'); if (c) { c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); } Sound.coin(); }, 300 + stars * 350);
+  if (earned) setTimeout(() => { const c = $('#ticketChip'); if (c) { c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); } Sound.coin(); }, 300 + stars * 350);
   await sleep(500 + stars * 350);
   if (run.mode === 'level' && !wasDone && worldDone(run.t)) {
-    state.tickets += 2; save(); renderStatus();
+    const got = grantTickets(1); save(); renderStatus();
     Sound.fanfare(); Confetti.burst(220);
-    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${artOf(WORLDS[run.t].art)}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. Als Belohnung gibt es <b>+2 Spiel-Tickets</b>.</p>`,
+    const r = await modal(`<div style="width:100px;margin:0 auto;color:var(--ink)">${artOf(WORLDS[run.t].art)}</div><p class="hand">Welt ${run.t + 1} komplett!</p><h2>${WORLDS[run.t].title}</h2><p>Du hast alle Level dieser Welt geschafft. ${got ? 'Als Belohnung gibt es <b>+1 Spiel-Ticket</b>.' : ''}</p>`,
       GAMES.length ? [{ label: 'Ab in die Arcade', cls: 'go' }, { label: 'Weiterlernen', cls: '' }] : [{ label: 'Weiterlernen', cls: 'go' }]);
     if (r === 0 && GAMES.length) { closeStage(); tab = 'arcade'; render(); }
   }

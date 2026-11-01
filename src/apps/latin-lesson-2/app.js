@@ -19,7 +19,7 @@ const APP = {
   // A Roman runner opens the reward games; the learner loves football, so the other games and trivia come from the football pack.
   praise: ['Optime!', 'Bene!', 'Recte!', 'Euge!', 'Tor!', 'Volltreffer!', 'Stark!', 'Genau so!'],
   trivia: FOOTBALL,
-  games: [{ id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'kickups', stars: 20 }, { id: 'proquiz', stars: 30 }],
+  games: [{ id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'proquiz', stars: 16 }, { id: 'kickups', stars: 20 }],
   ranks: [
     { xp: 0, name: 'Rekrut' },
     { xp: 150, name: 'Legionär' },

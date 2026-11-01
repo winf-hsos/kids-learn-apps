@@ -39,10 +39,14 @@ const BADGES = [
 // Persistent state (one localStorage entry per app, plus a summary for the hub)
 // ---------------------------------------------------------------------------
 const STORE_KEY = MANIFEST.storeKey || `kla:${MANIFEST.id}`;
+// Tickets reward learning but must not pile up into hours of gaming: one ticket
+// per three new stars, and never more than TICKET_CAP tickets at once.
+const STARS_PER_TICKET = APP.starsPerTicket || 3;
+const TICKET_CAP = APP.ticketCap || 3;
 
 function defaultState() {
   return {
-    xp: 0, tickets: 1, levels: {}, mistakes: {}, fixed: 0, badges: {},
+    xp: 0, tickets: 1, starBank: 0, levels: {}, mistakes: {}, fixed: 0, badges: {},
     bestCombo: 0, daily: { date: '', xp: 0 }, streak: { last: '', days: 0 },
     sound: true, games: Object.fromEntries(GAMES.map(g => [g.id, 0])),
     unlockedGames: {}, examBest: null, answered: 0, correct: 0, seenIntro: false,
@@ -54,6 +58,7 @@ function loadState() {
     if (raw) {
       const s = Object.assign(defaultState(), JSON.parse(raw));
       s.games = Object.assign(defaultState().games, s.games);
+      s.tickets = Math.min(s.tickets, TICKET_CAP);
       return s;
     }
   } catch (e) { /* storage unavailable */ }
@@ -92,6 +97,14 @@ function touchDaily() {
   }
 }
 
+// Adds tickets up to the cap and returns how many were actually added.
+function grantTickets(n) {
+  const before = state.tickets;
+  state.tickets = Math.min(TICKET_CAP, state.tickets + n);
+  return state.tickets - before;
+}
+const ticketNote = n => n ? `+${n} Spiel-Ticket${n === 1 ? '' : 's'}` : `Dein Ticket-Vorrat ist voll (${TICKET_CAP}), also ab in die Arcade`;
+
 function addXp(n) {
   if (n <= 0) return;
   const before = rankIndex();
@@ -99,8 +112,8 @@ function addXp(n) {
   const wasBelow = state.daily.xp < DAILY_GOAL;
   state.xp += n; state.daily.xp += n;
   if (wasBelow && state.daily.xp >= DAILY_GOAL) {
-    state.tickets += 1;
-    toast('Tagesziel geschafft!', `${DAILY_GOAL} XP heute. +1 Spiel-Ticket`, ICON.ticket);
+    const got = grantTickets(1);
+    toast('Tagesziel geschafft!', `${DAILY_GOAL} XP heute. ${ticketNote(got)}`, ICON.ticket);
     Sound.coin();
   }
   const after = rankIndex();
@@ -135,9 +148,9 @@ async function checkGameUnlocks(prevStars) {
   const now = totalStars();
   for (const g of GAMES) {
     if (prevStars < g.stars && now >= g.stars && !state.unlockedGames[g.id]) {
-      state.unlockedGames[g.id] = true; state.tickets += 1; save();
+      state.unlockedGames[g.id] = true; const got = grantTickets(1); save();
       Sound.fanfare(); Confetti.burst(150);
-      const r = await modal(`<div class="thumb">${gameThumb(g.id)}</div><p class="hand">Meilenstein: ${g.stars} Sterne!</p><h2>${g.name} freigeschaltet</h2><p>${g.desc}</p><p><b>+1 Spiel-Ticket</b> als Belohnung.</p>`,
+      const r = await modal(`<div class="thumb">${gameThumb(g.id)}</div><p class="hand">Meilenstein: ${g.stars} Sterne!</p><h2>${g.name} freigeschaltet</h2><p>${g.desc}</p>${got ? '<p><b>+1 Spiel-Ticket</b> als Belohnung.</p>' : ''}`,
         [{ label: 'Jetzt spielen', cls: 'go' }, { label: 'Später', cls: '' }]);
       if (r === 0) { closeStage(); openGame(g.id); return true; }
     }

@@ -44,7 +44,7 @@ async function examResult() {
   if (!state.examBest || +grade < +state.examBest) state.examBest = grade;
   if (+grade <= 2) award('exam2');
   if (grade === '1') award('exam1');
-  if (+grade <= 2) state.tickets += 2;
+  if (+grade <= 2) grantTickets(1);
   save();
   const wrong = run.answers.filter(a => !a.write && !a.ok);
   const ready = examDay && EXAM && daysUntil(EXAM.date) >= 0 ? `Du bist bereit für ${examDay}.` : 'Du bist bestens vorbereitet.';

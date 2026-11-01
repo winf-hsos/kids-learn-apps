@@ -70,7 +70,7 @@ function homeHtml() {
     ${APP.exam ? `<button class="tile exam" data-act="exam"><div class="ico" style="background:var(--card);color:var(--ink)">${ICON.exam}</div><div><b>Probe-${examName}</b><span>${state.examBest ? `Beste Note: ${state.examBest}` : examDay ? `Teste dich wie am ${examDay}` : 'Teste dich wie in der echten Arbeit'}</span></div></button>` : ''}
   </div>
   ${WORLDS.map((t, ti) => worldHtml(t, ti)).join('')}
-  ${GAMES.length ? `<p class="muted" style="text-align:center;margin-top:30px;font-size:14px">Jeder neue Stern gibt ein Spiel-Ticket für die Arcade. Ab ${GAMES[0].stars} Sternen wartet das erste Spiel.</p>` : ''}`;
+  ${GAMES.length ? `<p class="muted" style="text-align:center;margin-top:30px;font-size:14px">Je ${STARS_PER_TICKET} neue Sterne geben ein Spiel-Ticket für die Arcade. Ab ${GAMES[0].stars} Sternen wartet das erste Spiel.</p>` : ''}`;
 }
 
 function worldHtml(t, ti) {

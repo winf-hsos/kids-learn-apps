@@ -111,7 +111,24 @@ function recordGame(key, value) {
 function rrect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
 
 // Trivia questions come from the app's pack (APP.trivia), answers shuffled.
-function triviaQuestions(n) { return shuffle(APP.trivia).slice(0, n).map(q => { const order = shuffle([0, 1, 2, 3]); return { q: q.q, o: order.map(i => q.o[i]), a: order.indexOf(q.a), f: q.f }; }); }
+// Unseen questions come first. The seen list is shared by all apps on this site,
+// so a question from one app does not come back in another, and it starts over
+// once the whole pool has been shown.
+const TRIVIA_SEEN_KEY = 'kla:trivia-seen';
+const triviaId = q => { let h = 5381; for (const ch of q.q) h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0; return h.toString(36); };
+function triviaQuestions(n) {
+  let seen;
+  try { seen = new Set(JSON.parse(localStorage.getItem(TRIVIA_SEEN_KEY)) || []); } catch (e) { seen = new Set(); }
+  const fresh = shuffle(APP.trivia.filter(q => !seen.has(triviaId(q))));
+  let picked = fresh.slice(0, n);
+  if (picked.length < n) {
+    APP.trivia.forEach(q => seen.delete(triviaId(q)));
+    picked = picked.concat(shuffle(APP.trivia.filter(q => !picked.includes(q))).slice(0, n - picked.length));
+  }
+  picked.forEach(q => seen.add(triviaId(q)));
+  try { localStorage.setItem(TRIVIA_SEEN_KEY, JSON.stringify([...seen])); } catch (e) { /* storage unavailable */ }
+  return picked.map(q => { const order = shuffle([0, 1, 2, 3]); return { q: q.q, o: order.map(i => q.o[i]), a: order.indexOf(q.a), f: q.f }; });
+}
 
 function questionBox(q, idx, total, onAnswer, timeLimit) {
   return { html: `<div class="fq"><div class="qtitle" style="color:#9DAED2">Frage ${idx + 1}/${total}</div>${timeLimit ? '<div class="timer"><i id="fqT"></i></div>' : ''}<div class="question">${q.q}</div>
