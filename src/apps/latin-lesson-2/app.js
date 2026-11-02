@@ -16,7 +16,7 @@ const APP = {
   levelTypes: { vmatch: vocabMatchLevel },
   trainer: {
     title: 'Vokabeltrainer', unit: 'Vokabeln', unitOne: 'Vokabel', item: trainerItem,
-    intro: 'Der Trainer fragt alle Vokabeln von Latein nach Deutsch ab, mal mit Antworten zum Antippen, mal zum Eintippen, und hört nie auf.',
+    intro: 'Der Trainer fragt alle Vokabeln von Latein nach Deutsch ab, mal mit Antworten zum Antippen, mal zum Eintippen, und hört nie auf. Beim Eintippen brauchst du bei Nomen wie im Test auch den Akkusativ.',
     cards: () => [...NOUN_IDS, ...Object.keys(VERBS), ...WORD_IDS],
     label: id => `${laOf(id)} <small>${deOf(id)}</small>`,
   },

@@ -173,13 +173,12 @@ const VOCAB_QUIZ_TYPES = {
 };
 
 // Vocabulary trainer (src/core/trainer.js): Latin to German, as multiple choice
-// or typed, verbs in a random form. Wrong options come from the same word class.
+// or typed, verbs in a random form. Typed nouns ask accusative and meaning, like
+// the test. Wrong options come from the same word class.
 function trainerItem(id, typed) {
   const lv = { words: NOUNS[id] ? NOUN_IDS : VERBS[id] ? Object.keys(VERBS) : WORD_IDS };
   const key = VERBS[id] ? `${id}.${pick(['inf', 'sg', 'pl'])}` : id;
-  if (!typed) return mcItem(lv, key, null);
-  if (NOUNS[id]) return { kind: 'type', q: plain(NOUNS[id].la), lead: 'Was heißt das?', fields: [meaningField(id)], x: explain(id), ref: null };
-  return typedItem(lv, key, null);
+  return typed ? typedItem(lv, key, null) : mcItem(lv, key, null);
 }
 
 // Match level with six random pairs from the level's words.
