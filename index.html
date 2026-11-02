@@ -437,6 +437,12 @@ button.tile:hover { border-color: var(--accent); }
 .sgoal.saved .sgoal-keeper { transform: translateY(-6px) rotate(-14deg) scale(1.15); }
 .sgoal.answer { outline: 4px dashed #34D08C; outline-offset: 3px; }
 .sgoal[disabled] { cursor: default; opacity: 1; }
+@media (max-width: 599px) {
+  .scorer-goals.stack { grid-template-columns: 1fr; }
+  .scorer-goals.stack .sgoal { min-height: 66px; padding: 10px 56px 10px 14px; border-bottom: 5px solid #fff; border-radius: 4px; align-items: center; justify-content: flex-start; text-align: left; }
+  .scorer-goals.stack .sgoal-keeper { left: auto; right: 16px; bottom: 4px; margin-left: 0; width: 22px; height: 26px; }
+  .scorer-goals.stack .sgoal-keeper::before { left: 5px; top: -12px; width: 12px; height: 12px; }
+}
 .scorer-pitch { height: 58px; display: grid; place-items: center; }
 .sball { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, #111 0 26%, #fff 28%); border: 2px solid #111; transition: transform .4s cubic-bezier(.2, .7, .3, 1), opacity .3s; }
 .sball.gone { opacity: 0; }

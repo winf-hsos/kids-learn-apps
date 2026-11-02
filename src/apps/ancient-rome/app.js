@@ -27,7 +27,12 @@ const APP = {
   // The learner loves football, so the praise and the reward games lean that way, with a Roman runner first.
   praise: ['Optime!', 'Richtig!', 'Volltreffer!', 'Stark!', 'Genau so!', 'Wie ein Konsul!', 'Tor!', 'Sauber!'],
   trivia: FOOTBALL,
-  games: [{ id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'proquiz', stars: 18 }, { id: 'kickups', stars: 24 }],
+  // The free scorer opens early and asks the app's own questions; never raise a threshold that is already live.
+  games: [
+    { id: 'scorer', stars: 3, name: 'Geschichts-Torjäger', desc: 'Schieß in das Tor mit der richtigen Antwort zum alten Rom. 10 Schüsse, ganz ohne Ticket.' },
+    { id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'proquiz', stars: 18 }, { id: 'kickups', stars: 24 },
+    { id: 'keeper', stars: 30 }, { id: 'slalom', stars: 38 }, { id: 'blitz', stars: 46 },
+  ],
   ranks: [
     { xp: 0, name: 'Tourist im Forum' },
     { xp: 150, name: 'Plebejer' },

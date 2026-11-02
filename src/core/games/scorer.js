@@ -4,7 +4,9 @@
 // mistakes first, so the game is practice too. Wrong answers go to the mistake box.
 // ---------------------------------------------------------------------------
 function scorerQuestions(n) {
-  const items = allRefs().map(r => itemFromRef(r.ref)).filter(it => it && it.kind === 'mc' && !it.fig && !it.img && it.o.length >= 3);
+  // Answers longer than a short phrase do not fit on a goal.
+  const short = o => String(o).replace(/<[^>]+>/g, '').length <= 70;
+  const items = allRefs().map(r => itemFromRef(r.ref)).filter(it => it && it.kind === 'mc' && !it.fig && !it.img && it.o.length >= 3 && it.o.every(short));
   const open = shuffle(items.filter(it => state.mistakes[it.ref])).slice(0, Math.ceil(n / 2));
   const rest = shuffle(items.filter(it => !open.includes(it)));
   return shuffle([...open, ...rest.slice(0, n - open.length)]).map(it => {
@@ -12,6 +14,9 @@ function scorerQuestions(n) {
     return { q: it.q, o, a: o.indexOf(it.o[it.a]), x: it.x, ref: it.ref };
   });
 }
+
+// Labels with long words or many words get goals stacked on top of each other on phones.
+const longLabel = o => { const t = String(o).replace(/<[^>]+>/g, ''); return t.length > 34 || t.split(/[\s/-]+/).some(w => w.length > 11); };
 
 function scorerGame(area, hud) {
   const SHOTS = 10, TIME = 12;
@@ -26,11 +31,11 @@ function scorerGame(area, hud) {
     if (i >= qs.length) return finish();
     const q = qs[i];
     box.innerHTML = `<div class="timer"><i id="scT"></i></div><div class="scorer-q">${q.q}</div>
-      <div class="scorer-goals">${q.o.map((o, k) => `<button class="sgoal" data-k="${k}"><span class="sgoal-keeper"></span><span class="sgoal-txt">${o}</span></button>`).join('')}</div>
+      <div class="scorer-goals ${q.o.some(longLabel) ? 'stack' : ''}">${q.o.map((o, k) => `<button class="sgoal" data-k="${k}"><span class="sgoal-keeper"></span><span class="sgoal-txt">${o}</span></button>`).join('')}</div>
       <div class="scorer-pitch"><span class="sball" id="scBall"></span></div>
       <div class="scorer-fact" id="scF"></div><div id="scNext" class="scorer-next"></div><div class="scorer-dots">${dots()}</div>`;
     $$('.sgoal', box).forEach(b => b.onclick = () => shoot(+b.dataset.k));
-    hud(`${goals} Tore · Schuss ${i + 1}/${qs.length}`);
+    hud(`${goals} ${goals === 1 ? 'Tor' : 'Tore'} · Schuss ${i + 1}/${qs.length}`);
     done = false; t0 = performance.now(); raf = requestAnimationFrame(tick);
   };
   const tick = now => {
@@ -58,7 +63,7 @@ function scorerGame(area, hud) {
       el('scF').innerHTML = `<b>${ok ? 'TOR!' : k < 0 ? 'Zeit abgelaufen!' : 'Gehalten!'}</b> ${q.x || ''}`;
       el('scNext').innerHTML = `<button class="btn ${ok ? 'go' : ''}" id="scGo">${i + 1 < qs.length ? 'Nächster Schuss' : 'Ergebnis'}</button>`;
       $('.scorer-dots', box).innerHTML = dots();
-      hud(`${goals} Tore · Schuss ${i + 1}/${qs.length}`);
+      hud(`${goals} ${goals === 1 ? 'Tor' : 'Tore'} · Schuss ${i + 1}/${qs.length}`);
       $('#scGo').onclick = () => { i++; ask(); };
       $('#scGo').focus();
     }, k >= 0 ? 420 : 0);
