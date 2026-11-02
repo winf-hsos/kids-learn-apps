@@ -132,6 +132,33 @@ button.tile:hover { border-color: var(--accent); }
 .tile.exam { border-color: var(--ink); background: var(--gold); color: var(--gold-ink); }
 .tile.exam span { color: var(--gold-ink); opacity: .8; }
 
+/* endless trainer */
+.tr-top { background: var(--good); } .tr-good { background: var(--gold); } .tr-weak { background: var(--bad); } .tr-new { background: var(--line); }
+.tr-bar { display: flex; gap: 3px; height: 14px; border-radius: 99px; overflow: hidden; background: var(--line); }
+.tr-bar i { display: block; min-width: 6px; }
+.trainer-tile { display: grid; gap: 8px; width: 100%; margin-top: 12px; padding: 14px 16px; text-align: left; background: var(--card); border: 3px solid var(--ink); border-radius: 18px; box-shadow: var(--shadow); color: var(--ink); }
+.trainer-tile:hover { border-color: var(--accent); }
+.tt-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; }
+.tt-head b { font-family: var(--f-display); font-size: 20px; }
+.tt-head span, .tt-go { font-size: 14px; color: var(--ink-soft); }
+.trainer { text-align: center; padding-top: 20px; max-width: 560px; margin: 0 auto; }
+.trainer h1 { font-size: clamp(30px, 7vw, 44px); }
+.trainer .tr-bar { height: 20px; margin: 16px 0 12px; }
+.tr-round { margin: 6px auto 0; }
+.tr-legend { display: grid; gap: 6px; text-align: left; }
+.tr-legend div { display: grid; grid-template-columns: 14px 34px 1fr auto; align-items: center; gap: 10px; font-size: 16px; }
+.tr-legend i, .tr-list summary i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+.tr-legend b { text-align: right; font-variant-numeric: tabular-nums; }
+.tr-legend em { font-style: normal; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.tr-how { color: var(--ink-soft); font-size: 15px; text-align: left; margin: 16px 0; }
+.trainer .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+.tr-list { text-align: left; border-top: 2px solid var(--line); padding: 10px 0; }
+.tr-list summary { cursor: pointer; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.tr-words { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.tr-words span { padding: 4px 10px; border-radius: 10px; background: var(--paper); border: 2px solid var(--line); font-weight: 700; }
+.tr-words small, .toast small { font-weight: 400; color: var(--ink-soft); }
+.trainer-chip svg { width: 18px; height: 18px; }
+
 .world { margin-top: 30px; }
 .world-head { display: flex; align-items: center; gap: 14px; }
 .world-art { width: 64px; height: 64px; flex: none; background: var(--card); border: 3px solid var(--ink); border-radius: 16px; padding: 6px; color: var(--ink); box-shadow: var(--shadow); }

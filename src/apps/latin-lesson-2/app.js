@@ -14,6 +14,12 @@ const APP = {
   learnExtras: vocabLearnExtras,
   quizTypes: VOCAB_QUIZ_TYPES,
   levelTypes: { vmatch: vocabMatchLevel },
+  trainer: {
+    title: 'Vokabeltrainer', unit: 'Vokabeln', unitOne: 'Vokabel', item: trainerItem,
+    intro: 'Der Trainer fragt alle Vokabeln von Latein nach Deutsch ab, mal mit Antworten zum Antippen, mal zum Eintippen, und hört nie auf.',
+    cards: () => [...NOUN_IDS, ...Object.keys(VERBS), ...WORD_IDS],
+    label: id => `${laOf(id)} <small>${deOf(id)}</small>`,
+  },
   // The mock test only asks typed answers and conjugation classes, like the real test.
   exam: { mix: { nouns: 6, verbs2: 7, words: 3, verbs1: 5, conj: 4 }, types: ['vtest', 'conj'], writes: 0, art: 'tabula' },
   intro: { title: 'Deine Latein-Arena', tip: 'Tipp: Fang mit „Familie und Haus“ an, und am Ende zeigt dir der Probe-Vokabeltest, ob alles sitzt.' },

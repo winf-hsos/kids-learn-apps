@@ -157,7 +157,7 @@ document.addEventListener('click', e => {
 function boardStep(it, title, top) {
   const kind = BOARD_KINDS[it.kind], exam = run.mode === 'exam';
   openStage(`${top}
-    <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    <div class="qtitle">${stepLabel(title)}</div>
     ${mediaHtml(it)}
     <div class="question">${it.q}</div>
     ${kind.body(it)}

@@ -172,6 +172,16 @@ const VOCAB_QUIZ_TYPES = {
   debet: { keys: debetKeys, item: debetItem },
 };
 
+// Vocabulary trainer (src/core/trainer.js): Latin to German, as multiple choice
+// or typed, verbs in a random form. Wrong options come from the same word class.
+function trainerItem(id, typed) {
+  const lv = { words: NOUNS[id] ? NOUN_IDS : VERBS[id] ? Object.keys(VERBS) : WORD_IDS };
+  const key = VERBS[id] ? `${id}.${pick(['inf', 'sg', 'pl'])}` : id;
+  if (!typed) return mcItem(lv, key, null);
+  if (NOUNS[id]) return { kind: 'type', q: plain(NOUNS[id].la), lead: 'Was heißt das?', fields: [meaningField(id)], x: explain(id), ref: null };
+  return typedItem(lv, key, null);
+}
+
 // Match level with six random pairs from the level's words.
 function vocabMatchLevel() {
   const ids = shuffle(run.lv.words).reduce((acc, id) => acc.length < 6 && !acc.some(o => overlaps(o, id)) ? [...acc, id] : acc, []);

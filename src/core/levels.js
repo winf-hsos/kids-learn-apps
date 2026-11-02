@@ -27,19 +27,21 @@ function startMistakes() {
 // Quiz engine (mc, swipe, typed answers and the kinds in items.js), also used for the mistake box and the exam
 // ---------------------------------------------------------------------------
 function quizStep() {
+  // Endless runs (the trainer) add each question when it is needed.
+  if (run.endless && run.i >= run.items.length) run.next();
   if (run.i >= run.items.length) {
     if (run.mode === 'exam') return examWrite(0);
     return finish(run.correct / run.total);
   }
   const it = run.items[run.i];
   const title = run.mode === 'level' ? run.lv.title : run.title;
-  const top = stageTop(run.i / run.total, run.mode === 'exam' ? '' : comboHtml());
+  const top = run.endless ? stageTop(run.progress(), run.extra() + comboHtml()) : stageTop(run.i / run.total, run.mode === 'exam' ? '' : comboHtml());
   if (it.kind === 'swipe') return swipeStep(it, title, top);
   if (it.kind === 'type') return typeStep(it, title, top);
   if (BOARD_KINDS[it.kind]) return boardStep(it, title, top);
   openStage(`${top}
     ${run.timer && run.mode === 'level' ? '<div class="timer"><i id="tbar"></i></div>' : ''}
-    <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    <div class="qtitle">${stepLabel(title)}</div>
     ${it.fig ? `<div class="figure ${it.figClass || ''}">${it.fig}</div>` : ''}
     ${mediaHtml(it)}
     <div class="question">${it.q}</div>
@@ -86,7 +88,7 @@ function swipeVerdict(it) { return `Das ist <b>${(it.ok ? it.yes : it.no).toLowe
 function swipeStep(it, title, top) {
   const next = run.items[run.i + 1];
   openStage(`${top}
-    <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    <div class="qtitle">${stepLabel(title)}</div>
     <div class="question" style="font-size:18px;font-weight:400;color:var(--ink-soft)">${it.prompt} Wische oder tippe.</div>
     <div class="swipe-wrap">
       ${next && next.kind === 'swipe' ? `<div class="scard back">${next.t}</div>` : ''}
@@ -128,7 +130,7 @@ function swipeStep(it, title, top) {
 function typeStep(it, title, top) {
   const exam = run.mode === 'exam';
   openStage(`${top}
-    <div class="qtitle">${title} · ${run.i + 1}/${run.total}</div>
+    <div class="qtitle">${stepLabel(title)}</div>
     ${mediaHtml(it)}
     ${it.lead ? `<div class="type-lead">${it.lead}</div>` : ''}
     <div class="type-word">${it.q}</div>

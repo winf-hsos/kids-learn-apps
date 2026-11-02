@@ -70,6 +70,7 @@ function homeHtml() {
     <button class="tile" data-act="mistakes"><div class="ico" style="background:var(--bad-soft);color:var(--bad)">${ICON.box}</div><div><b>Fehlerkiste</b><span>${nMist ? `${nMist} Fragen zum Reparieren` : 'Leer. Stark!'}</span></div></button>
     ${APP.exam ? `<button class="tile exam" data-act="exam"><div class="ico" style="background:var(--card);color:var(--ink)">${ICON.exam}</div><div><b>Probe-${examName}</b><span>${state.examBest ? `Beste Note: ${state.examBest}` : examDay ? `Teste dich wie am ${examDay}` : 'Teste dich wie in der echten Arbeit'}</span></div></button>` : ''}
   </div>
+  ${trainerTileHtml()}
   ${WORLDS.map((t, ti) => worldHtml(t, ti)).join('')}
   ${GAMES.length ? `<p class="muted" style="text-align:center;margin-top:30px;font-size:14px">Je ${STARS_PER_TICKET} neue Sterne geben ein Spiel-Ticket für die Arcade. Ab ${GAMES[0].stars} Sternen wartet das erste Spiel.</p>` : ''}`;
 }
@@ -102,6 +103,7 @@ function bindMain() {
   });
   const mist = $('#main [data-act="mistakes"]'); if (mist) mist.onclick = () => startMistakes();
   const ex = $('#main [data-act="exam"]'); if (ex) ex.onclick = () => startExam();
+  const tr = $('#main [data-act="trainer"]'); if (tr) tr.onclick = () => { Sound.click(); trainerOverview(); };
   $$('#main [data-game]').forEach(b => b.onclick = () => tryGame(b.dataset.game));
   $$('#main [data-learnall]').forEach(b => b.onclick = () => startLevel(+b.dataset.learnall, 0));
 }
@@ -139,7 +141,9 @@ function stageTop(progress, extra = '') {
   return `<div class="stage-top"><button class="iconbtn" id="quit" aria-label="Level verlassen">${ICON.close}</button>
     <div class="progress"><i style="width:${progress * 100}%"></i></div>${extra}</div>`;
 }
-function bindQuit() { $('#quit').onclick = () => { closeStage(); render(); }; }
+function bindQuit() { $('#quit').onclick = () => { if (run && run.onQuit) return run.onQuit(); closeStage(); render(); }; }
+// Question heading with the counter; endless runs have no counter.
+function stepLabel(title) { return run.endless ? title : `${title} · ${run.i + 1}/${run.total}`; }
 function comboHtml() { return run && run.combo >= 3 ? `<span class="combo ${run.combo >= 6 ? 'hot' : ''}">Combo x${run.combo}</span>` : ''; }
 
 function showSheet(ok, title, text, xp, onNext) {
@@ -164,10 +168,12 @@ function scoreAnswer(ok, ref, bonus = 0) {
     run.xp += xp;
     Sound.right();
     if (run.combo === 5 || run.combo === 10 || run.combo === 15) Confetti.burst(50, .5, .2);
+    if (run.onAnswer) run.onAnswer(true, xp);
     return xp;
   }
   run.combo = 0;
   noteMistake(ref);
   Sound.wrong();
+  if (run.onAnswer) run.onAnswer(false, 0);
   return 0;
 }
