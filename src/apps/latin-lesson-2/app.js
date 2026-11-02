@@ -18,9 +18,15 @@ const APP = {
   exam: { mix: { nouns: 6, verbs2: 7, words: 3, verbs1: 5, conj: 4 }, types: ['vtest', 'conj'], writes: 0, art: 'tabula' },
   intro: { title: 'Deine Latein-Arena', tip: 'Tipp: Fang mit „Familie und Haus“ an, und am Ende zeigt dir der Probe-Vokabeltest, ob alles sitzt.' },
   // A Roman runner opens the reward games; the learner loves football, so the other games and trivia come from the football pack.
+  // The free vocabulary scorer opens early; the later games keep unlocking up to the second half of the stars.
+  // Never raise a threshold that is already live, or an unlocked game locks again.
   praise: ['Optime!', 'Bene!', 'Recte!', 'Euge!', 'Tor!', 'Volltreffer!', 'Stark!', 'Genau so!'],
   trivia: FOOTBALL,
-  games: [{ id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'proquiz', stars: 16 }, { id: 'kickups', stars: 20 }],
+  games: [
+    { id: 'scorer', stars: 3, name: 'Vokabel-Torjäger', desc: 'Schieß in das Tor mit der richtigen Übersetzung. 10 Schüsse, ganz ohne Ticket.' },
+    { id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'proquiz', stars: 16 }, { id: 'kickups', stars: 20 },
+    { id: 'keeper', stars: 26 }, { id: 'slalom', stars: 32 }, { id: 'blitz', stars: 40 },
+  ],
   ranks: [
     { xp: 0, name: 'Rekrut' },
     { xp: 150, name: 'Legionär' },

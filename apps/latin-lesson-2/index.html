@@ -403,6 +403,51 @@ button.tile:hover { border-color: var(--accent); }
 .fq .opt.wrong { background: #3D1A24; border-color: #FF5D70; box-shadow: 0 4px 0 #FF5D70; }
 .fq .fact { margin-top: 12px; color: #C8D3EE; font-size: 15px; }
 
+/* football blitz */
+.blitz { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 14px; padding: 16px; max-width: 520px; margin: 0 auto; color: #fff; background: radial-gradient(ellipse at top, #1C4F8A, #0B1020 75%); }
+.blitz .timer { background: rgba(255, 255, 255, .15); margin: 0; }
+.blitz .timer i { background: #FFC21A; }
+.blitz-score { text-align: center; color: #C8D3EE; font-size: 16px; }
+.blitz-score b { font-family: var(--f-display); font-size: 26px; color: #fff; }
+.blitz-card { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 14px; background: #152039; border: 3px solid #33467A; border-radius: 22px; padding: 20px; text-align: center; touch-action: none; user-select: none; cursor: grab; transition: border-color .15s, background .15s; }
+.blitz-q { color: #C8D3EE; font-size: clamp(17px, 4.2vw, 21px); }
+.blitz-a { font-family: var(--f-display); font-size: clamp(24px, 7vw, 36px); color: #FFC21A; overflow-wrap: anywhere; }
+.blitz-note { min-height: 1.4em; color: #fff; font-size: 16px; }
+.blitz-card.right { border-color: #34D08C; background: #11392A; }
+.blitz-card.wrong { border-color: #FF5D70; background: #3D1A24; }
+.blitz-btns { display: flex; gap: 12px; }
+.blitz-btns .btn { flex: 1; border-color: #fff; box-shadow: 0 4px 0 #fff; font-size: 19px; padding: 14px 10px; }
+.blitz-no { background: #D7263D; color: #fff; }
+
+/* knowledge scorer */
+.scorer { position: absolute; inset: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding: 14px 16px 18px; color: #fff; background: linear-gradient(#0B4D2C, #13804A); }
+.scorer > * { width: 100%; max-width: 640px; margin-left: auto; margin-right: auto; }
+.scorer .timer { background: rgba(255, 255, 255, .18); margin: 0 auto; }
+.scorer .timer i { background: #FFC21A; }
+.scorer-q { font-size: clamp(19px, 4.6vw, 24px); text-align: center; }
+.scorer-q .type-lead { font-size: 15px; color: #CFE8DA; margin-bottom: 4px; }
+.scorer-goals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.sgoal { position: relative; min-height: 136px; padding: 8px 6px 56px; border: 5px solid #fff; border-bottom: 0; border-radius: 4px 4px 0 0; color: #fff; font-weight: 700; font-size: clamp(15px, 4.2vw, 18px); line-height: 1.25; display: flex; align-items: flex-start; justify-content: center; overflow-wrap: anywhere; hyphens: auto;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .14) 0 1px, transparent 1px 12px), repeating-linear-gradient(90deg, rgba(255, 255, 255, .14) 0 1px, transparent 1px 12px), rgba(0, 0, 0, .18); transition: background-color .2s, transform .2s; }
+.sgoal:not([disabled]):hover { background-color: rgba(255, 194, 26, .2); }
+.sgoal-txt { position: relative; z-index: 1; }
+.sgoal-keeper { position: absolute; left: 50%; bottom: 0; width: 26px; height: 34px; margin-left: -13px; border-radius: 8px 8px 3px 3px; background: #FFC21A; transition: transform .25s; }
+.sgoal-keeper::before { content: ""; position: absolute; left: 6px; top: -14px; width: 14px; height: 14px; border-radius: 50%; background: #FFD6B0; }
+.sgoal.goal { background-color: rgba(255, 194, 26, .35); transform: scale(1.04); }
+.sgoal.saved .sgoal-keeper { transform: translateY(-6px) rotate(-14deg) scale(1.15); }
+.sgoal.answer { outline: 4px dashed #34D08C; outline-offset: 3px; }
+.sgoal[disabled] { cursor: default; opacity: 1; }
+.scorer-pitch { height: 58px; display: grid; place-items: center; }
+.sball { width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 50% 50%, #111 0 26%, #fff 28%); border: 2px solid #111; transition: transform .4s cubic-bezier(.2, .7, .3, 1), opacity .3s; }
+.sball.gone { opacity: 0; }
+.scorer-fact { min-height: 1.4em; text-align: center; color: #E5F3EA; font-size: 16px; }
+.scorer-next { text-align: center; }
+.scorer-next .btn { border-color: #fff; box-shadow: 0 4px 0 #fff; }
+.scorer-dots { display: flex; gap: 8px; justify-content: center; }
+.scorer-dots i { width: 14px; height: 14px; border-radius: 50%; background: rgba(255, 255, 255, .25); }
+.scorer-dots i.hit { background: #34D08C; }
+.scorer-dots i.miss { background: #FF5D70; }
+
 /* badges */
 .badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
 .badge { background: var(--card); border: 3px solid var(--line); border-radius: 18px; padding: 14px 10px; text-align: center; }
@@ -1438,9 +1483,15 @@ const APP = {
   exam: { mix: { nouns: 6, verbs2: 7, words: 3, verbs1: 5, conj: 4 }, types: ['vtest', 'conj'], writes: 0, art: 'tabula' },
   intro: { title: 'Deine Latein-Arena', tip: 'Tipp: Fang mit „Familie und Haus“ an, und am Ende zeigt dir der Probe-Vokabeltest, ob alles sitzt.' },
   // A Roman runner opens the reward games; the learner loves football, so the other games and trivia come from the football pack.
+  // The free vocabulary scorer opens early; the later games keep unlocking up to the second half of the stars.
+  // Never raise a threshold that is already live, or an unlocked game locks again.
   praise: ['Optime!', 'Bene!', 'Recte!', 'Euge!', 'Tor!', 'Volltreffer!', 'Stark!', 'Genau so!'],
   trivia: FOOTBALL,
-  games: [{ id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'proquiz', stars: 16 }, { id: 'kickups', stars: 20 }],
+  games: [
+    { id: 'scorer', stars: 3, name: 'Vokabel-Torjäger', desc: 'Schieß in das Tor mit der richtigen Übersetzung. 10 Schüsse, ganz ohne Ticket.' },
+    { id: 'legion', stars: 5 }, { id: 'penalty', stars: 12 }, { id: 'proquiz', stars: 16 }, { id: 'kickups', stars: 20 },
+    { id: 'keeper', stars: 26 }, { id: 'slalom', stars: 32 }, { id: 'blitz', stars: 40 },
+  ],
   ranks: [
     { xp: 0, name: 'Rekrut' },
     { xp: 150, name: 'Legionär' },
@@ -1483,6 +1534,27 @@ const GAME_DEFS = {
     record: v => `Rekord: ${v}/10`, badge: { id: 'expert8', name: 'Fußball-Experte', desc: 'Mindestens 8 von 10 im Experten-Quiz' },
     play: (area, hud) => proQuizGame(area, hud),
   },
+  keeper: {
+    name: 'Torwart-Reflex', desc: 'Du stehst im Tor. Flieg in die richtige Ecke, bevor der Ball drin ist. Jeder Schuss wird schneller.',
+    record: v => `Rekord: ${v} Paraden`, badge: { id: 'keeper15', name: 'Torwart-Titan', desc: '15 Paraden beim Torwart-Reflex' },
+    play: (area, hud) => keeperGame(area, hud),
+  },
+  slalom: {
+    name: 'Dribbel-Slalom', desc: 'Dribble übers Feld, weich Hütchen und Gegnern aus und sammle Pokale.',
+    record: v => `Rekord: ${v} Punkte`, badge: { id: 'slalom1000', name: 'Dribbelkönig', desc: '1000 Punkte im Dribbel-Slalom' },
+    play: (area, hud) => slalomGame(area, hud),
+  },
+  blitz: {
+    name: 'Fußball-Blitz', desc: '60 Sekunden: Stimmt die Antwort oder nicht? Wisch schnell, jeder Fehler kostet Zeit.',
+    record: v => `Rekord: ${v} richtig`, badge: { id: 'blitz20', name: 'Blitzmerker', desc: '20 richtige Antworten im Fußball-Blitz' },
+    play: (area, hud) => blitzGame(area, hud),
+  },
+  // Free to play, because every shot is a question from the app's own levels.
+  scorer: {
+    name: 'Wissens-Torjäger', desc: 'Schieß in das Tor mit der richtigen Antwort. 10 Schüsse, ganz ohne Ticket.', free: true,
+    record: v => `Rekord: ${v}/10 Tore`, badge: { id: 'scorer10', name: 'Torschützenkönig', desc: '10 von 10 Toren beim Torjäger' },
+    play: (area, hud) => scorerGame(area, hud),
+  },
 };
 
 function gameThumb(id) {
@@ -1507,6 +1579,20 @@ function gameThumb(id) {
       <circle cx="100" cy="86" r="8" fill="#fff" stroke="#111"/><rect x="92" y="38" width="16" height="26" rx="5" fill="#FFC21A"/><circle cx="100" cy="33" r="6" fill="#FFD6B0"/>`, '0 0 200 100'),
     kickups: svg(`<rect width="200" height="100" fill="#123B6B"/><circle cx="100" cy="36" r="14" fill="#fff" stroke="#111" stroke-width="2"/><path d="M100 26 l6 5 -2 7 h-8 l-2 -7z" fill="#111"/><path d="M80 92 Q100 70 120 92" fill="#FFD6B0"/><text x="160" y="30" fill="#FFC21A" font-size="22" font-weight="700" font-family="sans-serif">27</text>`, '0 0 200 100'),
     proquiz: svg(`<rect width="200" height="100" fill="#2A1B55"/><path d="M84 22 h32 v18 a16 16 0 0 1 -32 0 z M84 28 h-8 a8 8 0 0 0 8 12 M116 28 h8 a8 8 0 0 1 -8 12 M100 56 v12 M88 74 h24" fill="none" stroke="#FFC21A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><text x="140" y="40" fill="#fff" font-size="24" font-weight="700" font-family="sans-serif">?</text><text x="44" y="70" fill="#fff" font-size="18" font-weight="700" font-family="sans-serif">?</text>`, '0 0 200 100'),
+    keeper: svg(`<rect width="200" height="100" fill="#0F6B3E"/><rect width="200" height="16" fill="#0A1A2E"/><path d="M30 22 H170 V80 H30 Z" fill="none" stroke="#fff" stroke-width="4"/><path d="M30 22 L42 32 H158 L170 22 M42 32 V80 M158 32 V80" stroke="#fff" stroke-width="1" opacity=".5"/>
+      <g transform="translate(120 66) rotate(62)"><rect x="-8" y="-34" width="16" height="24" rx="5" fill="#22C55E"/><path d="M-6 -30 L-18 -44 M6 -30 L18 -44" stroke="#22C55E" stroke-width="5" stroke-linecap="round"/><circle cx="-19" cy="-46" r="4.5" fill="#fff"/><circle cx="19" cy="-46" r="4.5" fill="#fff"/><circle cx="0" cy="-40" r="6" fill="#FFD6B0"/><path d="M-4 -10 L-6 2 M4 -10 L6 2" stroke="#111" stroke-width="5" stroke-linecap="round"/></g>
+      <circle cx="152" cy="34" r="7" fill="#fff" stroke="#111"/><path d="M100 92 Q130 60 150 38" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 4" fill="none" opacity=".6"/>`, '0 0 200 100'),
+    slalom: svg(`<rect width="200" height="100" fill="#11733F"/>${Array.from({ length: 5 }, (_, i) => `<rect x="${i * 40}" width="20" height="100" fill="#13804A"/>`).join('')}
+      <path d="M40 92 C70 70 40 50 90 40 S120 14 160 8" stroke="#fff" stroke-width="2" stroke-dasharray="4 5" fill="none" opacity=".7"/>
+      <circle cx="78" cy="62" r="7" fill="#FF7A1A"/><circle cx="78" cy="62" r="3.5" fill="#fff"/><circle cx="118" cy="40" r="7" fill="#FF7A1A"/><circle cx="118" cy="40" r="3.5" fill="#fff"/>
+      <ellipse cx="60" cy="38" rx="12" ry="8" fill="#D7263D"/><circle cx="60" cy="38" r="5" fill="#2A1A14"/><ellipse cx="150" cy="58" rx="12" ry="8" fill="#7C3AED"/><circle cx="150" cy="58" r="5" fill="#2A1A14"/>
+      <path d="M160 18 h12 q0 8 -6 9 q-6 -1 -6 -9z M164 27 h4 v4 h-4z M161 31 h10 v2 h-10z" fill="#F2B92E"/>
+      <ellipse cx="40" cy="84" rx="13" ry="8" fill="#FFC21A"/><circle cx="40" cy="84" r="5" fill="#5A3A22"/><circle cx="42" cy="70" r="4.5" fill="#fff" stroke="#111"/>`, '0 0 200 100'),
+    blitz: svg(`<rect width="200" height="100" fill="#123B6B"/><path d="M112 6 L82 54 H100 L88 94 L124 40 H104 Z" fill="#FFC21A"/>
+      <g transform="rotate(-10 52 50)"><rect x="24" y="26" width="56" height="48" rx="8" fill="#fff"/><path d="M36 52 l8 8 l16 -18" stroke="#22C55E" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g transform="rotate(10 150 50)"><rect x="122" y="26" width="56" height="48" rx="8" fill="#fff"/><path d="M138 38 l24 24 M162 38 l-24 24" stroke="#D7263D" stroke-width="6" stroke-linecap="round"/></g>`, '0 0 200 100'),
+    scorer: svg(`<rect width="200" height="100" fill="#0F6B3E"/>${[14, 76, 138].map((x, i) => `<rect x="${x}" y="18" width="48" height="30" fill="${i === 1 ? 'rgba(255,194,26,.3)' : 'none'}" stroke="#fff" stroke-width="3"/><rect x="${x + 6}" y="6" width="36" height="9" rx="3" fill="${i === 1 ? '#FFC21A' : '#fff'}" opacity=".9"/>`).join('')}
+      <circle cx="100" cy="34" r="6" fill="#fff" stroke="#111"/><path d="M100 88 Q98 62 100 42" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 4" fill="none" opacity=".6"/><circle cx="100" cy="88" r="7" fill="#fff" stroke="#111"/>`, '0 0 200 100'),
   };
   return thumbs[id].replace('<svg ', '<svg preserveAspectRatio="xMidYMid slice" ');
 }
@@ -2816,20 +2902,22 @@ function cheatHtml() {
 function arcadeHtml() {
   if (!GAMES.length) return `<h2 class="section-title">Arcade</h2><p class="lead">In dieser App gibt es noch keine Spiele.</p>`;
   const ts = totalStars(), next = GAMES.find(g => g.stars > ts);
-  return `<h2 class="section-title">Arcade</h2><p class="lead">Hier gibt es die Belohnung fürs Lernen, und jedes Spiel kostet ein Ticket. Ein Ticket bekommst du für je ${STARS_PER_TICKET} neue Sterne, für jede komplette Welt, fürs Tagesziel${APP.exam ? ` und für ${examArt.good} Probe-${examName}` : ''}. Mehr als ${TICKET_CAP} Tickets kannst du nicht ansparen.</p>
+  return `<h2 class="section-title">Arcade</h2><p class="lead">Hier gibt es die Belohnung fürs Lernen, und ${GAMES.some(g => g.free) ? 'fast ' : ''}jedes Spiel kostet ein Ticket. Ein Ticket bekommst du für je ${STARS_PER_TICKET} neue Sterne, für jede komplette Welt, fürs Tagesziel${APP.exam ? ` und für ${examArt.good} Probe-${examName}` : ''}. Mehr als ${TICKET_CAP} Tickets kannst du nicht ansparen.</p>
   <div class="ticketbar">${ICON.ticket}<div><b>${state.tickets} Ticket${state.tickets === 1 ? '' : 's'}</b><p>Du hast ${ts} ${ts === 1 ? 'Stern' : 'Sterne'}. Noch ${STARS_PER_TICKET - (state.starBank || 0)} neue ${STARS_PER_TICKET - (state.starBank || 0) === 1 ? 'Stern' : 'Sterne'} bis zum nächsten Ticket. ${next ? `Nächstes Spiel ab ${next.stars} Sternen.` : 'Alle Spiele sind freigeschaltet!'}</p></div></div>
   <div class="games">${GAMES.map(g => {
     const unlocked = ts >= g.stars;
     return `<button class="game ${unlocked ? '' : 'locked'}" data-game="${g.id}"><div class="thumb">${gameThumb(g.id)}</div><div class="body"><h3>${g.name}</h3><p>${g.desc}</p>
-      <div class="meta"><span>${unlocked ? g.record(state.games[g.id] || 0) : `${ICON.lock.replace('<svg', '<svg style="width:16px;height:16px;display:inline;vertical-align:-3px"')} ab ${g.stars} Sternen`}</span><span>${unlocked ? '1 Ticket' : ''}</span></div></div></button>`;
+      <div class="meta"><span>${unlocked ? g.record(state.games[g.id] || 0) : `${ICON.lock.replace('<svg', '<svg style="width:16px;height:16px;display:inline;vertical-align:-3px"')} ab ${g.stars} Sternen`}</span><span>${unlocked ? (g.free ? 'ohne Ticket' : '1 Ticket') : ''}</span></div></div></button>`;
   }).join('')}</div>`;
 }
 
 function tryGame(id) {
   const g = GAMES.find(x => x.id === id);
   if (totalStars() < g.stars) { Sound.wrong(); toast('Noch gesperrt', `Sammle ${g.stars} Sterne im Lernpfad.`, ICON.lock); return; }
-  if (state.tickets < 1) { Sound.wrong(); toast('Keine Tickets', `Hol dir neue Sterne im Lernpfad, für je ${STARS_PER_TICKET} gibt es ein Ticket.`, ICON.ticket); return; }
-  state.tickets--; save(); renderStatus();
+  if (!g.free) {
+    if (state.tickets < 1) { Sound.wrong(); toast('Keine Tickets', `Hol dir neue Sterne im Lernpfad, für je ${STARS_PER_TICKET} gibt es ein Ticket.`, ICON.ticket); return; }
+    state.tickets--; save(); renderStatus();
+  }
   openGame(id);
 }
 
@@ -3789,6 +3877,438 @@ function proQuizGame(area, hud) {
   overlay(area, `<h2>Fußball-Experte</h2><p>10 knallharte Fragen über Bundesliga, WM und Champions League. Du hast 15 Sekunden pro Frage. Schnelle Antworten und Serien geben Extrapunkte.</p><button class="btn go" id="qGo" style="margin-top:12px">Los!</button>`);
   $('#qGo').onclick = () => { Sound.whistle(); ask(); };
   return () => { if (unbind) unbind(); };
+}
+
+
+// ---------------------------------------------------------------------------
+// Goalkeeper reflex: the learner keeps goal and dives into the corner the ball
+// flies to. Shots get faster with every save and start to curve after a while.
+// Three goals against end the game.
+// ---------------------------------------------------------------------------
+function keeperGame(area, hud) {
+  const { ctx, size, dispose } = setupCanvas(area);
+  let phase = 'intro', raf = 0, last = 0, saves = 0, conceded = 0, wait = 0, popups = [];
+  const shot = { t: 0, dur: 1, zone: 1, from: null, to: null, ctrl: null, dive: -1, result: '' };
+  const keeper = { x: 0, y: 0, tx: 0, ty: 0, rot: 0, trot: 0 };
+  const geo = () => {
+    const { W, H } = size, gw = Math.min(W * .9, 560), gh = gw * .36, gx = (W - gw) / 2, gy = H * .2;
+    return { W, H, gw, gh, gx, gy, spotX: W / 2, spotY: H * .84 };
+  };
+  const zoneX = (G, z) => G.gx + G.gw * (z + .5) / 3;
+  const resetKeeper = () => { const G = geo(); keeper.tx = G.W / 2; keeper.ty = G.gy + G.gh; keeper.trot = 0; };
+  const snapKeeper = () => { resetKeeper(); Object.assign(keeper, { x: keeper.tx, y: keeper.ty, rot: 0 }); };
+
+  const nextShot = () => {
+    resetKeeper();
+    shot.dive = -1; shot.result = ''; shot.t = 0;
+    wait = .7 + Math.random() * .9;
+    phase = 'windup';
+  };
+  const kick = () => {
+    const G = geo();
+    shot.zone = Math.floor(Math.random() * 3);
+    shot.from = { x: G.spotX, y: G.spotY - 14 };
+    shot.to = { x: zoneX(G, shot.zone) + (Math.random() - .5) * G.gw * .16, y: G.gy + G.gh * (.2 + Math.random() * .6) };
+    // From the eighth save on, some shots start towards another corner and curve back.
+    const bend = saves >= 8 && Math.random() < .5 ? (Math.random() < .5 ? -1 : 1) * G.gw * .4 : 0;
+    shot.ctrl = { x: (shot.from.x + shot.to.x) / 2 + bend, y: (shot.from.y + shot.to.y) / 2 };
+    shot.dur = Math.max(.45, 1.15 - saves * .035);
+    phase = 'flight'; Sound.kick();
+  };
+  const dive = z => {
+    if (phase !== 'flight' || shot.dive >= 0) return;
+    const G = geo();
+    shot.dive = z;
+    // The keeper pivots on his feet, so a side dive starts a bit inside the corner.
+    keeper.tx = zoneX(G, z) + (1 - z) * G.gw * .1; keeper.ty = z === 1 ? G.gy + G.gh * .75 : G.gy + G.gh * .9;
+    keeper.trot = z === 0 ? -1.15 : z === 2 ? 1.15 : 0;
+  };
+  const resolve = () => {
+    phase = 'after';
+    if (shot.dive === shot.zone) {
+      saves++; shot.result = 'Gehalten!'; Sound.right();
+      popups.push({ x: shot.to.x, y: shot.to.y, t: 0, txt: saves % 5 === 0 ? `${saves}!` : '+1' });
+      if (saves % 5 === 0) { Sound.coin(); Confetti.burst(50, shot.to.x / innerWidth, .3); }
+    } else {
+      conceded++; shot.result = shot.dive < 0 ? 'Zu spät!' : 'Tor …'; Sound.tone(200, .3, 'triangle', .08);
+    }
+    setTimeout(() => conceded >= 3 ? finish() : nextShot(), 1100);
+    hudUpdate();
+  };
+  const finish = () => {
+    phase = 'end';
+    const isNew = recordGame('keeper', saves);
+    if (saves >= 15) award('keeper15');
+    overlay(area, `<p class="hand" style="color:#FFC21A">${saves >= 15 ? 'Unüberwindbar!' : saves >= 8 ? 'Starke Reflexe!' : 'Weiter üben!'}</p><h2>${saves} Paraden</h2><p>${isNew ? 'Neuer Rekord!' : `Rekord: ${state.games.keeper} Paraden`}</p><button class="btn" id="kpBack" style="margin-top:12px">Zurück zur Arcade</button>`);
+    if (isNew && saves >= 5) Confetti.burst(140);
+    $('#kpBack').onclick = () => { closeGame(); tab = 'arcade'; render(); };
+  };
+  const hudUpdate = () => hud(`${saves} Paraden · ${'●'.repeat(3 - conceded)}${'○'.repeat(conceded)}`);
+
+  const drawKeeper = G => {
+    keeper.x += (keeper.tx - keeper.x) * .25; keeper.y += (keeper.ty - keeper.y) * .25; keeper.rot += (keeper.trot - keeper.rot) * .25;
+    const s = G.gh / 110;
+    ctx.save(); ctx.translate(keeper.x, keeper.y); ctx.rotate(keeper.rot);
+    ctx.fillStyle = '#22C55E'; rrect(ctx, -15 * s, -62 * s, 30 * s, 40 * s, 8 * s); ctx.fill();
+    ctx.fillStyle = '#0B4D2C'; ctx.font = `700 ${Math.round(16 * s)}px "Dela Gothic One", sans-serif`; ctx.textAlign = 'center'; ctx.fillText('1', 0, -36 * s);
+    ctx.strokeStyle = '#22C55E'; ctx.lineWidth = 9 * s; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-12 * s, -56 * s); ctx.lineTo(-36 * s, -80 * s); ctx.moveTo(12 * s, -56 * s); ctx.lineTo(36 * s, -80 * s); ctx.stroke();
+    ctx.strokeStyle = '#111'; ctx.beginPath(); ctx.moveTo(-7 * s, -22 * s); ctx.lineTo(-11 * s, 0); ctx.moveTo(7 * s, -22 * s); ctx.lineTo(11 * s, 0); ctx.stroke();
+    ctx.fillStyle = '#FFD6B0'; ctx.beginPath(); ctx.arc(0, -72 * s, 10 * s, 0, 7); ctx.fill();
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = '#111'; ctx.lineWidth = 1.5 * s;
+    for (const gx of [-38, 38]) { ctx.beginPath(); ctx.arc(gx * s, -82 * s, 8 * s, 0, 7); ctx.fill(); ctx.stroke(); }
+    ctx.restore();
+  };
+  const ballAt = p => {
+    const a = shot.from, b = shot.ctrl, c = shot.to, u = 1 - p;
+    return { x: u * u * a.x + 2 * u * p * b.x + p * p * c.x, y: u * u * a.y + 2 * u * p * b.y + p * p * c.y - Math.sin(p * Math.PI) * 30 };
+  };
+
+  const loop = now => {
+    const dt = Math.min(.033, (now - last) / 1000 || 0); last = now;
+    const G = geo(), { W, H } = G;
+    if (phase === 'windup') { wait -= dt; if (wait <= 0) kick(); }
+    if (phase === 'flight') { shot.t += dt; if (shot.t >= shot.dur) resolve(); }
+
+    const grass = ctx.createLinearGradient(0, 0, 0, H); grass.addColorStop(0, '#0B4D2C'); grass.addColorStop(1, '#13804A');
+    ctx.fillStyle = grass; ctx.fillRect(0, 0, W, H);
+    for (let i = 0; i < 8; i++) { ctx.fillStyle = i % 2 ? 'rgba(255,255,255,.03)' : 'rgba(0,0,0,.04)'; ctx.fillRect(0, H * .3 + i * H * .09, W, H * .09); }
+    ctx.fillStyle = '#0A1A2E'; ctx.fillRect(0, 0, W, G.gy - 20);
+    for (let i = 0; i < 160; i++) { const x = (i * 53) % W, y = 10 + ((i * 29) % Math.max(10, G.gy - 40)); ctx.fillStyle = ['#22C55E', '#fff', '#D7263D', '#FFC21A'][i % 4]; ctx.globalAlpha = .5; ctx.beginPath(); ctx.arc(x, y + Math.sin(now / 300 + i) * 1.5, 3, 0, 7); ctx.fill(); }
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 3;
+    ctx.strokeRect(G.gx - G.gw * .2, G.gy + G.gh, G.gw * 1.4, G.spotY - G.gy - G.gh + H * .08);
+    ctx.beginPath(); ctx.arc(G.spotX, G.spotY, 4, 0, 7); ctx.fillStyle = '#fff'; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 1;
+    for (let x = G.gx; x <= G.gx + G.gw; x += 14) { ctx.beginPath(); ctx.moveTo(x, G.gy); ctx.lineTo(x, G.gy + G.gh); ctx.stroke(); }
+    for (let y = G.gy; y <= G.gy + G.gh; y += 14) { ctx.beginPath(); ctx.moveTo(G.gx, y); ctx.lineTo(G.gx + G.gw, y); ctx.stroke(); }
+    // Faint thirds show where a tap sends the keeper.
+    if (phase === 'windup' || phase === 'flight') {
+      ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.setLineDash([6, 8]); ctx.lineWidth = 2;
+      for (const f of [1 / 3, 2 / 3]) { ctx.beginPath(); ctx.moveTo(G.gx + G.gw * f, G.gy); ctx.lineTo(G.gx + G.gw * f, G.gy + G.gh); ctx.stroke(); }
+      ctx.setLineDash([]);
+    }
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 7; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(G.gx, G.gy + G.gh); ctx.lineTo(G.gx, G.gy); ctx.lineTo(G.gx + G.gw, G.gy); ctx.lineTo(G.gx + G.gw, G.gy + G.gh); ctx.stroke();
+
+    const ballBehind = phase === 'after' && shot.dive !== shot.zone;
+    let b = { x: G.spotX, y: G.spotY - 14 }, br = 18;
+    if (phase === 'flight' || phase === 'after') { const p = clamp(shot.t / shot.dur, 0, 1); b = ballAt(p); br = 18 - 9 * p; }
+    const drawBall = () => {
+      ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.beginPath(); ctx.ellipse(b.x, b.y + br, br, br * .35, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.strokeStyle = '#111'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(b.x, b.y, br, 0, 7); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(b.x, b.y, br * .35, 0, 7); ctx.fill();
+    };
+    if (ballBehind) { drawBall(); drawKeeper(G); } else { drawKeeper(G); drawBall(); }
+    // The striker runs up during the wind-up.
+    if (phase === 'windup' || phase === 'intro') {
+      const p = phase === 'intro' ? 0 : clamp(1 - wait / 1.6, 0, 1), s = G.gh / 110;
+      const sx = G.spotX - 70 * s + 50 * s * p, sy = G.spotY + 40 * s - 30 * s * p;
+      ctx.fillStyle = '#D7263D'; rrect(ctx, sx - 16 * s, sy - 50 * s, 32 * s, 40 * s, 9 * s); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.font = `700 ${Math.round(18 * s)}px "Dela Gothic One", sans-serif`; ctx.textAlign = 'center'; ctx.fillText('9', sx, sy - 22 * s);
+      ctx.fillStyle = '#5A3A22'; ctx.beginPath(); ctx.arc(sx, sy - 60 * s, 11 * s, 0, 7); ctx.fill();
+    }
+    if (phase === 'after') {
+      ctx.fillStyle = shot.result === 'Gehalten!' ? '#FFC21A' : '#fff'; ctx.font = `700 ${Math.round(Math.min(W * .09, 56))}px "Dela Gothic One", sans-serif`; ctx.textAlign = 'center';
+      ctx.fillText(shot.result, W / 2, H * .64);
+    }
+    for (const p of popups) { p.t += dt; ctx.globalAlpha = Math.max(0, 1 - p.t); ctx.fillStyle = '#FFC21A'; ctx.font = '700 22px "Dela Gothic One", sans-serif'; ctx.textAlign = 'center'; ctx.fillText(p.txt, p.x, p.y - p.t * 60); }
+    ctx.globalAlpha = 1; popups = popups.filter(p => p.t < 1);
+    raf = requestAnimationFrame(loop);
+  };
+
+  const tap = e => {
+    if (e.target.closest('.overlay')) return;
+    const r = area.getBoundingClientRect(), G = geo(), x = e.clientX - r.left;
+    dive(x < G.gx + G.gw / 3 ? 0 : x > G.gx + G.gw * 2 / 3 ? 2 : 1);
+  };
+  const key = e => {
+    const z = { ArrowLeft: 0, a: 0, '1': 0, ArrowDown: 1, ArrowUp: 1, s: 1, ' ': 1, '2': 1, ArrowRight: 2, d: 2, '3': 2 }[e.key];
+    if (z !== undefined && phase === 'flight') { e.preventDefault(); dive(z); }
+  };
+  snapKeeper(); hudUpdate();
+  overlay(area, `<h2>Torwart-Reflex</h2><p>Heute stehst du im Tor. Sobald der Stürmer schießt, tippst du auf die Seite, in die der Ball fliegt: links, Mitte oder rechts. Auf dem Computer gehen auch die Pfeiltasten. Du hast nur einen Versuch pro Schuss, und mit jeder Parade werden die Schüsse schneller. Später kommen auch Bananenflanken, die eine Kurve fliegen.</p><p>Nach drei Gegentoren ist Schluss.</p><button class="btn go" id="kpGo" style="margin-top:12px">Anpfiff</button>`);
+  $('#kpGo').onclick = () => { hideOverlay(area); Sound.whistle(); nextShot(); };
+  area.addEventListener('pointerdown', tap); addEventListener('keydown', key);
+  raf = requestAnimationFrame(loop);
+  return () => { cancelAnimationFrame(raf); area.removeEventListener('pointerdown', tap); removeEventListener('keydown', key); dispose(); };
+}
+
+
+// ---------------------------------------------------------------------------
+// Dribble slalom: a top-down run up the pitch. Steer past cones and defenders,
+// pick up trophies for bonus points. It gets faster all the time. One ticket = 3 runs.
+// ---------------------------------------------------------------------------
+function slalomGame(area, hud) {
+  const { ctx, size, dispose } = setupCanvas(area);
+  const LANES = 5, PR = 15;
+  let tries = 3, raf = 0, last = 0, alive = false, g = null, keys = { l: false, r: false };
+  const field = () => { const fw = Math.min(size.W, 520); return { fw, fx: (size.W - fw) / 2 }; };
+  const reset = () => {
+    const { fw, fx } = field();
+    g = { x: fx + fw / 2, tx: null, y: size.H * .78, speed: 230, dist: 0, bonus: 0, scroll: 0, next: 120, things: [], popups: [], t: 0 };
+  };
+  const score = () => Math.floor(g.dist / 10) + g.bonus;
+
+  // A new row of obstacles always leaves at least two neighbouring lanes free.
+  const spawnRow = () => {
+    const { fw, fx } = field(), lw = fw / LANES;
+    const free = Math.floor(Math.random() * (LANES - 1));
+    const busy = shuffle([...Array(LANES).keys()].filter(i => i !== free && i !== free + 1)).slice(0, 1 + Math.floor(Math.random() * Math.min(3, 1 + g.dist / 3000)));
+    for (const lane of busy) {
+      const x = fx + lw * (lane + .5);
+      if (Math.random() < .45) g.things.push({ kind: 'cone', x, y: -30, r: 11 });
+      else g.things.push({ kind: 'def', x, y: -30, r: 17, vx: g.dist > 1500 && Math.random() < .5 ? (Math.random() < .5 ? -1 : 1) * (40 + Math.random() * 50) : 0, home: x, lw, shirt: pick(['#D7263D', '#7C3AED', '#0EA5E9']) });
+    }
+    if (Math.random() < .35) g.things.push({ kind: 'cup', x: fx + lw * (free + (Math.random() < .5 ? .5 : 1.5)), y: -30, r: 13 });
+    g.next = Math.max(95, 190 - g.dist / 80) + Math.random() * 60;
+  };
+
+  const start = () => { hideOverlay(area); reset(); alive = true; last = performance.now(); Sound.whistle(); };
+  const end = () => {
+    alive = false; tries--;
+    const s = score(), isNew = recordGame('slalom', s);
+    if (s >= 1000) award('slalom1000');
+    Sound.tone(160, .3, 'sine', .15, 0, 60);
+    overlay(area, `<p class="hand" style="color:#FFC21A">${isNew ? 'Neuer Rekord!' : 'Ball verloren!'}</p><h2>${s} Punkte</h2><p>Rekord: ${state.games.slalom}</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">${tries > 0 ? `<button class="btn go" id="slAgain">Nochmal (${tries} übrig)</button>` : ''}<button class="btn" id="slBack">Zurück</button></div>
+      ${tries <= 0 ? '<p>Für weitere Läufe brauchst du ein neues Ticket.</p>' : ''}`);
+    if (isNew && s > 200) Confetti.burst(100);
+    const a = $('#slAgain'); if (a) a.onclick = start;
+    $('#slBack').onclick = () => { closeGame(); tab = 'arcade'; render(); };
+  };
+
+  const drawPlayer = (x, y, t) => {
+    ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.beginPath(); ctx.ellipse(x + 3, y + 4, PR * 1.2, PR * .8, 0, 0, 7); ctx.fill();
+    const sway = Math.sin(t * 14) * 3;
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.ellipse(x - 6, y + 6 + sway, 4, 6, 0, 0, 7); ctx.ellipse(x + 6, y + 6 - sway, 4, 6, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#FFC21A'; ctx.beginPath(); ctx.ellipse(x, y, PR * 1.15, PR * .7, 0, 0, 7); ctx.fill();
+    ctx.fillStyle = '#5A3A22'; ctx.beginPath(); ctx.arc(x, y - 1, PR * .5, 0, 7); ctx.fill();
+    const bx = x + Math.sin(t * 7) * 4, by = y - PR - 10 - Math.abs(Math.sin(t * 9)) * 4;
+    ctx.fillStyle = '#fff'; ctx.strokeStyle = '#111'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.arc(bx, by, 7, 0, 7); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.arc(bx, by, 2.5, 0, 7); ctx.fill();
+  };
+  const drawThing = o => {
+    if (o.kind === 'cone') {
+      ctx.fillStyle = '#FF7A1A'; ctx.beginPath(); ctx.arc(o.x, o.y, o.r, 0, 7); ctx.fill();
+      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(o.x, o.y, o.r * .55, 0, 7); ctx.fill();
+      ctx.fillStyle = '#FF7A1A'; ctx.beginPath(); ctx.arc(o.x, o.y, o.r * .3, 0, 7); ctx.fill();
+    } else if (o.kind === 'def') {
+      ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.beginPath(); ctx.ellipse(o.x + 3, o.y + 4, o.r * 1.2, o.r * .8, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = o.shirt; ctx.beginPath(); ctx.ellipse(o.x, o.y, o.r * 1.15, o.r * .72, 0, 0, 7); ctx.fill();
+      ctx.fillStyle = '#2A1A14'; ctx.beginPath(); ctx.arc(o.x, o.y + 1, o.r * .48, 0, 7); ctx.fill();
+    } else {
+      const bob = Math.sin(g.t * 5 + o.x) * 2;
+      ctx.fillStyle = '#F2B92E'; ctx.strokeStyle = '#A8700E'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(o.x - 9, o.y - 9 + bob); ctx.lineTo(o.x + 9, o.y - 9 + bob); ctx.quadraticCurveTo(o.x + 9, o.y + 3 + bob, o.x, o.y + 4 + bob); ctx.quadraticCurveTo(o.x - 9, o.y + 3 + bob, o.x - 9, o.y - 9 + bob); ctx.fill(); ctx.stroke();
+      ctx.fillRect(o.x - 2, o.y + 4 + bob, 4, 5); ctx.fillRect(o.x - 6, o.y + 9 + bob, 12, 3);
+    }
+  };
+
+  const loop = now => {
+    const dt = Math.min(.033, (now - last) / 1000 || 0); last = now;
+    const { W, H } = size, { fw, fx } = field();
+    if (!g) reset();
+    g.t += dt;
+    if (alive) {
+      g.speed = Math.min(620, 230 + g.dist / 25);
+      const dy = g.speed * dt; g.dist += dy; g.scroll = (g.scroll + dy) % 80; g.next -= dy;
+      if (g.next <= 0) spawnRow();
+      const steer = (keys.r ? 1 : 0) - (keys.l ? 1 : 0);
+      if (steer) { g.tx = null; g.x += steer * (260 + g.speed * .45) * dt; }
+      else if (g.tx !== null) g.x += clamp(g.tx - g.x, -900 * dt, 900 * dt);
+      g.x = clamp(g.x, fx + PR + 4, fx + fw - PR - 4);
+      for (const o of g.things) {
+        o.y += dy;
+        if (o.vx) { o.x += o.vx * dt; if (Math.abs(o.x - o.home) > o.lw * .9) { o.x = o.home + Math.sign(o.x - o.home) * o.lw * .9; o.vx = -o.vx; } }
+        if (Math.hypot(o.x - g.x, o.y - g.y) < o.r + PR * .85) {
+          if (o.kind === 'cup') { o.gone = true; g.bonus += 50; Sound.coin(); g.popups.push({ x: o.x, y: o.y, t: 0, txt: '+50' }); }
+          else { alive = false; setTimeout(end, 500); break; }
+        }
+      }
+      g.things = g.things.filter(o => !o.gone && o.y < H + 40);
+    }
+    ctx.fillStyle = '#0B3A22'; ctx.fillRect(0, 0, W, H);
+    for (let y = -80 + g.scroll; y < H; y += 80) { ctx.fillStyle = '#13804A'; ctx.fillRect(fx, y, fw, 40); ctx.fillStyle = '#11733F'; ctx.fillRect(fx, y + 40, fw, 40); }
+    ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(fx + 2, 0); ctx.lineTo(fx + 2, H); ctx.moveTo(fx + fw - 2, 0); ctx.lineTo(fx + fw - 2, H); ctx.stroke();
+    g.things.forEach(drawThing);
+    drawPlayer(g.x, g.y, alive ? g.t : 0);
+    for (const p of g.popups) { p.t += dt; ctx.globalAlpha = Math.max(0, 1 - p.t); ctx.fillStyle = '#FFC21A'; ctx.font = '700 20px "Dela Gothic One", sans-serif'; ctx.textAlign = 'center'; ctx.fillText(p.txt, p.x, p.y - p.t * 50); }
+    ctx.globalAlpha = 1; g.popups = g.popups.filter(p => p.t < 1);
+    hud(`${score()} Punkte · Rekord ${state.games.slalom}`);
+    raf = requestAnimationFrame(loop);
+  };
+
+  const point = e => {
+    if (!alive || e.target.closest('.overlay')) return;
+    if (e.type === 'pointermove' && e.pointerType !== 'mouse' && !e.buttons) return;
+    g.tx = e.clientX - area.getBoundingClientRect().left;
+  };
+  const key = (e, down) => {
+    if (['ArrowLeft', 'a'].includes(e.key)) { keys.l = down; e.preventDefault(); }
+    if (['ArrowRight', 'd'].includes(e.key)) { keys.r = down; e.preventDefault(); }
+  };
+  const kd = e => key(e, true), ku = e => key(e, false);
+  reset();
+  overlay(area, `<h2>Dribbel-Slalom</h2><p>Du dribbelst übers Feld. Weiche Hütchen und Gegenspielern aus und sammle Pokale für 50 Extrapunkte. Zum Lenken ziehst du den Finger nach links oder rechts, am Computer gehen auch Maus und Pfeiltasten. Es wird immer schneller, und später laufen die Gegner dir in den Weg.</p><button class="btn go" id="slGo" style="margin-top:12px">Start (3 Läufe)</button>`);
+  $('#slGo').onclick = start;
+  area.addEventListener('pointerdown', point); area.addEventListener('pointermove', point);
+  addEventListener('keydown', kd); addEventListener('keyup', ku);
+  raf = requestAnimationFrame(loop);
+  return () => { cancelAnimationFrame(raf); area.removeEventListener('pointerdown', point); area.removeEventListener('pointermove', point); removeEventListener('keydown', kd); removeEventListener('keyup', ku); dispose(); };
+}
+
+
+// ---------------------------------------------------------------------------
+// Football blitz: 60 seconds of true-or-false. Each card shows a trivia question
+// with one answer, which is the right one half of the time. A wrong call costs
+// five seconds.
+// ---------------------------------------------------------------------------
+function blitzGame(area, hud) {
+  const TIME = 60, PENALTY = 5;
+  let queue = [], card = null, right = 0, streak = 0, best = 0, penalty = 0, t0 = 0, raf = 0, busy = false, running = false;
+  const box = document.createElement('div'); box.className = 'blitz'; area.appendChild(box);
+  box.innerHTML = `<div class="timer"><i id="blT"></i></div><div class="blitz-score" id="blS"></div>
+    <div class="blitz-card" id="blCard"><div class="blitz-q" id="blQ"></div><div class="blitz-a" id="blA"></div><div class="blitz-note" id="blN"></div></div>
+    <div class="blitz-btns"><button class="btn blitz-no" id="blNo">← Falsch</button><button class="btn go" id="blYes">Stimmt →</button></div>`;
+  const el = id => $('#' + id, box);
+
+  const nextCard = () => {
+    if (queue.length < 2) queue = queue.concat(triviaQuestions(10));
+    const q = queue.shift(), truth = Math.random() < .5;
+    card = { q, truth, shown: truth ? q.o[q.a] : pick(q.o.filter((_, i) => i !== q.a)) };
+    el('blQ').innerHTML = q.q; el('blA').innerHTML = card.shown; el('blN').innerHTML = '';
+    el('blCard').className = 'blitz-card'; el('blCard').style.transform = '';
+    busy = false;
+  };
+  const answer = yes => {
+    if (!running || busy || !card) return;
+    busy = true;
+    const ok = yes === card.truth, c = el('blCard');
+    c.style.transform = '';
+    c.classList.add(ok ? 'right' : 'wrong');
+    if (ok) { right++; streak++; best = Math.max(best, streak); Sound.right(); if (streak % 5 === 0) { Sound.coin(); Confetti.burst(30, .5, .4); } setTimeout(nextCard, 260); }
+    else {
+      streak = 0; penalty += PENALTY; Sound.wrong();
+      el('blN').innerHTML = `<b>−${PENALTY} Sekunden.</b> ${card.truth ? 'Die Antwort stimmt.' : `Richtig wäre: ${card.q.o[card.q.a]}`}`;
+      setTimeout(nextCard, 1500);
+    }
+    el('blS').innerHTML = scoreLine();
+  };
+  const scoreLine = () => `<b>${right}</b> richtig${streak >= 3 ? ` · Serie ${streak}` : ''}`;
+
+  const loop = now => {
+    const left = TIME - (now - t0) / 1000 - penalty;
+    el('blT').style.transform = `scaleX(${clamp(left / TIME, 0, 1)})`;
+    hud(`${Math.max(0, Math.ceil(left))} s`);
+    if (left <= 0) return finish();
+    raf = requestAnimationFrame(loop);
+  };
+  const finish = () => {
+    running = false;
+    const isNew = recordGame('blitz', right);
+    if (right >= 20) award('blitz20');
+    overlay(area, `<p class="hand" style="color:#FFC21A">${right >= 20 ? 'Blitzschnell!' : right >= 12 ? 'Starke Runde!' : 'Abpfiff!'}</p><h2>${right} richtig</h2><p>Längste Serie: ${best} · ${isNew ? 'Neuer Rekord!' : `Rekord: ${state.games.blitz}`}</p><button class="btn" id="blBack" style="margin-top:12px">Zurück zur Arcade</button>`);
+    if (isNew && right >= 10) Confetti.burst(140);
+    $('#blBack').onclick = () => { closeGame(); tab = 'arcade'; render(); };
+  };
+
+  // Cards can also be swiped: right for true, left for false.
+  let drag = null;
+  const down = e => { if (running && !busy) { drag = { x: e.clientX, dx: 0 }; el('blCard').setPointerCapture(e.pointerId); } };
+  const move = e => { if (!drag) return; drag.dx = e.clientX - drag.x; el('blCard').style.transform = `translateX(${drag.dx}px) rotate(${drag.dx / 20}deg)`; };
+  const up = () => { if (!drag) return; const dx = drag.dx; drag = null; if (Math.abs(dx) > 70) answer(dx > 0); else el('blCard').style.transform = ''; };
+  const key = e => { if (e.key === 'ArrowLeft') { e.preventDefault(); answer(false); } if (e.key === 'ArrowRight') { e.preventDefault(); answer(true); } };
+  const c = el('blCard');
+  c.addEventListener('pointerdown', down); c.addEventListener('pointermove', move); c.addEventListener('pointerup', up); c.addEventListener('pointercancel', up);
+  el('blNo').onclick = () => answer(false); el('blYes').onclick = () => answer(true);
+  addEventListener('keydown', key);
+
+  el('blS').innerHTML = scoreLine(); hud(`${TIME} s`);
+  overlay(area, `<h2>Fußball-Blitz</h2><p>Du hast 60 Sekunden. Auf jeder Karte steht eine Fußballfrage mit einer Antwort, und du entscheidest blitzschnell, ob die Antwort stimmt. Wische nach rechts oder tippe auf „Stimmt“, wenn sie richtig ist, sonst nach links auf „Falsch“. Jeder Fehler kostet 5 Sekunden.</p><button class="btn go" id="blGo" style="margin-top:12px">Los!</button>`);
+  $('#blGo').onclick = () => { hideOverlay(area); Sound.whistle(); nextCard(); running = true; t0 = performance.now(); raf = requestAnimationFrame(loop); };
+  return () => { cancelAnimationFrame(raf); removeEventListener('keydown', key); };
+}
+
+
+// ---------------------------------------------------------------------------
+// Knowledge scorer: ten shots, each at one of three goals labelled with answers.
+// The questions are the app's own multiple-choice items from all worlds, open
+// mistakes first, so the game is practice too. Wrong answers go to the mistake box.
+// ---------------------------------------------------------------------------
+function scorerQuestions(n) {
+  const items = allRefs().map(r => itemFromRef(r.ref)).filter(it => it && it.kind === 'mc' && !it.fig && !it.img && it.o.length >= 3);
+  const open = shuffle(items.filter(it => state.mistakes[it.ref])).slice(0, Math.ceil(n / 2));
+  const rest = shuffle(items.filter(it => !open.includes(it)));
+  return shuffle([...open, ...rest.slice(0, n - open.length)]).map(it => {
+    const wrong = shuffle(it.o.filter((_, i) => i !== it.a)).slice(0, 2), o = shuffle([it.o[it.a], ...wrong]);
+    return { q: it.q, o, a: o.indexOf(it.o[it.a]), x: it.x, ref: it.ref };
+  });
+}
+
+function scorerGame(area, hud) {
+  const SHOTS = 10, TIME = 12;
+  const qs = scorerQuestions(SHOTS);
+  let i = 0, goals = 0, results = [], raf = 0, t0 = 0, done = true;
+  const box = document.createElement('div'); box.className = 'scorer'; area.appendChild(box);
+  const el = id => $('#' + id, box);
+  if (!qs.length) { overlay(area, `<h2>Keine Fragen</h2><p>In dieser App gibt es noch keine Auswahlfragen für dieses Spiel.</p><button class="btn" id="scBack">Zurück</button>`); $('#scBack').onclick = () => { closeGame(); tab = 'arcade'; render(); }; return () => {}; }
+
+  const dots = () => `${Array.from({ length: qs.length }, (_, k) => `<i class="${results[k] === undefined ? '' : results[k] ? 'hit' : 'miss'}"></i>`).join('')}`;
+  const ask = () => {
+    if (i >= qs.length) return finish();
+    const q = qs[i];
+    box.innerHTML = `<div class="timer"><i id="scT"></i></div><div class="scorer-q">${q.q}</div>
+      <div class="scorer-goals">${q.o.map((o, k) => `<button class="sgoal" data-k="${k}"><span class="sgoal-keeper"></span><span class="sgoal-txt">${o}</span></button>`).join('')}</div>
+      <div class="scorer-pitch"><span class="sball" id="scBall"></span></div>
+      <div class="scorer-fact" id="scF"></div><div id="scNext" class="scorer-next"></div><div class="scorer-dots">${dots()}</div>`;
+    $$('.sgoal', box).forEach(b => b.onclick = () => shoot(+b.dataset.k));
+    hud(`${goals} Tore · Schuss ${i + 1}/${qs.length}`);
+    done = false; t0 = performance.now(); raf = requestAnimationFrame(tick);
+  };
+  const tick = now => {
+    const p = (now - t0) / 1000 / TIME, bar = el('scT');
+    if (!bar || done) return;
+    bar.style.transform = `scaleX(${1 - clamp(p, 0, 1)})`;
+    if (p >= 1) return shoot(-1);
+    raf = requestAnimationFrame(tick);
+  };
+  const shoot = k => {
+    if (done) return; done = true; cancelAnimationFrame(raf);
+    const q = qs[i], ok = k === q.a, gs = $$('.sgoal', box), ball = el('scBall');
+    gs.forEach(b => b.disabled = true);
+    if (k >= 0) {
+      const g = gs[k].getBoundingClientRect(), b = ball.getBoundingClientRect();
+      ball.style.transform = `translate(${g.left + g.width / 2 - b.left - b.width / 2}px, ${g.top + g.height * .55 - b.top - b.height / 2}px) scale(.6)`;
+      Sound.kick();
+    }
+    results[i] = ok;
+    setTimeout(() => {
+      if (k >= 0) { gs[k].classList.add(ok ? 'goal' : 'saved'); ball.classList.add('gone'); }
+      if (!ok) gs[q.a].classList.add('answer');
+      if (ok) { goals++; Sound.fanfare(); Confetti.burst(50, .5, .3); }
+      else { Sound.tone(200, .3, 'triangle', .08); noteMistake(q.ref); save(); }
+      el('scF').innerHTML = `<b>${ok ? 'TOR!' : k < 0 ? 'Zeit abgelaufen!' : 'Gehalten!'}</b> ${q.x || ''}`;
+      el('scNext').innerHTML = `<button class="btn ${ok ? 'go' : ''}" id="scGo">${i + 1 < qs.length ? 'Nächster Schuss' : 'Ergebnis'}</button>`;
+      $('.scorer-dots', box).innerHTML = dots();
+      hud(`${goals} Tore · Schuss ${i + 1}/${qs.length}`);
+      $('#scGo').onclick = () => { i++; ask(); };
+      $('#scGo').focus();
+    }, k >= 0 ? 420 : 0);
+  };
+  const finish = () => {
+    const isNew = recordGame('scorer', goals);
+    if (goals === qs.length) award('scorer10');
+    overlay(area, `<p class="hand" style="color:#FFC21A">${goals >= 9 ? 'Torschützenkönig!' : goals >= 6 ? 'Starke Quote!' : 'Weiter trainieren!'}</p><h2>${goals} von ${qs.length} Toren</h2><p>${isNew ? 'Neuer Rekord!' : `Rekord: ${state.games.scorer}/${qs.length}`}${goals < qs.length ? ' · Die Fehlschüsse liegen jetzt in deiner Fehlerkiste.' : ''}</p><button class="btn" id="scBack" style="margin-top:12px">Zurück zur Arcade</button>`);
+    if (goals >= 8) Confetti.burst(160);
+    $('#scBack').onclick = () => { closeGame(); tab = 'arcade'; render(); };
+  };
+  const key = e => { const n = +e.key; if (!done && n >= 1 && n <= 3) shoot(n - 1); };
+  addEventListener('keydown', key);
+  hud(`0 Tore`);
+  overlay(area, `<h2>${GAMES.find(g => g.id === 'scorer').name}</h2><p>10 Schüsse, und über jedem der drei Tore steht eine Antwort. Schieß in das Tor mit der richtigen Antwort, dann ist der Ball drin. Bei der falschen Antwort hält der Torwart. Du hast 12 Sekunden pro Schuss. Dieses Spiel kostet kein Ticket.</p><button class="btn go" id="scGo0" style="margin-top:12px">Anstoß</button>`);
+  $('#scGo0').onclick = () => { hideOverlay(area); Sound.whistle(); ask(); };
+  return () => { cancelAnimationFrame(raf); done = true; removeEventListener('keydown', key); };
 }
 
 

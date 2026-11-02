@@ -28,6 +28,27 @@ const GAME_DEFS = {
     record: v => `Rekord: ${v}/10`, badge: { id: 'expert8', name: 'Fußball-Experte', desc: 'Mindestens 8 von 10 im Experten-Quiz' },
     play: (area, hud) => proQuizGame(area, hud),
   },
+  keeper: {
+    name: 'Torwart-Reflex', desc: 'Du stehst im Tor. Flieg in die richtige Ecke, bevor der Ball drin ist. Jeder Schuss wird schneller.',
+    record: v => `Rekord: ${v} Paraden`, badge: { id: 'keeper15', name: 'Torwart-Titan', desc: '15 Paraden beim Torwart-Reflex' },
+    play: (area, hud) => keeperGame(area, hud),
+  },
+  slalom: {
+    name: 'Dribbel-Slalom', desc: 'Dribble übers Feld, weich Hütchen und Gegnern aus und sammle Pokale.',
+    record: v => `Rekord: ${v} Punkte`, badge: { id: 'slalom1000', name: 'Dribbelkönig', desc: '1000 Punkte im Dribbel-Slalom' },
+    play: (area, hud) => slalomGame(area, hud),
+  },
+  blitz: {
+    name: 'Fußball-Blitz', desc: '60 Sekunden: Stimmt die Antwort oder nicht? Wisch schnell, jeder Fehler kostet Zeit.',
+    record: v => `Rekord: ${v} richtig`, badge: { id: 'blitz20', name: 'Blitzmerker', desc: '20 richtige Antworten im Fußball-Blitz' },
+    play: (area, hud) => blitzGame(area, hud),
+  },
+  // Free to play, because every shot is a question from the app's own levels.
+  scorer: {
+    name: 'Wissens-Torjäger', desc: 'Schieß in das Tor mit der richtigen Antwort. 10 Schüsse, ganz ohne Ticket.', free: true,
+    record: v => `Rekord: ${v}/10 Tore`, badge: { id: 'scorer10', name: 'Torschützenkönig', desc: '10 von 10 Toren beim Torjäger' },
+    play: (area, hud) => scorerGame(area, hud),
+  },
 };
 
 function gameThumb(id) {
@@ -52,6 +73,20 @@ function gameThumb(id) {
       <circle cx="100" cy="86" r="8" fill="#fff" stroke="#111"/><rect x="92" y="38" width="16" height="26" rx="5" fill="#FFC21A"/><circle cx="100" cy="33" r="6" fill="#FFD6B0"/>`, '0 0 200 100'),
     kickups: svg(`<rect width="200" height="100" fill="#123B6B"/><circle cx="100" cy="36" r="14" fill="#fff" stroke="#111" stroke-width="2"/><path d="M100 26 l6 5 -2 7 h-8 l-2 -7z" fill="#111"/><path d="M80 92 Q100 70 120 92" fill="#FFD6B0"/><text x="160" y="30" fill="#FFC21A" font-size="22" font-weight="700" font-family="sans-serif">27</text>`, '0 0 200 100'),
     proquiz: svg(`<rect width="200" height="100" fill="#2A1B55"/><path d="M84 22 h32 v18 a16 16 0 0 1 -32 0 z M84 28 h-8 a8 8 0 0 0 8 12 M116 28 h8 a8 8 0 0 1 -8 12 M100 56 v12 M88 74 h24" fill="none" stroke="#FFC21A" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><text x="140" y="40" fill="#fff" font-size="24" font-weight="700" font-family="sans-serif">?</text><text x="44" y="70" fill="#fff" font-size="18" font-weight="700" font-family="sans-serif">?</text>`, '0 0 200 100'),
+    keeper: svg(`<rect width="200" height="100" fill="#0F6B3E"/><rect width="200" height="16" fill="#0A1A2E"/><path d="M30 22 H170 V80 H30 Z" fill="none" stroke="#fff" stroke-width="4"/><path d="M30 22 L42 32 H158 L170 22 M42 32 V80 M158 32 V80" stroke="#fff" stroke-width="1" opacity=".5"/>
+      <g transform="translate(120 66) rotate(62)"><rect x="-8" y="-34" width="16" height="24" rx="5" fill="#22C55E"/><path d="M-6 -30 L-18 -44 M6 -30 L18 -44" stroke="#22C55E" stroke-width="5" stroke-linecap="round"/><circle cx="-19" cy="-46" r="4.5" fill="#fff"/><circle cx="19" cy="-46" r="4.5" fill="#fff"/><circle cx="0" cy="-40" r="6" fill="#FFD6B0"/><path d="M-4 -10 L-6 2 M4 -10 L6 2" stroke="#111" stroke-width="5" stroke-linecap="round"/></g>
+      <circle cx="152" cy="34" r="7" fill="#fff" stroke="#111"/><path d="M100 92 Q130 60 150 38" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 4" fill="none" opacity=".6"/>`, '0 0 200 100'),
+    slalom: svg(`<rect width="200" height="100" fill="#11733F"/>${Array.from({ length: 5 }, (_, i) => `<rect x="${i * 40}" width="20" height="100" fill="#13804A"/>`).join('')}
+      <path d="M40 92 C70 70 40 50 90 40 S120 14 160 8" stroke="#fff" stroke-width="2" stroke-dasharray="4 5" fill="none" opacity=".7"/>
+      <circle cx="78" cy="62" r="7" fill="#FF7A1A"/><circle cx="78" cy="62" r="3.5" fill="#fff"/><circle cx="118" cy="40" r="7" fill="#FF7A1A"/><circle cx="118" cy="40" r="3.5" fill="#fff"/>
+      <ellipse cx="60" cy="38" rx="12" ry="8" fill="#D7263D"/><circle cx="60" cy="38" r="5" fill="#2A1A14"/><ellipse cx="150" cy="58" rx="12" ry="8" fill="#7C3AED"/><circle cx="150" cy="58" r="5" fill="#2A1A14"/>
+      <path d="M160 18 h12 q0 8 -6 9 q-6 -1 -6 -9z M164 27 h4 v4 h-4z M161 31 h10 v2 h-10z" fill="#F2B92E"/>
+      <ellipse cx="40" cy="84" rx="13" ry="8" fill="#FFC21A"/><circle cx="40" cy="84" r="5" fill="#5A3A22"/><circle cx="42" cy="70" r="4.5" fill="#fff" stroke="#111"/>`, '0 0 200 100'),
+    blitz: svg(`<rect width="200" height="100" fill="#123B6B"/><path d="M112 6 L82 54 H100 L88 94 L124 40 H104 Z" fill="#FFC21A"/>
+      <g transform="rotate(-10 52 50)"><rect x="24" y="26" width="56" height="48" rx="8" fill="#fff"/><path d="M36 52 l8 8 l16 -18" stroke="#22C55E" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></g>
+      <g transform="rotate(10 150 50)"><rect x="122" y="26" width="56" height="48" rx="8" fill="#fff"/><path d="M138 38 l24 24 M162 38 l-24 24" stroke="#D7263D" stroke-width="6" stroke-linecap="round"/></g>`, '0 0 200 100'),
+    scorer: svg(`<rect width="200" height="100" fill="#0F6B3E"/>${[14, 76, 138].map((x, i) => `<rect x="${x}" y="18" width="48" height="30" fill="${i === 1 ? 'rgba(255,194,26,.3)' : 'none'}" stroke="#fff" stroke-width="3"/><rect x="${x + 6}" y="6" width="36" height="9" rx="3" fill="${i === 1 ? '#FFC21A' : '#fff'}" opacity=".9"/>`).join('')}
+      <circle cx="100" cy="34" r="6" fill="#fff" stroke="#111"/><path d="M100 88 Q98 62 100 42" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 4" fill="none" opacity=".6"/><circle cx="100" cy="88" r="7" fill="#fff" stroke="#111"/>`, '0 0 200 100'),
   };
   return thumbs[id].replace('<svg ', '<svg preserveAspectRatio="xMidYMid slice" ');
 }

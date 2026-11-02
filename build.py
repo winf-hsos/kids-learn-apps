@@ -27,7 +27,8 @@ CORE = SRC / "core"
 CORE_BEFORE = ["util.js", "icons.js", "fx.js"]
 CORE_AFTER = [
     "games/arcade.js", "engine.js", "ui.js", "levels.js", "items.js", "exam.js", "pages.js", "parents.js",
-    "games/runner.js", "games/legion.js", "games/penalty.js", "games/kickups.js", "games/quiz.js", "boot.js",
+    "games/runner.js", "games/legion.js", "games/penalty.js", "games/kickups.js", "games/quiz.js",
+    "games/keeper.js", "games/slalom.js", "games/blitz.js", "games/scorer.js", "boot.js",
 ]
 # Apps are grouped by school on the start page; kids' names never appear on the public site.
 SCHOOLS = ["Gymnasium", "Grundschule", "Kita"]
