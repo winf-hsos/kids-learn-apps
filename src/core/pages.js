@@ -21,7 +21,7 @@ function arcadeHtml() {
 
 function tryGame(id) {
   const g = GAMES.find(x => x.id === id);
-  if (totalStars() < g.stars) { Sound.wrong(); toast('Noch gesperrt', `Sammle ${g.stars} Sterne im Lernpfad.`, ICON.lock); return; }
+  if (totalStars() < g.stars) { Sound.wrong(); toast('Noch gesperrt', `Sammle ${g.stars} Sterne im Lernpfad${TRAINER ? ` oder im ${TRAINER.title}` : ''}.`, ICON.lock); return; }
   if (!g.free) {
     if (state.tickets < 1) { Sound.wrong(); toast('Keine Tickets', `Hol dir neue Sterne im Lernpfad, für je ${STARS_PER_TICKET} gibt es ein Ticket.`, ICON.ticket); return; }
     state.tickets--; save(); renderStatus();

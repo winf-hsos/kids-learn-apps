@@ -80,9 +80,14 @@ function save() {
 
 const levelKey = (t, l) => `${WORLDS[t].id}:${l}`;
 const starsOf = (t, l) => (state.levels[levelKey(t, l)] || {}).stars || 0;
-const totalStars = () => Object.values(state.levels).reduce((s, v) => s + (v.stars || 0), 0);
+// The trainer (src/core/trainer.js) adds one star per TRAINER_STAR_CARDS cards that have
+// reached its top level at least once, so these stars are never lost again.
+const TRAINER_STAR_CARDS = 5;
+const trainerStars = () => APP.trainer && state.trainer ? Math.floor(Object.keys(state.trainer.top || {}).length / TRAINER_STAR_CARDS) : 0;
+const trainerMaxStars = () => APP.trainer ? Math.floor(APP.trainer.cards().length / TRAINER_STAR_CARDS) : 0;
+const totalStars = () => Object.values(state.levels).reduce((s, v) => s + (v.stars || 0), 0) + trainerStars();
 const maxStarsOf = lv => lv.type === 'learn' ? 1 : 3;
-const maxStars = () => WORLDS.reduce((s, t) => s + t.levels.reduce((a, lv) => a + maxStarsOf(lv), 0), 0);
+const maxStars = () => WORLDS.reduce((s, t) => s + t.levels.reduce((a, lv) => a + maxStarsOf(lv), 0), 0) + trainerMaxStars();
 // A level opens once the one before has a star; levels that already have stars (e.g. from a takeover) stay open.
 const isUnlocked = (t, l) => l === 0 || starsOf(t, l) > 0 || starsOf(t, l - 1) > 0;
 const worldDone = t => WORLDS[t].levels.every((_, l) => starsOf(t, l) > 0);

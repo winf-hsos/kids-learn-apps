@@ -150,6 +150,8 @@ button.tile:hover { border-color: var(--accent); }
 .tr-legend i, .tr-list summary i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
 .tr-legend b { text-align: right; font-variant-numeric: tabular-nums; }
 .tr-legend em { font-style: normal; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.tr-stars { display: flex; gap: 10px; align-items: center; text-align: left; margin: 16px 0 0; padding: 10px 12px; border-radius: 14px; background: var(--paper); border: 2px solid var(--line); font-size: 15px; }
+.tr-stars svg { width: 28px; height: 28px; flex: none; }
 .tr-how { color: var(--ink-soft); font-size: 15px; text-align: left; margin: 16px 0; }
 .trainer .actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
 .tr-list { text-align: left; border-top: 2px solid var(--line); padding: 10px 0; }

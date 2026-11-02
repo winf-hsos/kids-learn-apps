@@ -18,9 +18,14 @@ const TRAINER_LEVELS = [
   { id: 'new', name: 'noch nicht geübt', sing: 'noch nicht geübt', one: 'neu', test: c => !c.n },
 ];
 
+// state.trainer.top remembers every card that ever reached the top level; it
+// earns the trainer's stars (see trainerStars in engine.js). Progress from before
+// it existed counts the cards that are top right now.
 function trainerState() {
   if (!state.trainer) state.trainer = { step: 0, bank: 0, cards: {} };
-  return state.trainer;
+  const ts = state.trainer;
+  if (!ts.top) ts.top = Object.fromEntries(Object.entries(ts.cards).filter(([, c]) => c.n && c.b >= 4).map(([id]) => [id, 1]));
+  return ts;
 }
 const trainerCard = id => trainerState().cards[id] || { b: 0, n: 0, due: 0 };
 const trainerLevel = id => TRAINER_LEVELS.find(l => l.test(trainerCard(id)));
@@ -55,6 +60,15 @@ function trainerAnswer(id, typed, ok) {
   ts.cards[id] = c;
   const after = trainerLevel(id).id;
   if (after === 'top' && before !== 'top') { run.newTop++; toast(`${TRAINER.label(id)}`, 'sitzt jetzt top!', ICON.star()); }
+  if (after === 'top' && !ts.top[id]) {
+    const prevStars = totalStars(), prevOwn = trainerStars();
+    ts.top[id] = 1;
+    if (trainerStars() > prevOwn) {
+      save(); renderStatus(); Sound.fanfare(); Confetti.burst(120);
+      toast('Neuer Stern!', `${trainerStars() * TRAINER_STAR_CARDS} ${TRAINER.unit} haben es schon auf top geschafft.`, ICON.star());
+      checkGameUnlocks(prevStars);
+    }
+  }
   if (ok && ++ts.bank >= TRAINER_TICKET) {
     ts.bank = 0;
     const got = grantTickets(1);
@@ -100,6 +114,7 @@ function trainerOverview() {
       ${round}
       ${trainerBar(st)}
       <div class="tr-legend">${TRAINER_LEVELS.map(l => `<div><i class="tr-${l.id}"></i><b>${st.groups[l.id].length}</b><span>${st.groups[l.id].length === 1 ? l.sing : l.name}</span><em>${st.pct(l.id)} %</em></div>`).join('')}</div>
+      <p class="tr-stars">${ICON.star()}<span><b>${trainerStars()} von ${trainerMaxStars()} Sternen</b> aus dem Trainer. Für je ${TRAINER_STAR_CARDS} ${TRAINER.unit}, die top sitzen, gibt es einen Stern, und den behältst du.</span></p>
       <p class="tr-how">${TRAINER.intro || ''} Was noch nicht sitzt, kommt öfter dran. Top sitzt ein Wort erst, wenn du es mehrmals richtig eingetippt hast. Für je ${TRAINER_TICKET} richtige Antworten gibt es ein Spiel-Ticket, noch ${TRAINER_TICKET - ts.bank} bis zum nächsten.</p>
       <div class="actions"><button class="btn go" id="trGo">${ts.step ? 'Weiter trainieren' : 'Training starten'}</button><button class="btn" id="trBack">Zum Lernpfad</button></div>
       ${TRAINER_LEVELS.filter(l => st.groups[l.id].length).map(l => `<details class="tr-list"><summary><i class="tr-${l.id}"></i>${trainerCount(st.groups[l.id].length, l)}</summary>
@@ -118,5 +133,5 @@ function trainerTileHtml() {
   return `<button class="trainer-tile" data-act="trainer">
     <div class="tt-head"><b>${TRAINER.title}</b><span>${st.groups.new.length === st.ids.length ? 'noch nicht gestartet' : `${st.pct('top')} % top · ${st.pct('good')} % gut · ${st.groups.weak.length} zum Üben`}</span></div>
     ${trainerBar(st)}
-    <span class="tt-go">Alle ${st.ids.length} ${TRAINER.unit} üben, so lange du willst. Je ${TRAINER_TICKET} richtige Antworten gibt es ein Ticket.</span></button>`;
+    <span class="tt-go">Alle ${st.ids.length} ${TRAINER.unit} üben, so lange du willst. Je ${TRAINER_STAR_CARDS} ${TRAINER.unit}, die top sitzen, geben einen Stern (${trainerStars()}/${trainerMaxStars()}), und je ${TRAINER_TICKET} richtige Antworten ein Ticket.</span></button>`;
 }
