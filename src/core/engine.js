@@ -6,7 +6,8 @@
 
 const WORLDS = APP.topics;
 const EXAM = MANIFEST.exam || null;
-const DAILY_GOAL = APP.dailyGoal || 150;
+// The parents may set another daily goal per app in the dashboard (see cloud.js).
+let DAILY_GOAL = APP.dailyGoal || 150;
 const RANKS = APP.ranks || [
   { xp: 0, name: 'Neuling' }, { xp: 150, name: 'Entdecker' }, { xp: 400, name: 'Durchstarter' },
   { xp: 800, name: 'Könner' }, { xp: 1300, name: 'Profi' }, { xp: 2000, name: 'Meister' }, { xp: 3000, name: 'Legende' },
@@ -41,7 +42,9 @@ const BADGES = [
 // ---------------------------------------------------------------------------
 // Persistent state (one localStorage entry per app, plus a summary for the hub)
 // ---------------------------------------------------------------------------
-const STORE_KEY = MANIFEST.storeKey || `kla:${MANIFEST.id}`;
+// Each child signed in on this device has its own state per app (see cloud.js).
+Cloud.requireProfile();
+const STORE_KEY = Cloud.storeKey(MANIFEST.storeKey || `kla:${MANIFEST.id}`);
 // Tickets reward learning but must not pile up into hours of gaming: one ticket
 // per three new stars, and never more than TICKET_CAP tickets at once.
 const STARS_PER_TICKET = APP.starsPerTicket || 3;
@@ -61,7 +64,6 @@ function loadState() {
     if (raw) {
       const s = Object.assign(defaultState(), JSON.parse(raw));
       s.games = Object.assign(defaultState().games, s.games);
-      s.tickets = Math.min(s.tickets, TICKET_CAP);
       return s;
     }
   } catch (e) { /* storage unavailable */ }
@@ -71,11 +73,12 @@ const state = loadState();
 function save() {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(state));
-    localStorage.setItem(`kla:summary:${MANIFEST.id}`, JSON.stringify({
+    localStorage.setItem(Cloud.summaryKey(MANIFEST.id), JSON.stringify({
       xp: state.xp, rank: RANKS[rankIndex()].name, stars: totalStars(), maxStars: maxStars(),
       examBest: state.examBest, streak: state.streak, updated: Date.now(),
     }));
   } catch (e) { /* ignore */ }
+  Cloud.saved();
 }
 
 const levelKey = (t, l) => `${WORLDS[t].id}:${l}`;

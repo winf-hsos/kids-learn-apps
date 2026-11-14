@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup of the learning apps database
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/kla/app/server
+Environment=KLA_DB=%h/kla/data/kla.sqlite3
+Environment=KLA_BACKUP_DIR=%h/kla/backup
+ExecStart=%h/kla/.venv/bin/python -m kla.backup

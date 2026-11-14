@@ -15,6 +15,7 @@ function renderStatus() {
       <span class="chip" title="Tage in Folge gelernt">${ICON.fire}${state.streak.days || 0}</span>
       <span class="chip hide-sm" title="Sterne">${ICON.star()}${totalStars()}</span>
       <span class="chip" id="ticketChip" title="Spiel-Tickets">${ICON.ticket}${state.tickets}</span>
+      ${Cloud.chipHtml()}
     </div>
     <button class="iconbtn" id="soundBtn" aria-label="Ton an/aus">${state.sound ? ICON.soundOn : ICON.soundOff}</button>`;
   $('#soundBtn').onclick = () => { state.sound = !state.sound; if (!state.sound) Sound.stopRoar(); save(); renderStatus(); Sound.click(); };

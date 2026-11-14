@@ -1,0 +1,120 @@
+[
+ {
+  "id": "ancient-rome",
+  "title": "Zeitreise ins alte Rom",
+  "school": "Gymnasium",
+  "subject": "Geschichte",
+  "grade": "Klasse 6",
+  "exam": {
+   "kind": "Klassenarbeit",
+   "gender": "f",
+   "date": "2026-11-05",
+   "topics": "Gründung Roms, Alltagsleben, familia, Ämter der Republik, historische Quellen und schriftliche Beurteilung"
+  },
+  "cover": "apps/ancient-rome/img/hero.webp",
+  "url": "apps/ancient-rome/"
+ },
+ {
+  "id": "chemistry-lab",
+  "title": "Chemie-Labor",
+  "school": "Gymnasium",
+  "subject": "Chemie",
+  "grade": "Klasse 6",
+  "exam": {
+   "kind": "Klassenarbeit",
+   "date": "2026-10-28",
+   "topics": "Sicherheit, Experimentieren, Laborgeräte, Gasbrenner und Gefahrstoffe"
+  },
+  "cover": "apps/chemistry-lab/img/hero.webp",
+  "url": "apps/chemistry-lab/"
+ },
+ {
+  "id": "english-irregular-verbs",
+  "title": "Englisch-Vokabeln: Klasse 6 – Irregular Verbs",
+  "school": "Gymnasium",
+  "subject": "Englisch",
+  "grade": "Klasse 6",
+  "exam": {
+   "kind": "Vokabeltest",
+   "gender": "m",
+   "date": "2026-11-17",
+   "topics": "Irregular Verbs: die 46 Verben vom Arbeitsblatt (to be bis to write) mit allen drei Formen"
+  },
+  "cover": "apps/english-irregular-verbs/img/hero.webp",
+  "url": "apps/english-irregular-verbs/"
+ },
+ {
+  "id": "english-quest",
+  "title": "English Quest: Klasse 6 – Unit 1",
+  "school": "Gymnasium",
+  "subject": "Englisch",
+  "grade": "Klasse 6",
+  "exam": {
+   "kind": "Englischarbeit",
+   "gender": "f",
+   "date": "2026-10-08",
+   "topics": "Simple Past mit Fragen, Kurzantworten und Verneinung, unregelmäßige Verben und die Vokabeln von S. 209–217"
+  },
+  "cover": "apps/english-quest/img/hero.webp",
+  "url": "apps/english-quest/"
+ },
+ {
+  "id": "english-unit-1-story",
+  "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story",
+  "school": "Gymnasium",
+  "subject": "Englisch",
+  "grade": "Klasse 6",
+  "exam": {
+   "kind": "Vokabeltest",
+   "gender": "m",
+   "date": "2026-11-02",
+   "topics": "Vokabeln aus Unit 1, Story (S. 218–220), von to smile bis to roll"
+  },
+  "cover": "apps/english-unit-1-story/img/hero.webp",
+  "url": "apps/english-unit-1-story/"
+ },
+ {
+  "id": "latin-lesson-2",
+  "title": "Latein-Arena: Klasse 6 – Lektion 2",
+  "school": "Gymnasium",
+  "subject": "Latein",
+  "grade": "Klasse 6",
+  "exam": {
+   "kind": "Vokabeltest",
+   "gender": "m",
+   "date": "2026-11-03",
+   "topics": "Vokabeln aus Lektion 2, Verben aus Salve und Lektion 1, Akkusativ, Verbformen und Konjugationsklassen"
+  },
+  "cover": "apps/latin-lesson-2/img/hero.webp",
+  "url": "apps/latin-lesson-2/"
+ },
+ {
+  "id": "music-melodies",
+  "title": "Musik: Klasse 6 – Noten, Intervalle, Melodien",
+  "school": "Gymnasium",
+  "subject": "Musik",
+  "grade": "Klasse 6",
+  "exam": {
+   "kind": "Klassenarbeit",
+   "gender": "f",
+   "date": "2026-11-18",
+   "topics": "Töne im Violinschlüssel benennen und notieren, Intervalle bestimmen, Melodien analysieren und beschreiben, dazu eine Mini-Prüfung am Xylophon"
+  },
+  "cover": "apps/music-melodies/img/hero.webp",
+  "url": "apps/music-melodies/"
+ },
+ {
+  "id": "peace-city-ride",
+  "title": "Ritt zur Friedensstadt",
+  "school": "Grundschule",
+  "subject": "Sachunterricht",
+  "grade": "Klasse 4",
+  "exam": {
+   "kind": "Arbeit",
+   "gender": "f",
+   "topics": "Entstehung Osnabrücks, Reformation, Dreißigjähriger Krieg, Westfälischer Friede und Steckenpferdreiten"
+  },
+  "cover": "apps/peace-city-ride/img/hero.webp",
+  "url": "apps/peace-city-ride/"
+ }
+]

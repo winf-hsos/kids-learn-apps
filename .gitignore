@@ -4,3 +4,8 @@
 desktop.ini
 .claude/settings.local.json
 __pycache__/
+
+# Server data: the database and its backups never go into the repo
+server/data/
+server/backup/
+.pytest_cache/

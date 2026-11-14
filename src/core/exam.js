@@ -41,6 +41,7 @@ async function examResult() {
   const mins = Math.max(1, Math.round((Date.now() - run.started) / 60000));
   const xp = 40 + Math.round(mcPts * 5 + wPts * 5);
   addXp(xp);
+  Cloud.event('exam', { grade, pts, max, pct, wrong: Cloud.wrongOf(run.answers) });
   if (!state.examBest || +grade < +state.examBest) state.examBest = grade;
   if (+grade <= 2) award('exam2');
   if (grade === '1') award('exam1');

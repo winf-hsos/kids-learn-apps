@@ -222,6 +222,10 @@ async function finish(ratio) {
   } else if (run.mode === 'mistakes') {
     run.xp += 10;
   }
+  // For the parents' day view (cloud.js): what was played and which questions went wrong.
+  Cloud.event('level', run.mode === 'level'
+    ? { world: WORLDS[run.t].title, title: run.lv.title, type: run.lv.type, stars, prev: state.levels[levelKey(run.t, run.l)].stars - newStars, pct: Math.round(ratio * 100), right: run.correct, total: run.total, wrong: Cloud.wrongOf(run.answers) }
+    : { title: run.title || 'Fehlerkiste', type: run.mode, right: run.correct, total: run.total, wrong: Cloud.wrongOf(run.answers) });
   addXp(run.xp);
   const titles = ['Fast!', 'Geschafft!', 'Richtig gut!', 'Perfekt!'];
   const msg = isLearn ? 'Lernkarten geschafft. Jetzt wird geübt, und dabei gibt es bis zu 3 Sterne pro Level.' : run.mode === 'mistakes' ? `${run.correct} von ${run.total} Fehlern repariert.` :

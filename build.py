@@ -7,10 +7,12 @@ optional styles.css, icon.svg and img/ folder. The build writes
   apps/<id>/index.html   the app: shared core + trivia packs + app files
   apps/<id>/img/         the app's images, copied as they are
   apps/<id>/audio/       recorded learn cards from tools/tts.py, copied as they are
-  index.html             the start page listing all apps
+  index.html             the start page: sign-in and the child's apps
+  eltern/index.html      the parents' dashboard
+  apps.json              the app catalog for the server (server/kla)
 A manifest may name extra Google Fonts ("fonts") and a cover image for the
 start page ("cover", a path inside the app folder such as "img/hero.webp").
-Both are plain, dependency-free pages that GitHub Pages serves as they are.
+All are plain, dependency-free pages; server/kla serves them below /lernen next to its API.
 """
 import json
 import pathlib
@@ -24,7 +26,8 @@ CORE = SRC / "core"
 # Shared scripts before and after the app's own files. The app defines APP,
 # which the engine reads when it loads; games/arcade.js must come before the
 # engine because the engine builds its game list from GAME_DEFS.
-CORE_BEFORE = ["util.js", "icons.js", "fx.js"]
+# cloud.js (sign-in and sync with server/kla) comes before the engine, which asks it for the storage key.
+CORE_BEFORE = ["util.js", "icons.js", "fx.js", "cloud.js"]
 CORE_AFTER = [
     "games/arcade.js", "engine.js", "ui.js", "levels.js", "items.js", "exam.js", "trainer.js", "checklist.js", "pages.js", "parents.js",
     "games/runner.js", "games/legion.js", "games/penalty.js", "games/kickups.js", "games/quiz.js",
@@ -117,14 +120,38 @@ def build_hub(apps: list[dict]) -> None:
     js = "\n\n".join([
         read(CORE / "util.js"),
         read(CORE / "icons.js"),
+        read(CORE / "fx.js"),
+        read(CORE / "cloud.js"),
         "const SCHOOLS = " + json.dumps(SCHOOLS) + ";",
         "const APPS = " + json.dumps(listing, ensure_ascii=False) + ";",
         read(SRC / "hub" / "hub.js"),
     ])
     css = read(CORE / "core.css") + "\n" + read(SRC / "hub" / "hub.css")
-    html = page("Lernapps", read(SRC / "hub" / "icon.svg"), css, '<div class="app hub" id="hub"></div>', js)
+    html = page("Lernapps", read(SRC / "hub" / "icon.svg"), css, '<div class="app hub" id="hub"></div><div class="toasts" id="toasts" aria-live="polite"></div>', js)
     (ROOT / "index.html").write_text(html, encoding="utf-8", newline="\n")
     print(f"wrote index.html ({len(html) // 1024} KB, {len(apps)} apps)")
+    # The app catalog for the server (server/kla): which apps exist and for which school.
+    catalog = [{k: m[k] for k in ("id", "title", "school", "subject", "grade", "exam", "cover", "url") if k in m} for m in listing]
+    (ROOT / "apps.json").write_text(json.dumps(catalog, ensure_ascii=False, indent=1) + "\n", encoding="utf-8", newline="\n")
+
+
+def build_dashboard(apps: list[dict]) -> None:
+    """The parents' dashboard (eltern/index.html); its data comes from server/kla after the parent login."""
+    listing = [{"id": a["manifest"]["id"], "title": a["manifest"]["title"], "icon": a["icon"].strip()} for a in apps]
+    js = "\n\n".join([
+        read(CORE / "util.js"),
+        read(CORE / "icons.js"),
+        read(CORE / "fx.js"),
+        "const SCHOOLS = " + json.dumps(SCHOOLS) + ";",
+        "const APPS = " + json.dumps(listing, ensure_ascii=False) + ";",
+        read(SRC / "dashboard" / "dashboard.js"),
+    ])
+    css = read(CORE / "core.css") + "\n" + read(SRC / "dashboard" / "dashboard.css")
+    html = page("Eltern-Dashboard", read(SRC / "hub" / "icon.svg"), css, '<div class="app dash" id="dash"></div><div class="toasts" id="toasts" aria-live="polite"></div>', js)
+    out = ROOT / "eltern" / "index.html"
+    out.parent.mkdir(exist_ok=True)
+    out.write_text(html, encoding="utf-8", newline="\n")
+    print(f"wrote {out.relative_to(ROOT)} ({len(html) // 1024} KB)")
 
 
 def main() -> None:
@@ -132,6 +159,7 @@ def main() -> None:
     for app in apps:
         build_app(app)
     build_hub(apps)
+    build_dashboard(apps)
 
 
 if __name__ == "__main__":

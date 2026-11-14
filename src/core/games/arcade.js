@@ -95,6 +95,8 @@ let gameCleanup = null;
 
 function openGame(id) {
   closeGame();
+  if (!Cloud.mayPlay()) return;
+  Cloud.gameStarted(id);
   const g = GAMES.find(x => x.id === id);
   const st = document.createElement('div');
   st.className = 'game-stage'; st.id = 'gameStage';
@@ -107,6 +109,7 @@ function openGame(id) {
   gameCleanup = GAME_DEFS[id].play(area, hud);
 }
 function closeGame() {
+  Cloud.gameEnded();
   if (gameCleanup) { try { gameCleanup(); } catch (e) { } gameCleanup = null; }
   const st = $('#gameStage'); if (st) st.remove();
   document.body.style.overflow = '';

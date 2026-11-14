@@ -14,3 +14,4 @@ function boot() {
   }
 }
 boot();
+Cloud.start();

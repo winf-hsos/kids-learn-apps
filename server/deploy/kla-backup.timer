@@ -1,0 +1,9 @@
+[Unit]
+Description=Nightly backup of the learning apps database
+
+[Timer]
+OnCalendar=*-*-* 03:30:00 Europe/Berlin
+Persistent=true
+
+[Install]
+WantedBy=timers.target

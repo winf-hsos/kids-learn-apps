@@ -1,0 +1,13 @@
+[Unit]
+Description=Learning apps (server/kla) below /lernen
+
+[Service]
+WorkingDirectory=%h/kla/app/server
+Environment=KLA_DB=%h/kla/data/kla.sqlite3
+Environment=KLA_STATIC_DIR=%h/kla/app
+ExecStart=%h/kla/.venv/bin/uvicorn kla.main:app --host :: --port 8076 --proxy-headers --forwarded-allow-ips=* --no-server-header --log-level warning
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=default.target
