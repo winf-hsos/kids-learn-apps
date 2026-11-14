@@ -23,6 +23,7 @@ git archive --format=tar HEAD index.html apps.json apps eltern server \
 ssh "$HOST" bash -s <<'REMOTE'
 set -euo pipefail
 cd ~/kla
+chmod 700 ~/kla ~/kla/data ~/kla/backup   # children's data: only this account may read it
 [ -d .venv ] || python3 -m venv .venv
 .venv/bin/pip install -q --upgrade pip
 .venv/bin/pip install -q -r release.new/server/requirements.txt

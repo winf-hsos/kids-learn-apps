@@ -4,14 +4,15 @@ import datetime as dt
 import os
 import pathlib
 
-from .config import settings
+from . import config
 from .db import Database
 
 KEEP = 14
 
 
 def main() -> None:
-    target_dir = pathlib.Path(os.environ.get("KLA_BACKUP_DIR", pathlib.Path(settings.db_path).parent.parent / "backup"))
+    settings = config.load()
+    target_dir = pathlib.Path(os.environ.get("KLA_BACKUP_DIR") or pathlib.Path(settings.db_path).parent.parent / "backup")
     target = target_dir / f"kla-{dt.date.today().isoformat()}.sqlite3"
     Database(settings.db_path).backup(target)
     for old in sorted(target_dir.glob("kla-*.sqlite3"))[:-KEEP]:

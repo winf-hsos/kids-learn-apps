@@ -205,3 +205,12 @@ def test_verify_and_delete_child(client):
     assert client.delete(f"/lernen/api/parent/children/{child['id']}", headers=W).json() == {"ok": True}
     assert client.get("/lernen/api/me", headers=h).status_code == 401
     assert client.get("/lernen/api/parent/overview").json()["children"] == []
+
+
+def test_backup_copies_database(client, tmp_path, monkeypatch):
+    make_child(client)
+    monkeypatch.setenv("KLA_BACKUP_DIR", str(tmp_path / "backup"))
+    from kla import backup
+    backup.main()
+    copies = list((tmp_path / "backup").glob("kla-*.sqlite3"))
+    assert len(copies) == 1 and copies[0].stat().st_size > 0
