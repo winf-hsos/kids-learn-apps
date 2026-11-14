@@ -1,0 +1,20 @@
+{
+  "id": "music-melodies",
+  "title": "Musik: Klasse 6 – Noten, Intervalle, Melodien",
+  "school": "Gymnasium",
+  "subject": "Musik",
+  "grade": "Klasse 6",
+  "about": "Töne im Violinschlüssel, Intervalle, Melodien analysieren und beschreiben und die Stammtonreihe am Xylophon",
+  "storeKey": "kla:music-melodies",
+  "exam": {
+    "kind": "Klassenarbeit",
+    "gender": "f",
+    "date": "2026-11-18",
+    "topics": "Töne im Violinschlüssel benennen und notieren, Intervalle bestimmen, Melodien analysieren und beschreiben, dazu eine Mini-Prüfung am Xylophon"
+  },
+  "packs": ["football"],
+  "modules": ["music"],
+  "scripts": ["melodies.js", "drills.js", "content.js", "art.js", "app.js"],
+  "fonts": ["Lilita One", "Noto Music"],
+  "cover": "img/hero.webp"
+}

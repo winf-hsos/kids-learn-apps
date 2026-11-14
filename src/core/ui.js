@@ -70,6 +70,7 @@ function homeHtml() {
     <button class="tile" data-act="mistakes"><div class="ico" style="background:var(--bad-soft);color:var(--bad)">${ICON.box}</div><div><b>Fehlerkiste</b><span>${nMist ? `${nMist} Fragen zum Reparieren` : 'Leer. Stark!'}</span></div></button>
     ${APP.exam ? `<button class="tile exam" data-act="exam"><div class="ico" style="background:var(--card);color:var(--ink)">${ICON.exam}</div><div><b>Probe-${examName}</b><span>${state.examBest ? `Beste Note: ${state.examBest}` : examDay ? `Teste dich wie am ${examDay}` : 'Teste dich wie in der echten Arbeit'}</span></div></button>` : ''}
   </div>
+  ${checklistHtml()}
   ${trainerTileHtml()}
   ${WORLDS.map((t, ti) => worldHtml(t, ti)).join('')}
   ${GAMES.length ? `<p class="muted" style="text-align:center;margin-top:30px;font-size:14px">Je ${STARS_PER_TICKET} neue Sterne geben ein Spiel-Ticket für die Arcade. Ab ${GAMES[0].stars} Sternen wartet das erste Spiel.</p>` : ''}`;

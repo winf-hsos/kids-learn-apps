@@ -574,6 +574,67 @@ button.tile:hover { border-color: var(--accent); }
 .type-word .say { width: 38px; height: 38px; }
 .type-word .say svg { width: 20px; height: 20px; }
 
+/* Competence sheet on the start page (core/checklist.js). */
+.checklist { margin: 22px 0 8px; background: var(--card); border: 3px solid var(--ink); border-radius: 22px; padding: 16px 14px 10px; box-shadow: var(--shadow); }
+.cl-head h2 { font-family: var(--f-display); font-size: 22px; margin: 0 0 4px; }
+.cl-head p { margin: 0 0 10px; color: var(--ink-soft); font-size: 15px; }
+.cl-cols, .cl-row { display: grid; grid-template-columns: 1fr repeat(4, 30px); gap: 4px; align-items: center; }
+.cl-cols span { font-size: 10px; font-weight: 700; color: var(--ink-soft); text-align: center; writing-mode: vertical-rl; transform: rotate(180deg); justify-self: center; line-height: 1.1; }
+.cl-row { width: 100%; text-align: left; background: none; border: 0; border-top: 2px solid var(--line); padding: 9px 0; color: var(--ink); font: inherit; cursor: pointer; }
+.cl-row.cl-free { cursor: default; }
+.cl-text { font-size: 15px; line-height: 1.35; min-width: 0; }
+.cl-text small { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.cl-text em { display: block; font-size: 13px; color: var(--accent); margin-top: 3px; }
+.cl-box { width: 24px; height: 24px; justify-self: center; border: 2px solid var(--line); border-radius: 7px; display: grid; place-items: center; font-weight: 700; font-size: 14px; color: #fff; }
+.cl-box.on.c0 { background: var(--good); border-color: var(--good); }
+.cl-box.on.c1 { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.cl-box.on.c2 { background: var(--accent-2); border-color: var(--accent-2); }
+.cl-box.on.c3 { background: var(--bad); border-color: var(--bad); }
+
+/* Staff, xylophone and melodies of the optional music module (core/modules/music.js). */
+.staff { display: block; width: 100%; height: auto; margin: 6px auto; overflow: visible; }
+.staff .st-line { stroke: var(--ink); stroke-width: 1.1; }
+.staff .st-clef { font-family: 'Noto Music', serif; font-size: 50px; fill: var(--ink); }
+.staff .st-meter { font-family: var(--f-display); font-size: 19px; fill: var(--ink); text-anchor: middle; }
+.staff .st-head { fill: var(--ink); stroke: var(--ink); stroke-width: 1.4; }
+.staff .st-head.hollow { fill: var(--card); stroke-width: 2; }
+.staff .st-stem, .staff .st-flag { stroke: var(--ink); stroke-width: 1.5; fill: none; }
+.staff .st-dot, .staff .st-rest { fill: var(--ink); }
+.staff .st-label { font-family: var(--f-body); font-size: 12px; font-weight: 700; fill: var(--pen, var(--ink)); text-anchor: middle; }
+.staff .st-num { font-family: var(--f-body); font-size: 11px; font-weight: 700; fill: var(--ink-soft); text-anchor: middle; }
+.staff .st-mark { font-family: var(--f-body); font-size: 9.5px; font-weight: 700; fill: var(--accent); text-anchor: middle; }
+.staff .hi, .staff .st-label.hi { fill: var(--accent); stroke: var(--accent); }
+.staff .st-head.hollow.hi { fill: var(--accent-soft); }
+.staff .placed { fill: var(--accent); stroke: var(--accent); }
+.staff .good { fill: var(--good); stroke: var(--good); }
+.staff .bad { fill: var(--bad); stroke: var(--bad); }
+.staff .st-label.good, .staff .st-label.bad { stroke: none; }
+.staff .st-head.playing { fill: var(--gold); stroke: var(--gold); }
+.question .staff, .type-word .staff { max-height: 190px; }
+/* Staves inside the reward games sit on a white card, the pitch behind them is dark. */
+.scorer-q .staff { --ink: #1B1A33; --card: #FFFFFF; --pen: #2B2470; background: #FFFFFF; border-radius: 12px; max-width: 280px; max-height: 150px; margin: 8px auto 0; }
+.scorer-q .melody-card { --ink: #1B1A33; --card: #FFFFFF; --line: #DAD7CA; text-align: left; }
+.scorer-q .melody-card .staff { max-height: none; margin: 2px auto; }
+.staffpick { background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 6px 10px; touch-action: manipulation; }
+.staffpick svg { cursor: crosshair; }
+.sp-tip { font-size: 13px; margin: 2px 0 4px; text-align: center; }
+
+.xylo { display: flex; align-items: center; gap: 5px; height: 150px; padding: 10px 8px; margin: 10px 0 6px; border-radius: 16px; background: linear-gradient(transparent 32%, #6B4A2B 32%, #6B4A2B 38%, transparent 38%, transparent 62%, #6B4A2B 62%, #6B4A2B 68%, transparent 68%); }
+.xbar { flex: 1; height: var(--h); min-width: 0; border: 2px solid #8A5A2B; border-radius: 8px; background: linear-gradient(90deg, #E9C38C, #F6DDB0 45%, #DDAE6F); box-shadow: 0 3px 0 #9A6A35; cursor: pointer; display: flex; align-items: flex-end; justify-content: center; padding: 0 0 8px; font-family: var(--f-display); font-size: 15px; color: #4A2F14; touch-action: manipulation; }
+.xbar.hit { animation: xhit .25s ease; }
+@keyframes xhit { 50% { transform: translateY(4px) scale(.97); filter: brightness(1.15); } }
+.xy-picked { display: flex; flex-wrap: wrap; gap: 6px; min-height: 36px; justify-content: center; }
+.xy-picked span { min-width: 36px; height: 34px; padding: 0 6px; border-radius: 10px; border: 2px dashed var(--line); display: grid; place-items: center; font-weight: 700; color: var(--ink-soft); }
+.xy-picked span.on { border-style: solid; border-color: var(--accent); color: var(--ink); background: var(--accent-soft); }
+.xy-picked span.right { border-color: var(--good); background: var(--good-soft); }
+.xy-picked span.wrong { border-color: var(--bad); background: var(--bad-soft); }
+.xy-listen, .xy-tools { display: flex; justify-content: center; gap: 8px; margin: 6px 0; }
+.btn.listen svg, .xy-listen svg { width: 18px; height: 18px; vertical-align: -3px; margin-right: 6px; }
+.melody-card { background: var(--card); border: 2px solid var(--line); border-radius: 14px; padding: 8px 10px; margin: 10px 0; overflow-x: auto; }
+.melody-card .staff { margin: 2px auto; }
+.melody-card .mc-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; font: 700 15px/1.3 var(--f-body); color: var(--ink); text-align: left; }
+.melody-card .mc-head .btn { font: 700 13px var(--f-body); }
+
 /* Ancient Rome: the look of a Pompeian wall painting, with deep red panels, ochre and black,
    a chalky plaster background with red, black and ochre bands and Roman capitals (Marcellus SC) for headings.
    The shared design lives in core/core.css. */
@@ -2142,6 +2203,7 @@ function homeHtml() {
     <button class="tile" data-act="mistakes"><div class="ico" style="background:var(--bad-soft);color:var(--bad)">${ICON.box}</div><div><b>Fehlerkiste</b><span>${nMist ? `${nMist} Fragen zum Reparieren` : 'Leer. Stark!'}</span></div></button>
     ${APP.exam ? `<button class="tile exam" data-act="exam"><div class="ico" style="background:var(--card);color:var(--ink)">${ICON.exam}</div><div><b>Probe-${examName}</b><span>${state.examBest ? `Beste Note: ${state.examBest}` : examDay ? `Teste dich wie am ${examDay}` : 'Teste dich wie in der echten Arbeit'}</span></div></button>` : ''}
   </div>
+  ${checklistHtml()}
   ${trainerTileHtml()}
   ${WORLDS.map((t, ti) => worldHtml(t, ti)).join('')}
   ${GAMES.length ? `<p class="muted" style="text-align:center;margin-top:30px;font-size:14px">Je ${STARS_PER_TICKET} neue Sterne geben ein Spiel-Ticket für die Arcade. Ab ${GAMES[0].stars} Sternen wartet das erste Spiel.</p>` : ''}`;
@@ -2922,6 +2984,9 @@ const BOARD_KINDS = {
     sol: it => it.right.map(i => it.o[i]).join(' · '),
   },
 };
+// Apps (or core modules such as music) can add their own kinds with the same
+// interface: { body(it) -> html, bind(it, ready) -> evaluate() -> [hit, ...], sol(it) -> text }.
+Object.assign(BOARD_KINDS, APP.boardKinds || {});
 
 // Picture to the question; a tap opens it large.
 function mediaHtml(it) {
@@ -3186,6 +3251,47 @@ function trainerTileHtml() {
     ${trainerBar(st)}
     <span class="tt-go">Alle ${st.ids.length} ${TRAINER.unit} üben, so lange du willst. Je ${TRAINER_STAR_CARDS} ${TRAINER.unit}, die top sitzen, geben einen Stern (${trainerStars()}/${trainerMaxStars()}), und je ${TRAINER_TICKET} richtige Antworten ein Ticket.</span></button>`;
 }
+
+
+// Competence sheet on the start page, modeled on the self-check sheets teachers hand
+// out before a test ("Das muss ich können"): one row per competence with the same
+// four columns (sicher, überwiegend, teilweise, noch nicht), filled in from the stars
+// of the worlds that train it. A tap on a row jumps to its first world.
+//
+// APP.checklist = { title, intro, items: [{ text, src, worlds: [worldId, ...], tip }] }
+// Items without worlds (e.g. playing a real instrument) show their tip instead of a rating.
+
+const CHECK_COLS = ['sicher', 'überwiegend', 'teilweise', 'noch nicht'];
+
+function checkLevel(item) {
+  const tis = (item.worlds || []).map(id => WORLDS.findIndex(t => t.id === id)).filter(ti => ti >= 0);
+  if (!tis.length) return null;
+  let got = 0, max = 0;
+  tis.forEach(ti => WORLDS[ti].levels.forEach((lv, l) => { got += starsOf(ti, l); max += maxStarsOf(lv); }));
+  const r = max ? got / max : 0;
+  return { ti: tis[0], col: r >= .85 ? 0 : r >= .5 ? 1 : r > 0 ? 2 : 3, pct: Math.round(r * 100) };
+}
+
+function checklistHtml() {
+  const cl = APP.checklist; if (!cl) return '';
+  return `<section class="checklist">
+    <div class="cl-head"><h2>${cl.title || 'Das muss ich können'}</h2>${cl.intro ? `<p>${cl.intro}</p>` : ''}</div>
+    <div class="cl-cols" aria-hidden="true"><span></span>${CHECK_COLS.map(c => `<span>${c}</span>`).join('')}</div>
+    ${cl.items.map((it, i) => {
+      const lv = checkLevel(it);
+      return `<button class="cl-row${lv ? '' : ' cl-free'}" ${lv ? `data-world="${lv.ti}"` : ''}>
+        <span class="cl-text"><b>${i + 1}.</b> ${it.text}${it.src ? `<small>${it.src}</small>` : ''}${!lv && it.tip ? `<em>${it.tip}</em>` : ''}</span>
+        ${CHECK_COLS.map((c, k) => `<span class="cl-box${lv && lv.col === k ? ' on c' + k : ''}" aria-label="${c}">${lv && lv.col === k ? '✓' : ''}</span>`).join('')}
+      </button>`;
+    }).join('')}
+  </section>`;
+}
+
+document.addEventListener('click', e => {
+  const row = e.target.closest('.cl-row[data-world]'); if (!row) return;
+  const w = document.querySelectorAll('#main .world')[+row.dataset.world];
+  if (w) { Sound.click(); w.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+});
 
 
 // Tab pages: cheat sheet, arcade and achievements.

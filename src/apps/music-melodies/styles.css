@@ -1,0 +1,19 @@
+/* Music app: a manuscript-paper notebook (faint five-line staves) in deep indigo with a
+   gold second accent. Staff, xylophone and checklist styles are shared in core/core.css. */
+:root {
+  --paper: #F7F5EE; --grid: #DCDDEB; --card: #FFFFFF; --ink: #1B1A33; --ink-soft: #5B5A78; --line: #DAD7CA;
+  --accent: #4B3FB5; --accent-soft: #E6E3FA; --accent-2: #C98A10; --pen: #2B2470; --accent-strong: #4B3FB5;
+  --f-display: 'Lilita One', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --paper-pattern: linear-gradient(transparent 22px, var(--grid) 22px, var(--grid) 23px, transparent 23px, transparent 30px, var(--grid) 30px, var(--grid) 31px, transparent 31px, transparent 38px, var(--grid) 38px, var(--grid) 39px, transparent 39px, transparent 46px, var(--grid) 46px, var(--grid) 47px, transparent 47px, transparent 54px, var(--grid) 54px, var(--grid) 55px, transparent 55px);
+  --paper-size: 100% 96px;
+  --stripe: repeating-linear-gradient(-45deg, #4B3FB5 0 8px, #FFFFFF 8px 11px, #E0A72A 11px 19px, #FFFFFF 19px 22px);
+  --hero-pos: 50% 45%;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #12112A; --grid: #232245; --card: #1C1B3A; --ink: #F1EFE6; --ink-soft: #ABA9CC; --line: #2F2D58; --accent: #A99CFF; --accent-soft: #2A2658; --accent-2: #F2C14E; --pen: #CFC7FF; --accent-strong: #5A4CD0; --shadow: 0 2px 0 #08071A, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+}
+:root[data-theme="dark"] { --paper: #12112A; --grid: #232245; --card: #1C1B3A; --ink: #F1EFE6; --ink-soft: #ABA9CC; --line: #2F2D58; --accent: #A99CFF; --accent-soft: #2A2658; --accent-2: #F2C14E; --pen: #CFC7FF; --accent-strong: #5A4CD0; --shadow: 0 2px 0 #08071A, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+h1, h2, h3 { letter-spacing: .015em; }
+
+.swipe-staff { margin-top: 10px; overflow-x: auto; }
+.swipe-staff .staff { min-width: 420px; }

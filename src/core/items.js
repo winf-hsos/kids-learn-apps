@@ -125,6 +125,9 @@ const BOARD_KINDS = {
     sol: it => it.right.map(i => it.o[i]).join(' · '),
   },
 };
+// Apps (or core modules such as music) can add their own kinds with the same
+// interface: { body(it) -> html, bind(it, ready) -> evaluate() -> [hit, ...], sol(it) -> text }.
+Object.assign(BOARD_KINDS, APP.boardKinds || {});
 
 // Picture to the question; a tap opens it large.
 function mediaHtml(it) {
