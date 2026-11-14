@@ -1,0 +1,20 @@
+{
+  "id": "english-irregular-verbs",
+  "title": "Englisch-Vokabeln: Klasse 6 – Irregular Verbs",
+  "school": "Gymnasium",
+  "subject": "Englisch",
+  "grade": "Klasse 6",
+  "about": "Die 46 unregelmäßigen Verben vom Arbeitsblatt mit infinitive, simple past, past participle und deutscher Bedeutung",
+  "storeKey": "kla:english-irregular-verbs",
+  "exam": {
+    "kind": "Vokabeltest",
+    "gender": "m",
+    "date": "2026-11-17",
+    "topics": "Irregular Verbs: die 46 Verben vom Arbeitsblatt (to be bis to write) mit allen drei Formen"
+  },
+  "packs": ["football"],
+  "modules": ["speech"],
+  "scripts": ["verbs.js", "drills.js", "content.js", "art.js", "app.js"],
+  "fonts": ["Lilita One"],
+  "cover": "img/hero.webp"
+}

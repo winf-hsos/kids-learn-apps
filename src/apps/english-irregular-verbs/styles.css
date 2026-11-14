@@ -1,0 +1,46 @@
+/* Irregular verbs app: the British school notebook of the English apps (ruled lines, Lilita One),
+   here in royal blue with a London red second accent, plus the three-forms table and form rows.
+   The shared design lives in core/core.css. */
+:root {
+  --paper: #F8F7F1; --grid: #D9E3F1; --card: #FFFFFF; --ink: #14213D; --ink-soft: #56637F; --line: #DAD6C8;
+  --accent: #1F4FB8; --accent-soft: #E1E9FB; --accent-2: #C8102E; --pen: #14306E; --accent-strong: #1F4FB8;
+  --f-display: 'Lilita One', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --paper-pattern: linear-gradient(transparent 31px, var(--grid) 31px);
+  --paper-size: 100% 32px;
+  --stripe: repeating-linear-gradient(-45deg, #1F4FB8 0 8px, #FFFFFF 8px 11px, #C8102E 11px 19px, #FFFFFF 19px 22px);
+  --hero-pos: 40% 40%;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #0F1424; --grid: #1E2742; --card: #18203A; --ink: #F3F0E8; --ink-soft: #A9B3CF; --line: #2C365A; --accent: #7FA8FF; --accent-soft: #1F2D55; --accent-2: #FF6B7D; --pen: #B7CBFF; --accent-strong: #3563D0; --shadow: 0 2px 0 #080B16, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+}
+:root[data-theme="dark"] { --paper: #0F1424; --grid: #1E2742; --card: #18203A; --ink: #F3F0E8; --ink-soft: #A9B3CF; --line: #2C365A; --accent: #7FA8FF; --accent-soft: #1F2D55; --accent-2: #FF6B7D; --pen: #B7CBFF; --accent-strong: #3563D0; --shadow: 0 2px 0 #080B16, 0 10px 24px -14px rgba(0, 0, 0, .6); }
+h1, h2, h3 { letter-spacing: .015em; }
+
+.vtab { width: 100%; border-collapse: collapse; margin: 10px 0 4px; font-size: 16px; table-layout: fixed; }
+.vtab th { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-soft); text-align: left; padding: 4px 6px 6px; border-bottom: 2px solid var(--line); }
+.vtab th:first-child { width: 40%; }
+.vtab td { padding: 8px 6px; border-bottom: 2px solid var(--line); vertical-align: top; font-weight: 700; color: var(--pen); overflow-wrap: anywhere; }
+.vtab tr:last-child td { border-bottom: 0; }
+.vtab small { display: block; font-size: 13px; font-weight: 400; font-style: italic; color: var(--ink-soft); margin-top: 3px; }
+.vtab .say { margin-left: 4px; }
+
+.question small.qhint { display: block; font-family: var(--f-body); font-size: 15px; font-weight: 400; color: var(--ink-soft); margin: 4px 0 2px; }
+.vforms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 12px; font-family: var(--f-body); }
+.vforms > span { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 8px 4px; border: 2px solid var(--line); border-radius: 12px; background: var(--card); min-width: 0; }
+.vforms small { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: var(--ink-soft); line-height: 1.2; text-align: center; }
+.vforms b { font-family: var(--f-display); font-weight: 400; font-size: clamp(17px, 4.6vw, 22px); color: var(--pen); overflow-wrap: anywhere; text-align: center; line-height: 1.15; }
+.vforms .miss { border-style: dashed; border-color: var(--accent); background: var(--accent-soft); }
+.vforms .miss b { color: var(--accent); }
+.type-word .vforms { margin: 0 0 8px; }
+
+.scard .swipe-en { display: block; font-family: var(--f-display); font-size: clamp(22px, 6vw, 28px); line-height: 1.25; color: var(--pen); overflow-wrap: anywhere; }
+.scard .swipe-de { display: block; margin-top: 10px; font-size: 18px; color: var(--ink-soft); }
+
+/* Form rows on the dark pitch of the knowledge scorer. */
+.scorer-q small.qhint { display: block; font-size: 14px; color: rgba(255, 255, 255, .78); margin-top: 2px; }
+.scorer-q .vforms { margin-top: 8px; }
+.scorer-q .vforms > span { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .35); padding: 6px 4px; }
+.scorer-q .vforms small { color: rgba(255, 255, 255, .75); }
+.scorer-q .vforms b { color: #fff; }
+.scorer-q .vforms .miss { background: rgba(255, 194, 26, .18); border-color: #FFC21A; }
+.scorer-q .vforms .miss b { color: #FFC21A; }

@@ -6,18 +6,6 @@ const sameEn = (a, b) => WORD[a].en === WORD[b].en;
 const sample = (lv, keys) => shuffle(keys).slice(0, lv.n || keys.length);
 const others = (lv, id) => shuffle(lv.words.filter(o => o !== id && !sameEn(o, id)));
 
-// Read words aloud with the browser's English voice, from any element with data-say.
-function speakEn(text) {
-  if (!('speechSynthesis' in window)) return;
-  const u = new SpeechSynthesisUtterance(text.replace(/\bsb\b/g, 'somebody').replace(/\bsth\b/g, 'something'));
-  u.lang = 'en-GB'; u.rate = .9;
-  const v = speechSynthesis.getVoices().find(x => /^en(-|_)GB/i.test(x.lang)) || speechSynthesis.getVoices().find(x => /^en/i.test(x.lang));
-  if (v) u.voice = v;
-  speechSynthesis.cancel(); speechSynthesis.speak(u);
-}
-const sayBtn = text => `<button type="button" class="say" data-say="${esc(text)}" aria-label="Anhören">${ICON.soundOn}</button>`;
-document.addEventListener('click', e => { const b = e.target.closest('[data-say]'); if (b) { e.preventDefault(); speakEn(b.dataset.say); } });
-
 // Accepted English answers: with or without "to", without sb/sth, it's = it is.
 function enAccept(w) {
   const out = new Set();

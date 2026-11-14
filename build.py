@@ -79,7 +79,7 @@ def load_apps() -> list[dict]:
 def build_app(app: dict) -> None:
     m, folder = app["manifest"], app["dir"]
     injected = dict(m, hubUrl="../../")
-    for key in ("scripts", "fonts"):
+    for key in ("scripts", "fonts", "modules"):
         injected.pop(key, None)
     parts = [read(CORE / f) for f in CORE_BEFORE]
     parts += [read(SRC / "packs" / f"{p}.js") for p in m.get("packs", [])]
@@ -87,6 +87,8 @@ def build_app(app: dict) -> None:
     # Recorded learn cards (tools/tts.py); an app without recordings gets an empty map.
     audio = json.loads(read(folder / "audio.json")) if (folder / "audio.json").exists() else {}
     parts.append("const AUDIO = " + json.dumps(audio) + ";")
+    # Optional core modules the app opts into (src/core/modules/<name>.js), before its own scripts.
+    parts += [read(CORE / "modules" / f"{name}.js") for name in m.get("modules", [])]
     parts += [read(folder / f) for f in m["scripts"]]
     parts += [read(CORE / f) for f in CORE_AFTER]
     css = read(CORE / "core.css")
@@ -108,7 +110,7 @@ def build_app(app: dict) -> None:
 def build_hub(apps: list[dict]) -> None:
     listing = []
     for app in apps:
-        m = {k: v for k, v in app["manifest"].items() if k not in ("scripts", "packs", "fonts")}
+        m = {k: v for k, v in app["manifest"].items() if k not in ("scripts", "packs", "fonts", "modules")}
         if m.get("cover"):
             m["cover"] = f"apps/{m['id']}/{m['cover']}"
         listing.append(dict(m, url=f"apps/{m['id']}/", icon=app["icon"].strip()))
