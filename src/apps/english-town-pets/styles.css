@@ -79,6 +79,14 @@ h1, h2, h3 { letter-spacing: .015em; }
 .pic { width: 100%; height: 100%; object-fit: contain; }
 .mart .pic, .mem .pic { width: 100%; height: 100%; }
 
+/* The four children of the workbook table */
+.kids-tab { width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; font-weight: 400; }
+.kids-tab th, .kids-tab td { padding: 4px 2px; border-bottom: 2px solid var(--line); }
+.kids-tab thead th { color: var(--pen); font-size: 14px; }
+.kids-tab tbody th { color: var(--ink-soft); font-style: italic; font-weight: 400; text-align: left; }
+.kids-tab img { display: block; width: 40px; height: 40px; object-fit: contain; margin: 0 auto 2px; }
+.question .figure.wide { margin-bottom: 12px; }
+
 /* Pet fact file in write tasks */
 .factfile { display: flex; gap: 14px; align-items: center; margin: 0 0 12px; padding: 12px; border: 3px solid var(--ink); border-radius: 16px; background: var(--card); font-size: 16px; font-weight: 400; }
 .factfile img { width: 96px; height: 96px; object-fit: contain; flex: none; }

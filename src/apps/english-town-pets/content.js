@@ -15,7 +15,9 @@ const WORDS = {
   snake: ['snake', 'die Schlange'], spider: ['spider', 'die Spinne'], pony: ['pony', 'das Pony'], mouse: ['mouse', 'die Maus'], rat: ['rat', 'die Ratte'],
 };
 const PLACE_WORDS = ['zoo', 'library', 'hospital', 'cinema', 'bus_stop', 'museum', 'post_office', 'restaurant', 'sweet_shop', 'supermarket', 'playground', 'train_station', 'swimming_pool', 'school', 'park', 'bridge'];
-const PET_WORDS = ['dog', 'cat', 'rabbit', 'guinea_pig', 'hamster', 'budgie', 'fish', 'tortoise', 'snake', 'spider', 'pony', 'mouse', 'rat'];
+// The twelve pets of the workbook (p. 4). The quiz order stays as first published; the learn cards use the book's order.
+const PET_WORDS = ['dog', 'cat', 'rabbit', 'guinea_pig', 'hamster', 'budgie', 'fish', 'tortoise', 'snake', 'spider', 'pony', 'mouse'];
+const BOOK_PETS = ['hamster', 'cat', 'spider', 'fish', 'dog', 'guinea_pig', 'pony', 'rabbit', 'tortoise', 'mouse', 'snake', 'budgie'];
 const en = k => WORDS[k][0], de = k => WORDS[k][1];
 const article = w => /^[aeiou]/.test(w) ? 'an' : 'a';
 
@@ -238,6 +240,73 @@ const PET_WRITE = [
 }));
 
 // ---------------------------------------------------------------------------
+// From the workbook pages 4 to 7
+// ---------------------------------------------------------------------------
+const NUMBERS = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen'];
+
+const WORKBOOK_PETS = [
+  {
+    kind: 'cloze', q: 'Read and complete. (Arbeitsheft S. 7, Übung 8)',
+    s: "Have you got a pet, Jordan? – Yes, I ___. What is it? – It's a ___. What ___ is it? – It's brown and green. How old is it? – It's ___. ___ its name? – It's Tom. Are tortoises your favourite ___? – Yes, they are. What about you, Mila? – I ___ a pet.",
+    answers: ['have', 'tortoise', 'colour', 'four', "What's", 'pet', "haven't got"], o: ['have', 'tortoise', 'colour', 'four', "What's", 'pet', "haven't got"],
+    x: "Kurze Antwort: Yes, I have. Und wer kein Tier hat, sagt: I haven't got a pet.",
+  },
+  {
+    kind: 'cloze', q: 'Make the sentences. (Arbeitsheft S. 6, Übung 7)',
+    s: "Mona is on the ___ of the good people. Alto, Beta and Cota ___ the Wildlife Park with Mona. Spike lets the animals go free! But the ___ are clever. Wiza ___ Mona's family. That's a big problem. Alto, Beta, Cota and Mona ___ Fruit Island! The children ___ Spike. Wiza is very, very angry.",
+    answers: ['planet', 'go to', 'children', 'has got', 'go to', 'help'], o: ['planet', 'go to', 'go to', 'children', 'has got', 'help'],
+  },
+  {
+    kind: 'pairs', q: 'Have you got a pet? Finde die passende Antwort.', pairs: [
+      ['Have you got a pet?', 'Yes, I have.'], ['What is it?', "It's a tortoise."], ['What colour is it?', "It's brown and green."],
+      ['How old is it?', "It's four."], ["What's its name?", "It's Tom."], ['Are tortoises your favourite pet?', 'Yes, they are.'],
+    ],
+  },
+  { q: 'Mila hat kein Haustier. Was sagt sie?', o: ["I haven't got a pet.", "I hasn't got a pet.", "I have got not a pet."], a: 0, x: "I haven't got a pet. Bei he und she hieße es: She hasn't got a pet." },
+  { kind: 'order', q: 'Bring die Wörter in die richtige Reihenfolge.', items: ['Are', 'tortoises', 'your', 'favourite', 'pet?'] },
+  { kind: 'cloze', q: 'Fill in the gaps.', s: "In my pet zoo there ___ two rabbits. ___ brown and pink.", answers: ['are', "They're"], o: ['are', "They're", 'is', "It's"], x: 'Bei mehreren Tieren: there are und they are (they\'re).' },
+];
+
+// The four children of exercise 3 (p. 5), as ticked in the workbook.
+const KIDS = [
+  { name: 'Hannah', he: 'She', pet: 'pony', colour: 'black and white', age: 'five' },
+  { name: 'Joshua', he: 'He', pet: 'dog', colour: 'brown and white', age: 'twelve' },
+  { name: 'Laura', he: 'She', pet: 'rabbit', colour: 'grey', age: 'two' },
+  { name: 'Alex', he: 'He', pet: 'spider', colour: 'black', age: 'one' },
+];
+const yearsOld = age => `${age} ${age === 'one' ? 'year' : 'years'} old`;
+const kidsTable = `<table class="kids-tab"><thead><tr><th></th>${KIDS.map(k => `<th>${k.name}</th>`).join('')}</tr></thead><tbody>
+  <tr><th>pet</th>${KIDS.map(k => `<td><img src="img/${k.pet}.webp" alt="">${k.pet}</td>`).join('')}</tr>
+  <tr><th>colour</th>${KIDS.map(k => `<td>${k.colour}</td>`).join('')}</tr>
+  <tr><th>age</th>${KIDS.map(k => `<td>${yearsOld(k.age).replace(' old', '')}</td>`).join('')}</tr></tbody></table>`;
+const KIDS_ITEMS = [
+  ...KIDS.map(k => ({ q: `What has ${k.name} got?`, o: [`${k.he} has got a ${k.pet}.`, ...shuffle(KIDS.filter(x => x !== k)).slice(0, 2).map(x => `${k.he} has got a ${x.pet}.`)], a: 0 })),
+  ...KIDS.map(k => ({ q: `How old is ${k.name}'s ${k.pet}?`, o: [`It's ${yearsOld(k.age)}.`, ...KIDS.filter(x => x !== k).slice(0, 2).map(x => `It's ${yearsOld(x.age)}.`)], a: 0 })),
+  { q: "What colour is Joshua's dog?", o: ["It's brown and white.", "It's black and white.", "It's grey."], a: 0 },
+  { q: 'Who has got a spider?', o: ['Alex', 'Laura', 'Hannah'], a: 0 },
+].map(it => ({ ...it, fig: kidsTable }));
+
+const AGE_ITEMS = [
+  ...[1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14].map(n => ({ kind: 'type', lead: 'Schreib die Zahl auf Englisch.', q: String(n), fields: [{ label: 'English', accept: [NUMBERS[n - 1]], sol: NUMBERS[n - 1] }] })),
+  { q: "Alex's spider is one ___ old.", o: ['year', 'years'], a: 0, x: 'Bei one heißt es year, ohne s.' },
+  { q: "Joshua's dog is twelve ___ old.", o: ['years', 'year'], a: 0, x: 'Ab zwei heißt es years.' },
+  { kind: 'cloze', q: 'Fill in the gaps.', s: "How old is it? – It's ___ years old. My hamster is ___ year old.", answers: ['eleven', 'one'], o: ['eleven', 'one', 'twelve', 'two'] },
+];
+
+const KIDS_WRITE = [
+  ...KIDS.map(k => ({
+    q: `<div class="figure wide">${kidsTable}</div>Look at the table. Write about ${k.name}. (Arbeitsheft S. 5, Übung 4: „… has got …“)`,
+    m: `${k.name} has got a ${k.pet}. It's ${k.colour}. It's ${yearsOld(k.age)}.`,
+    k: [['has got'], [k.pet], [k.colour], [yearsOld(k.age).replace(' old', '')]],
+  })),
+  {
+    q: 'Read. Think about your pet or a pet you want. Answer. (Arbeitsheft S. 7, Übung 9)<br>1 What is it? 2 What colour is it? 3 How old is it? 4 What\'s its name?',
+    m: "It's a dog. It's brown and white. It's three years old. Its name is Bello.",
+    points: ["What is it? – It's a …", "What colour is it? – It's …", "How old is it? – It's … years old.", "What's its name? – It's … / Its name is …"],
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Worlds
 // ---------------------------------------------------------------------------
 const placePairs = keys => keys.map(k => ({ a: en(k), b: de(k), art: k }));
@@ -353,9 +422,9 @@ const TOPICS = [
   {
     id: 'pets', img: 'img/pets.webp', title: 'Pets', sub: 'Haustiere, Farben und „I\'ve got …“', art: 'dog', badge: 'Pet Friend',
     learn: [
-      { h: 'Pets (1)', p: 'Tipp auf den Lautsprecher, dann hörst du das Wort.', words: PET_WORDS.slice(0, 7) },
-      { h: 'Pets (2)', p: 'Diese Tiere kommen auch vor:', words: PET_WORDS.slice(7) },
-      { h: 'Colours', p: 'So sagst du, welche Farbe ein Tier hat:', bullets: [say("It's black.") + ' schwarz', say("It's white.") + ' weiß', say("It's brown.") + ' braun', say("It's grey.") + ' grau', say("It's yellow and green.") + ' gelb und grün', say("It's brown and white.") + ' braun und weiß'] },
+      { h: 'Pets (1)', p: 'Diese zwölf Tiere stehen in deinem Arbeitsheft auf S. 4. Tipp auf den Lautsprecher, dann hörst du das Wort.', words: BOOK_PETS.slice(0, 6) },
+      { h: 'Pets (2)', p: 'Und die anderen sechs:', words: BOOK_PETS.slice(6) },
+      { h: 'Colours', p: 'So sagst du, welche Farbe ein Tier hat:', bullets: [say("It's black.") + ' schwarz', say("It's white.") + ' weiß', say("It's brown.") + ' braun', say("It's grey.") + ' grau', say("It's red.") + ' rot', say("It's yellow and green.") + ' gelb und grün', say("It's brown and white.") + ' braun und weiß', say("It's black and white.") + ' schwarz und weiß'] },
       {
         h: "I've got … / He has got …", p: 'Bei <b>I</b> sagst du <i>have got</i>, bei <b>he</b> und <b>she</b> sagst du <i>has got</i>.',
         bullets: [say("I've got a mouse."), say('He has got a pony.'), say('She has got a cat.'), say("Emma hasn't got a pet."), say('Have you got a pet?') + ' – ' + say('Yes, I have.') + ' / ' + say("No, I haven't.")],
@@ -363,6 +432,14 @@ const TOPICS = [
       {
         h: 'Fragen zum Haustier', p: 'Mit diesen Fragen erfährst du alles über ein Tier:',
         bullets: [say('What is it?') + ' – ' + say("It's a rabbit."), say('What colour is it?') + ' – ' + say("It's white."), say('How old is it?') + ' – ' + say("It's three years old."), say("What's its name?") + ' – ' + say("It's Snowy."), say('What does it like?') + ' – ' + say('It likes carrots.')],
+      },
+      {
+        h: 'How old is it?', p: 'Die Zahlen von 1 bis 14 brauchst du für das Alter. Achtung: <i>one year</i> ohne s, ab zwei <i>years</i>.',
+        bullets: [NUMBERS.slice(0, 7).map((n, i) => `${i + 1} ${say(n)}`).join(' · '), NUMBERS.slice(7).map((n, i) => `${i + 8} ${say(n)}`).join(' · '), say("It's one year old."), say("It's twelve years old.")],
+      },
+      {
+        h: 'Favourite pet und pet zoo', p: 'Auch das steht in deinem Arbeitsheft:',
+        bullets: [say('Are tortoises your favourite pet?') + ' – ' + say('Yes, they are.'), say("What about you? – I haven't got a pet."), say('In my pet zoo there are two rabbits.') + ' ' + say("They're brown and pink.")],
       },
     ],
     levels: [
@@ -377,6 +454,11 @@ const TOPICS = [
       { type: 'mix', title: "I've got … / has got", items: GRAMMAR },
       { type: 'fig', title: 'Lesen: Haustiere', items: READING },
       { type: 'swrite', title: 'Schreib über ein Haustier', items: PET_WRITE },
+      // Added from the workbook pages 4 to 7 (new levels only at the end of the world).
+      { type: 'mix', title: 'Aus deinem Arbeitsheft', items: WORKBOOK_PETS },
+      { type: 'fig', title: 'Hannah, Joshua, Laura, Alex', items: KIDS_ITEMS },
+      { type: 'mix', title: 'How old is it?', items: AGE_ITEMS },
+      { type: 'swrite', title: '… has got …', items: KIDS_WRITE },
     ],
   },
 ];
