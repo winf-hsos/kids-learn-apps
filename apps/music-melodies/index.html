@@ -883,12 +883,21 @@ const Cloud = (() => {
     if (!r.ok) throw Object.assign(new Error(data.detail || 'Da ist etwas schiefgegangen.'), { status: r.status });
     return data;
   }
-  async function login(code) {
+  // With child, the code must belong to that child (picked by name on the start page).
+  async function login(code, child = null) {
     const label = /iPad|iPhone|Android|Windows|Mac/.exec(navigator.userAgent)?.[0] || 'Gerät';
-    const r = await api('login', { method: 'POST', body: { code, label } }, null);
+    const r = await api('login', { method: 'POST', body: { code, label, ...(child ? { child } : {}) } }, null);
     const p = { ...r.child, token: r.token };
     saveProfile(p); setActive(p.id);
     return p;
+  }
+  // All children of the family, asked with the token of a child signed in here; the last answer
+  // is kept so the picker also works offline.
+  const familyCached = () => ls.get('kla:family', []);
+  async function family() {
+    const p = profiles()[0]; if (!p) return [];
+    try { const r = await api('family', {}, p.token); ls.set('kla:family', r.children); return r.children; }
+    catch (e) { return familyCached(); }
   }
   // A revoked device: forget the child here and go back to the start page.
   function signedOut() {
@@ -1097,7 +1106,7 @@ const Cloud = (() => {
   }
 
   return {
-    ROOT, profiles, profile, setActive, removeProfile, saveProfile, login, api, requireProfile, start,
+    ROOT, profiles, profile, setActive, removeProfile, saveProfile, login, family, familyCached, api, requireProfile, start,
     storeKey, summaryKey, saved, event, wrongOf, mayPlay, gameStarted, gameEnded, chipHtml, info, CLOCK,
   };
 })();

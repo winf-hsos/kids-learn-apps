@@ -51,6 +51,8 @@ def app_catalog() -> list[dict[str, Any]]:
 class LoginIn(BaseModel):
     code: str = Field(min_length=1, max_length=64)
     label: str = Field(default="", max_length=80)
+    # Set when a child picked its name on the start page: the code must then belong to that child.
+    child: int | None = None
 
 
 def child_public(child: Any) -> dict[str, Any]:
@@ -71,11 +73,13 @@ def login(body: LoginIn, request: Request) -> dict[str, Any]:
         if security.too_many_failures(con, key):
             raise HTTPException(429, "Zu viele falsche Codes. Warte eine Viertelstunde.")
         child = find_child_by_code(con, body.code)
+        if body.child is not None and child and child["id"] != body.child:
+            child = None
         if not child:
             # Recorded and committed before the error, so the brake counts it.
             security.note_failure(con, key)
     if not child:
-        raise HTTPException(401, "Diesen Code kenne ich nicht.")
+        raise HTTPException(401, "Der Code stimmt nicht." if body.child is not None else "Diesen Code kenne ich nicht.")
     with db.connect() as con:
         token, token_hash = security.new_token()
         stamp = now().isoformat(timespec="seconds")
@@ -119,6 +123,14 @@ def verify(body: VerifyIn, request: Request, child=Depends(current_child)) -> di
         # 403, not 401: the device token is fine, only the code was wrong.
         raise HTTPException(403, "Der Code stimmt nicht.")
     return {"ok": True}
+
+
+@api.get("/family")
+def family(child=Depends(current_child)) -> dict[str, Any]:
+    """All children, for the profile picker of a device on which at least one child is signed in."""
+    with db.connect() as con:
+        return {"children": [{"id": c["id"], "name": c["name"], "school": c["school"]}
+                             for c in con.execute("SELECT * FROM children ORDER BY id")]}
 
 
 def activity_today(con, child_id: int, app_id: str | None = None) -> dict[str, int]:

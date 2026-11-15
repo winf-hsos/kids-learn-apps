@@ -84,12 +84,25 @@ function loginView() {
   });
 }
 
-function pickerView() {
-  const ps = Cloud.profiles();
+// Shows every child of the family once one child is signed in on this device. A child not yet
+// signed in here logs in with its code; the others switch with their code (or without, if the
+// parents switched that off in the dashboard).
+function pickerView(family = Cloud.familyCached()) {
+  const ps = Cloud.profiles(), known = new Set(ps.map(p => p.id));
+  const others = family.filter(c => !known.has(c.id));
+  const tile = (c, isNew) => `<button class="hub-profile" data-id="${c.id}"${isNew ? ' data-new="1"' : ''}><span class="hub-avatar">${esc(c.name.slice(0, 1))}</span><b>${esc(c.name)}</b><small>${esc(c.school)}</small></button>`;
   $('#hub').innerHTML = `${head('Wer lernt <em>jetzt</em>?', 'Tippe auf deinen Namen.')}
-    <div class="hub-profiles">${ps.map(p => `<button class="hub-profile" data-id="${p.id}"><span class="hub-avatar">${esc(p.name.slice(0, 1))}</span><b>${esc(p.name)}</b><small>${esc(p.school)}</small></button>`).join('')}
+    <div class="hub-profiles">${[...ps.map(p => tile(p, false)), ...others.map(c => tile(c, true))].join('')}
       <button class="hub-profile add" id="addKid"><span class="hub-avatar">+</span><b>Weiteres Kind</b><small>mit Code anmelden</small></button></div>`;
   $$('.hub-profile[data-id]').forEach(b => b.onclick = () => {
+    if (b.dataset.new) {
+      const c = others.find(x => x.id === +b.dataset.id);
+      return codeView({
+        title: `Hallo <em>${esc(c.name)}</em>`, sub: 'Gib deinen Code ein. Auf diesem Gerät musst du dich damit einmal anmelden.',
+        onCode: async code => { await Cloud.login(code, c.id); renderHub(); },
+        back: () => pickerView(),
+      });
+    }
     const p = ps.find(x => x.id === +b.dataset.id);
     if (!p.requireCode) { Cloud.setActive(p.id); return renderHub(); }
     codeView({
@@ -99,6 +112,14 @@ function pickerView() {
     });
   });
   $('#addKid').onclick = () => loginView();
+  // Ask the server for the current family once per picker and redraw if it changed.
+  if (!pickerView.asked) {
+    pickerView.asked = true;
+    Cloud.family().then(f => {
+      pickerView.asked = false;
+      if (JSON.stringify(f) !== JSON.stringify(family) && !Cloud.profile() && $('.hub-profiles')) pickerView(f);
+    });
+  }
 }
 
 async function homeView(p) {

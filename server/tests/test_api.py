@@ -197,6 +197,19 @@ def test_parent_login_through_family_page(client, monkeypatch):
     assert calls == ["session=c", "session=p"]
 
 
+def test_family_list_and_login_for_picked_child(client):
+    tim = make_child(client)
+    lena = make_child(client, name="Lena", school="Grundschule", code="EULE-12")
+    assert client.get("/lernen/api/family").status_code == 401
+    h = login(client)
+    assert client.get("/lernen/api/family", headers=h).json()["children"] == [
+        {"id": tim["id"], "name": "Tim", "school": "Gymnasium"}, {"id": lena["id"], "name": "Lena", "school": "Grundschule"}]
+    # Lena picked on the picker: Tim's code must not sign her in, her own code does.
+    assert client.post("/lernen/api/login", json={"code": "fuchs47", "child": lena["id"]}).status_code == 401
+    r = client.post("/lernen/api/login", json={"code": "eule12", "child": lena["id"]})
+    assert r.status_code == 200 and r.json()["child"]["name"] == "Lena"
+
+
 def test_verify_and_delete_child(client):
     child = make_child(client)
     h = login(client)
