@@ -1,0 +1,87 @@
+/* English app for year 4: a sunny town map in park green and post-box red, Lilita One for headings,
+   plus the street map, word tiles, preposition scenes and pet fact files. The shared design lives in core/core.css. */
+:root {
+  --paper: #F7F8EE; --grid: #DCE9D5; --card: #FFFFFF; --ink: #17263A; --ink-soft: #55657A; --line: #D9DCCB;
+  --accent: #C8102E; --accent-soft: #FBE1E5; --accent-2: #2E7D4F; --pen: #1D3C8F; --accent-strong: #C8102E;
+  --f-display: 'Lilita One', 'Arial Rounded MT Bold', system-ui, sans-serif;
+  --paper-pattern: radial-gradient(var(--grid) 1.3px, transparent 1.6px);
+  --paper-size: 22px 22px;
+  --stripe: repeating-linear-gradient(-45deg, #2E7D4F 0 8px, #FFFFFF 8px 11px, #C8102E 11px 19px, #FFFFFF 19px 22px);
+  --hero-pos: 55% 40%;
+  --tm-ground: #F1EEDF; --tm-road: #FFFFFF; --tm-edge: #B9B39D; --tm-line: #D8D2BC; --tm-park: #BFE3A6; --tm-tree: #5BAE5B;
+  --tm-river: #8CC8EE; --tm-bridge: #C9A77A; --tm-text: #17263A; --tm-halo: #FFFFFF;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10181A; --grid: #1D2A2A; --card: #1A2426; --ink: #EEF2E8; --ink-soft: #A5B4AE; --line: #2D3B3C; --accent: #FF6B7D; --accent-soft: #46202A; --accent-2: #6BCB8F; --pen: #9DB5FF; --accent-strong: #D22B44; --shadow: 0 2px 0 #060A0B, 0 10px 24px -14px rgba(0, 0, 0, .6);
+    --tm-ground: #263231; --tm-road: #46524F; --tm-edge: #5F6C68; --tm-line: #5F6C68; --tm-park: #2F5A36; --tm-tree: #4C9A55; --tm-river: #2F6C93; --tm-bridge: #8A6D4B; --tm-text: #EEF2E8; --tm-halo: #1A2426;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10181A; --grid: #1D2A2A; --card: #1A2426; --ink: #EEF2E8; --ink-soft: #A5B4AE; --line: #2D3B3C; --accent: #FF6B7D; --accent-soft: #46202A; --accent-2: #6BCB8F; --pen: #9DB5FF; --accent-strong: #D22B44; --shadow: 0 2px 0 #060A0B, 0 10px 24px -14px rgba(0, 0, 0, .6);
+  --tm-ground: #263231; --tm-road: #46524F; --tm-edge: #5F6C68; --tm-line: #5F6C68; --tm-park: #2F5A36; --tm-tree: #4C9A55; --tm-river: #2F6C93; --tm-bridge: #8A6D4B; --tm-text: #EEF2E8; --tm-halo: #1A2426;
+}
+h1, h2, h3 { letter-spacing: .015em; }
+
+/* Street map */
+.tm-wrap { margin: 4px auto 12px; max-width: 560px; }
+.town { display: block; width: 100%; height: auto; border: 3px solid var(--ink); border-radius: 14px; background: var(--tm-ground); }
+.tm-ground { fill: var(--tm-ground); }
+.tm-park { fill: var(--tm-park); }
+.tm-path { fill: none; stroke: #E8D9AE; stroke-width: 5; stroke-linecap: round; }
+.tm-river { fill: var(--tm-river); }
+.tm-road { fill: none; stroke: var(--tm-edge); stroke-width: 15; stroke-linecap: butt; }
+.tm-line { fill: none; stroke: var(--tm-road); stroke-width: 11.5; }
+.tm-bridge { fill: none; stroke: var(--tm-bridge); stroke-width: 3.5; stroke-linecap: round; }
+.tm-tree rect { fill: #8B5A2B; }
+.tm-tree circle { fill: var(--tm-tree); }
+.tm-sname { font: italic 700 6.6px var(--f-body, system-ui), sans-serif; fill: var(--ink-soft); letter-spacing: .02em; }
+.tm-pname, .tm-rname { fill: var(--tm-text); opacity: .7; }
+.tm-label { font: 700 8.6px var(--f-body, system-ui), sans-serif; fill: var(--tm-text); paint-order: stroke; stroke: var(--tm-halo); stroke-width: 2.6px; stroke-linejoin: round; }
+.tm-hit { fill: transparent; }
+.tm-ring { fill: none; stroke: var(--accent); stroke-width: 3; }
+.tm-star { fill: #FFC21A; stroke: var(--ink); stroke-width: 1.2; }
+.tm-route { fill: none; stroke: var(--accent); stroke-width: 4; stroke-dasharray: 7 5; stroke-linecap: round; stroke-linejoin: round; }
+.tm-arrowhead { fill: var(--accent); }
+.tm-start { fill: var(--accent); stroke: #FFFFFF; stroke-width: 1.5; }
+.tm-tap { cursor: pointer; }
+.tm-tap:hover .tm-hit, .tm-tap:focus .tm-hit { fill: rgba(46, 125, 79, .16); }
+.tm-tap.on .tm-hit { fill: rgba(200, 16, 46, .14); stroke: var(--accent); stroke-width: 2.5; }
+.tm-tap.right .tm-hit { fill: rgba(46, 160, 80, .25); stroke: var(--good); stroke-width: 3; }
+.tm-tap.wrong .tm-hit { fill: rgba(200, 16, 46, .2); stroke: var(--bad); stroke-width: 3; }
+.tm-tap:focus { outline: none; }
+.tm-note { text-align: center; margin: -4px 0 10px; font-size: 15px; }
+.tm-dir { display: block; font-size: 19px; line-height: 1.45; font-weight: 600; }
+.tm-q { display: block; }
+.question .tm-wrap, .type-lead .tm-wrap { font-size: 16px; }
+.type-lead .tm-wrap { margin-bottom: 4px; }
+
+/* Wide figures: map, scenes and texts above a multiple-choice question */
+.figure.wide { width: 100%; max-width: 560px; aspect-ratio: auto; padding: 8px; }
+.figure.wide .tm-wrap { margin: 0; }
+.figure.wide .town { border-width: 0; border-radius: 12px; }
+.figure.wide > svg:only-child { width: min(180px, 50vw); display: block; margin: 0 auto; }
+.prep-fig { display: block; }
+.prep-scene { display: block; width: 100%; max-width: 300px; margin: 0 auto; height: auto; }
+.pet-text { font-size: 18px; line-height: 1.5; padding: 6px 8px; text-align: left; }
+
+/* Learn cards */
+.wtiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; margin-top: 10px; }
+.wtile { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; padding: 10px 6px; border: 2px solid var(--line); border-radius: 14px; background: var(--paper); }
+.wtile img { width: 72px; height: 72px; object-fit: contain; }
+.wtile b { color: var(--pen); font-size: 17px; display: inline-flex; align-items: center; gap: 4px; }
+.wtile span { color: var(--ink-soft); font-size: 14px; }
+.prep-row { display: grid; grid-template-columns: minmax(0, 150px) 1fr; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 2px solid var(--line); }
+.prep-row:last-child { border-bottom: 0; }
+.prep-row .prep-scene { max-width: 150px; }
+.arrow-art { width: 64px; height: 64px; display: block; justify-self: center; color: var(--ink); }
+.say { vertical-align: middle; }
+.pic { width: 100%; height: 100%; object-fit: contain; }
+.mart .pic, .mem .pic { width: 100%; height: 100%; }
+
+/* Pet fact file in write tasks */
+.factfile { display: flex; gap: 14px; align-items: center; margin: 0 0 12px; padding: 12px; border: 3px solid var(--ink); border-radius: 16px; background: var(--card); font-size: 16px; font-weight: 400; }
+.factfile img { width: 96px; height: 96px; object-fit: contain; flex: none; }
+.factfile dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; }
+.factfile dt { color: var(--ink-soft); font-style: italic; }
+.factfile dd { margin: 0; font-weight: 700; color: var(--pen); }

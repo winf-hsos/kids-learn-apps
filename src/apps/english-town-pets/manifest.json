@@ -1,0 +1,20 @@
+{
+  "id": "english-town-pets",
+  "title": "Englisch: Klasse 4 – In town & Pets",
+  "school": "Grundschule",
+  "subject": "Englisch",
+  "grade": "Klasse 4",
+  "about": "Orte in der Stadt, wo etwas liegt, Wegbeschreibungen mit dem Stadtplan und Haustiere",
+  "storeKey": "kla:english-town-pets",
+  "exam": {
+    "kind": "Englischtest",
+    "gender": "m",
+    "date": "2026-11-17",
+    "topics": "In town (Orte, Wo ist …?, Wegbeschreibung mit dem Stadtplan) und Pets"
+  },
+  "packs": ["football"],
+  "modules": ["speech"],
+  "scripts": ["town.js", "content.js", "art.js", "app.js"],
+  "fonts": ["Lilita One"],
+  "cover": "img/hero.webp"
+}

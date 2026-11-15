@@ -59,6 +59,21 @@
   "url": "apps/english-quest/"
  },
  {
+  "id": "english-town-pets",
+  "title": "Englisch: Klasse 4 – In town & Pets",
+  "school": "Grundschule",
+  "subject": "Englisch",
+  "grade": "Klasse 4",
+  "exam": {
+   "kind": "Englischtest",
+   "gender": "m",
+   "date": "2026-11-17",
+   "topics": "In town (Orte, Wo ist …?, Wegbeschreibung mit dem Stadtplan) und Pets"
+  },
+  "cover": "apps/english-town-pets/img/hero.webp",
+  "url": "apps/english-town-pets/"
+ },
+ {
   "id": "english-unit-1-story",
   "title": "Englisch-Vokabeln: Klasse 6 – Unit 1 Story",
   "school": "Gymnasium",
