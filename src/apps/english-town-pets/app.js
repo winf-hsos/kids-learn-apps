@@ -34,6 +34,8 @@ const APP = {
   levelTypes: { swrite: writeLevel },
   boardKinds: MAP_BOARD,
   exam: { mix: { town: 4, where: 5, ways: 7, pets: 6 }, writes: 2, art: 'map' },
+  // All levels are open from the start, so the learner can jump to any topic before the test.
+  openLevels: true,
   intro: { title: 'Englisch: In town & Pets', tip: 'Fang mit den Orten an. Am wichtigsten für den Test ist die Welt „Directions“, denn dort übst du, mit dem Stadtplan einen Weg zu beschreiben.' },
   // The learner loves football, so the reward games and trivia come from the football pack.
   praise: ['Great!', 'Well done!', 'Super!', 'Tor!', 'Brilliant!', 'Yes!', 'Perfect!', 'Top!'],
